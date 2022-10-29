@@ -1,0 +1,3 @@
+sim/*
+!sim/xsim_cfg.tcl
+!sim/riscv.wcfg
