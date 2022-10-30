@@ -1,6 +1,7 @@
 sv  riscv ../include/axi4_pkg.svh
 
 sv  riscv ../src/riscv_top.sv
+sv  riscv ../src/riscv_ifu.sv
 
 sv  riscv ../asserts/axi4_assert.sv
 sv  riscv ../tb/tb.sv

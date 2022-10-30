@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="137.152 ns"></ZoomEndTime>
-      <Cursor1Time time="1.000 ns"></Cursor1Time>
+      <ZoomEndTime time="141.248 ns"></ZoomEndTime>
+      <Cursor1Time time="50.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="533"></NameColumnWidth>
-      <ValueColumnWidth column_width="219"></ValueColumnWidth>
+      <ValueColumnWidth column_width="211"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="3" />
+   <WVObjectSize size="5" />
    <wvobject fp_name="/tb/clock" type="logic">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -31,6 +31,15 @@
    <wvobject fp_name="/tb/DUT/AXI_AW_M" type="array">
       <obj_property name="ElementShortName">AXI_AW_M</obj_property>
       <obj_property name="ObjectShortName">AXI_AW_M</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/axi4_riscv_assert_inst/AXI_COMMON_ARESETnD1" type="logic">
+      <obj_property name="ElementShortName">AXI_COMMON_ARESETnD1</obj_property>
+      <obj_property name="ObjectShortName">AXI_COMMON_ARESETnD1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/axi4_riscv_assert_inst/AXI_COMMON" type="array">
+      <obj_property name="ElementShortName">AXI_COMMON</obj_property>
+      <obj_property name="ObjectShortName">AXI_COMMON</obj_property>
       <obj_property name="isExpanded"></obj_property>
    </wvobject>
 </wave_config>
