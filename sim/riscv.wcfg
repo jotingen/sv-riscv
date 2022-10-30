@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="141.248 ns"></ZoomEndTime>
-      <Cursor1Time time="50.000 ns"></Cursor1Time>
+      <ZoomEndTime time="152.135 ns"></ZoomEndTime>
+      <Cursor1Time time="64.297 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="533"></NameColumnWidth>
-      <ValueColumnWidth column_width="211"></ValueColumnWidth>
+      <ValueColumnWidth column_width="195"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="5" />
+   <WVObjectSize size="15" />
    <wvobject fp_name="/tb/clock" type="logic">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -28,18 +28,77 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
+   <wvobject fp_name="/tb/DUT/axi4_riscv_assert_inst/reset_observed" type="logic">
+      <obj_property name="ElementShortName">reset_observed</obj_property>
+      <obj_property name="ObjectShortName">reset_observed</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/axi4_riscv_assert_inst/enable_assert" type="logic">
+      <obj_property name="ElementShortName">enable_assert</obj_property>
+      <obj_property name="ObjectShortName">enable_assert</obj_property>
+   </wvobject>
    <wvobject fp_name="/tb/DUT/AXI_AW_M" type="array">
-      <obj_property name="ElementShortName">AXI_AW_M</obj_property>
-      <obj_property name="ObjectShortName">AXI_AW_M</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+      <obj_property name="ElementShortName">AXI_AW_M[0:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_AW_M[0:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/DUT/axi4_riscv_assert_inst/AXI_COMMON_ARESETnD1" type="logic">
-      <obj_property name="ElementShortName">AXI_COMMON_ARESETnD1</obj_property>
-      <obj_property name="ObjectShortName">AXI_COMMON_ARESETnD1</obj_property>
+   <wvobject fp_name="/tb/DUT/AXI_AW_S" type="array">
+      <obj_property name="ElementShortName">AXI_AW_S[0:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_AW_S[0:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/DUT/axi4_riscv_assert_inst/AXI_COMMON" type="array">
-      <obj_property name="ElementShortName">AXI_COMMON</obj_property>
-      <obj_property name="ObjectShortName">AXI_COMMON</obj_property>
+   <wvobject fp_name="/tb/DUT/AXI_W_M" type="array">
+      <obj_property name="ElementShortName">AXI_W_M[0:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_W_M[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/AXI_W_S" type="array">
+      <obj_property name="ElementShortName">AXI_W_S[0:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_W_S[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/AXI_B_M" type="array">
+      <obj_property name="ElementShortName">AXI_B_M[0:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_B_M[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/AXI_B_S" type="array">
+      <obj_property name="ElementShortName">AXI_B_S[0:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_B_S[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/AXI_AR_S" type="array">
+      <obj_property name="ElementShortName">AXI_AR_S[1:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_AR_S[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/AXI_AR_M" type="array">
+      <obj_property name="ElementShortName">AXI_AR_M[1:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_AR_M[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/AXI_R_S" type="array">
+      <obj_property name="ElementShortName">AXI_R_S[1:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_R_S[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/AXI_R_M" type="array">
+      <obj_property name="ElementShortName">AXI_R_M[1:0]</obj_property>
+      <obj_property name="ObjectShortName">AXI_R_M[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group21" type="group">
+      <obj_property name="label">ifu</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb/DUT/ifu/AXI_AR_M" type="array">
+         <obj_property name="ElementShortName">AXI_AR_M</obj_property>
+         <obj_property name="ObjectShortName">AXI_AR_M</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/ifu/AXI_AR_S" type="array">
+         <obj_property name="ElementShortName">AXI_AR_S</obj_property>
+         <obj_property name="ObjectShortName">AXI_AR_S</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/ifu/AXI_R_M" type="array">
+         <obj_property name="ElementShortName">AXI_R_M</obj_property>
+         <obj_property name="ObjectShortName">AXI_R_M</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/ifu/AXI_R_S" type="array">
+         <obj_property name="ElementShortName">AXI_R_S</obj_property>
+         <obj_property name="ObjectShortName">AXI_R_S</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
    </wvobject>
 </wave_config>

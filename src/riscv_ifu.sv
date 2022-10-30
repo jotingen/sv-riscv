@@ -1,10 +1,14 @@
 import axi4_pkg::*;
 
 module riscv_ifu (
-   input    logic clock,
-   input    logic reset,
+   input    logic             clock,
+   input    logic             reset,
 
-   output   axi4_pkg::aw_m AXI_AW_M
+   input    axi4_pkg::ar_s    AXI_AR_S,
+   input    axi4_pkg::r_s     AXI_R_S,
+
+   output   axi4_pkg::ar_m    AXI_AR_M,
+   output   axi4_pkg::r_m     AXI_R_M
 
 );
 
@@ -20,17 +24,17 @@ module riscv_ifu (
 
    //Generate Request
    always_ff@(posedge clock) begin
-      AXI_AW_M = AXI_AW_M;
+      AXI_AR_M = AXI_AR_M;
       if(fetch)
          begin
-         AXI_AW_M = '0;
-         AXI_AW_M.AWVALID = '1;
-         AXI_AW_M.AWADDR = PC;
+         AXI_AR_M = '0;
+         AXI_AR_M.ARVALID = '1;
+         AXI_AR_M.ARADDR = PC;
          end
          
       if(reset) 
          begin
-         AXI_AW_M.AWVALID = '0;
+         AXI_AR_M.ARVALID = '0;
          end
    end
 
@@ -49,6 +53,9 @@ module riscv_ifu (
          PC[31:0] = 'h200;
          end
       end
+
+   //Recieve Response
+   assign AXI_R_M.RREADY = '1;
     
 
 endmodule: riscv_ifu

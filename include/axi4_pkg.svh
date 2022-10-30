@@ -8,15 +8,15 @@ package axi4_pkg;
    typedef struct packed {
       logic          AWID;
       logic [31:0]   AWADDR;
-      logic          AWLEN;
-      logic          AWSIZE;
-      logic          AWBURST;
+      logic [7:0]    AWLEN;
+      logic [2:0]    AWSIZE;
+      logic [1:0]    AWBURST;
       logic          AWLOCK;
-      logic          AWCACHE;
-      logic          AWPROT;
-      logic          AWQOS;
-      logic          AWREGION;
-      logic          AWUSER;
+      logic [3:0]    AWCACHE;
+      logic [2:0]    AWPROT;
+      logic [3:0]    AWQOS;
+      logic [3:0]    AWREGION;
+      logic [7:0]    AWUSER;
       logic          AWVALID;
    } aw_m;
 
@@ -26,10 +26,10 @@ package axi4_pkg;
 
    typedef struct packed {
       logic          WID;
-      logic          WDATA;
-      logic          WSTRB;
+      logic [31:0]   WDATA;
+      logic [3:0]    WSTRB;
       logic          WLAST;
-      logic          WUSER;
+      logic [7:0]    WUSER;
       logic          WVALID;
    } w_m;
 
@@ -43,23 +43,23 @@ package axi4_pkg;
 
    typedef struct packed {
       logic         BID;
-      logic         BRESP;
-      logic         BUSER;
+      logic [1:0]   BRESP;
+      logic [7:0]   BUSER;
       logic         BVALID;
    } b_s;
 
    typedef struct packed {
       logic          ARID;
       logic [31:0]   ARADDR;
-      logic          ARLEN;
-      logic          ARSIZE;
-      logic          ARBURST;
+      logic [7:0]    ARLEN;
+      logic [2:0]    ARSIZE;
+      logic [1:0]    ARBURST;
       logic          ARLOCK;
-      logic          ARCACHE;
-      logic          ARPROT;
-      logic          ARQOS;
-      logic          ARREGION;
-      logic          ARUSER;
+      logic [3:0]    ARCACHE;
+      logic [2:0]    ARPROT;
+      logic [3:0]    ARQOS;
+      logic [3:0]    ARREGION;
+      logic [7:0]    ARUSER;
       logic          ARVALID;
    } ar_m;
 
@@ -73,10 +73,10 @@ package axi4_pkg;
    
    typedef struct packed {
       logic          RID;
-      logic          RDATA;
-      logic          RRESP;
+      logic [31:0]   RDATA;
+      logic [1:0]    RRESP;
       logic          RLAST;
-      logic          RUSER;
+      logic [7:0]    RUSER;
       logic          RVALID;
    } r_s;
 
