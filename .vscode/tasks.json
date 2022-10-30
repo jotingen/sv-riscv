@@ -19,7 +19,11 @@
 			"options": {
 				"cwd": "${workspaceFolder}\\sim"
 			},
-			"command": "C:\\Xilinx\\Vivado\\2022.2\\bin\\xvlog.bat --sv ../src/riscv_top.sv ../tb/tb.sv",
+			"command": "C:\\Xilinx\\Vivado\\2022.2\\bin\\xvlog.bat",
+			"args": [
+				"--prj",
+				"../config/riscv.prj"
+			],
 			"presentation": {
 				"reveal": "always",
 			}
@@ -31,7 +35,7 @@
 			"options": {
 				"cwd": "${workspaceFolder}\\sim"
 			},
-			"command": "C:\\Xilinx\\Vivado\\2022.2\\bin\\xelab.bat -debug typical -top tb -snapshot riscv",
+			"command": "C:\\Xilinx\\Vivado\\2022.2\\bin\\xelab.bat -debug typical -snapshot riscv riscv.tb",
 			"group": "build",
 			"presentation": {
 				"reveal": "always",
