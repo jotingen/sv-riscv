@@ -12,38 +12,42 @@ module riscv_ifu (
 
 );
 
-   logic [31:0] PC;
+   logic          req_ack;
+   logic [31:0]   PC;
 
-   logic fetch;
+   riscv_axi_driver axi_driver (
+      .clock      (clock),
+      .reset      (reset),
 
-   //Determine if we should fetch
-   always_comb
-      begin
-      fetch = '1;
-      end
+      .req_vld  ('1),
+      .req_rnw  ('1),
+      .req_addr (PC),
+      .req_data ('x),
 
-   //Generate Request
-   always_ff@(posedge clock) begin
-      AXI_AR_M = AXI_AR_M;
-      if(fetch)
-         begin
-         AXI_AR_M = '0;
-         AXI_AR_M.ARVALID = '1;
-         AXI_AR_M.ARADDR = PC;
-         end
-         
-      if(reset) 
-         begin
-         AXI_AR_M.ARVALID = '0;
-         end
-   end
+      .req_ack  (req_ack),
+
+      .rsp_vld  (),
+      .rsp_data (),
+
+      .AXI_AW_S ('0),
+      .AXI_W_S  ('0),
+      .AXI_B_S  ('0),
+      .AXI_AR_S (AXI_AR_S),
+      .AXI_R_S  (AXI_R_S),
+
+      .AXI_AW_M (),
+      .AXI_W_M  (),
+      .AXI_B_M  (),
+      .AXI_AR_M (AXI_AR_M),
+      .AXI_R_M  (AXI_R_M)
+   );
 
    //Update PC for next fetch
    always_ff @(posedge clock)
       begin
       PC[31:0] = PC[31:0]; 
 
-      if(fetch)
+      if(req_ack)
          begin
          PC[31:0] = PC[31:0] + 'd4;
          end
@@ -55,7 +59,7 @@ module riscv_ifu (
       end
 
    //Recieve Response
-   assign AXI_R_M.RREADY = '1;
+   //assign AXI_R_M.RREADY = '1;
     
 
 endmodule: riscv_ifu
