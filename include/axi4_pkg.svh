@@ -6,7 +6,7 @@ package axi4_pkg;
    } common;
 
    typedef struct packed {
-      logic          AWID;
+      logic [3:0]    AWID;
       logic [31:0]   AWADDR;
       logic [7:0]    AWLEN;
       logic [2:0]    AWSIZE;
@@ -25,7 +25,7 @@ package axi4_pkg;
    } aw_s;
 
    typedef struct packed {
-      logic          WID;
+      logic [3:0]    WID;
       logic [31:0]   WDATA;
       logic [3:0]    WSTRB;
       logic          WLAST;
@@ -42,14 +42,14 @@ package axi4_pkg;
    } b_m;
 
    typedef struct packed {
-      logic         BID;
+      logic [3:0]   BID;
       logic [1:0]   BRESP;
       logic [7:0]   BUSER;
       logic         BVALID;
    } b_s;
 
    typedef struct packed {
-      logic          ARID;
+      logic [3:0]    ARID;
       logic [31:0]   ARADDR;
       logic [7:0]    ARLEN;
       logic [2:0]    ARSIZE;
@@ -72,7 +72,7 @@ package axi4_pkg;
    } r_m;
    
    typedef struct packed {
-      logic          RID;
+      logic [3:0]    RID;
       logic [31:0]   RDATA;
       logic [1:0]    RRESP;
       logic          RLAST;
