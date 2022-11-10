@@ -15,6 +15,8 @@ module riscv_axi_driver (
    output   logic [31:0]      rsp_addr,
    output   logic [31:0]      rsp_data,
 
+   input    logic             rsp_ack,
+
    input    axi4_pkg::aw_s    AXI_AW_S,
    input    axi4_pkg::w_s     AXI_W_S,
    input    axi4_pkg::b_s     AXI_B_S,
@@ -137,7 +139,8 @@ always_ff @(posedge clock)
       end
 
    //Export responses
-   if( pending[pending_rd_ptr].rsp_vld )
+   if( rsp_ack 
+     & pending[pending_rd_ptr].rsp_vld )
       begin
       pending[pending_rd_ptr].req_vld <= '0;
       pending[pending_rd_ptr].rsp_vld <= '0;

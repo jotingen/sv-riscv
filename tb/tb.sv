@@ -145,7 +145,7 @@ module tb ();
    initial begin
       clock = 0;
       reset = 1;
-      #1000;
+      #10000;
       //assert (sum == 5) else // Unless something went really wrong in the universe, we'd expect that 1+2=3
       //   $fatal(1, "Well if we cant add 1 and 2 to get 3 then we really screwed something up");
       $display("TB passed");

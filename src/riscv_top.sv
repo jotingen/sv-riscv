@@ -18,6 +18,10 @@ module riscv_top (
    logic clock;
    logic reset;
 
+   logic             ifu_vld;
+   logic      [31:0] ifu_addr;
+   logic      [31:0] ifu_data;
+
    //Extract clock and reset
    assign clock =  AXI_COMMON.ACLK;
    assign reset = ~AXI_COMMON.ARESETn;
@@ -28,7 +32,10 @@ module riscv_top (
       .AXI_AR_S   (AXI_AR_S[1]),
       .AXI_R_S    (AXI_R_S[1]),
       .AXI_AR_M   (AXI_AR_M[1]),
-      .AXI_R_M    (AXI_R_M[1])
+      .AXI_R_M    (AXI_R_M[1]),
+      .ifu_vld    (ifu_vld),
+      .ifu_addr   (ifu_addr),
+      .ifu_data   (ifu_data)
    );
 
 endmodule: riscv_top
