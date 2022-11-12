@@ -1,4 +1,5 @@
 import axi4_pkg::*;
+import riscv_pkg::*;
 
 module riscv_ifu (
    input    logic             clock,

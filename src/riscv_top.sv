@@ -1,4 +1,5 @@
 import axi4_pkg::*;
+import riscv_pkg::*;
 
 module riscv_top (
    input    axi4_pkg::common        AXI_COMMON,
@@ -22,6 +23,10 @@ module riscv_top (
    logic      [31:0] ifu_addr;
    logic      [31:0] ifu_data;
 
+   logic                   idu_vld;
+   logic      [31:0]       idu_addr;
+   riscv_pkg::instr_type   idu_data;
+
    //Extract clock and reset
    assign clock =  AXI_COMMON.ACLK;
    assign reset = ~AXI_COMMON.ARESETn;
@@ -36,6 +41,17 @@ module riscv_top (
       .ifu_vld    (ifu_vld),
       .ifu_addr   (ifu_addr),
       .ifu_data   (ifu_data)
+   );
+
+   riscv_idu idu (
+      .clock      (clock),
+      .reset      (reset),
+      .ifu_vld    (ifu_vld),
+      .ifu_addr   (ifu_addr),
+      .ifu_data   (ifu_data),
+      .idu_vld    (idu_vld),
+      .idu_addr   (idu_addr),
+      .idu_data   (idu_data)
    );
 
 endmodule: riscv_top
