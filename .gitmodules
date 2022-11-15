@@ -1,0 +1,3 @@
+[submodule "submodules/riscv-isa-data"]
+	path = submodules/riscv-isa-data
+	url = https://github.com/five-embeddev/riscv-isa-data.git
