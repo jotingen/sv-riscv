@@ -20,6 +20,113 @@ riscv_pkg::instr_type   ifu_cdata_converted;
 
 logic          ifu_is_illegal;
 
+logic ADD;
+logic ADDI;
+logic AND;
+logic ANDI;
+logic AUIPC;
+logic BEQ;
+logic BGE;
+logic BGEU;
+logic BLT;
+logic BLTU;
+logic BNE;
+logic C_ADD;
+logic C_ADDI;
+logic C_ADDI16SP;
+logic C_ADDI4SPN;
+logic C_AND;
+logic C_ANDI;
+logic C_BEQZ;
+logic C_BNEZ;
+logic C_EBREAK;
+logic C_J;
+logic C_JAL;
+logic C_JALR;
+logic C_JR;
+logic C_LI;
+logic C_LUI;
+logic C_LW;
+logic C_LWSP;
+logic C_MV;
+logic C_NOP;
+logic C_OR;
+logic C_SUB;
+logic C_SW;
+logic C_SWSP;
+logic C_XOR;
+logic DIV;
+logic DIVU;
+logic EBREAK;
+logic ECALL;
+logic FENCE;
+logic JAL;
+logic JALR;
+logic LB;
+logic LBU;
+logic LH;
+logic LHU;
+logic LUI;
+logic LW;
+logic MUL;
+logic MULH;
+logic MULHSU;
+logic MULHU;
+logic OR;
+logic ORI;
+logic REM;
+logic REMU;
+logic SB;
+logic SH;
+logic SLL;
+logic SLT;
+logic SLTI;
+logic SLTIU;
+logic SLTU;
+logic SRA;
+logic SRL;
+logic SUB;
+logic SW;
+logic XOR;
+logic XORI;
+logic defined;
+logic bimm12hi;
+logic bimm12lo;
+logic c_bimm9hi;
+logic c_bimm9lo;
+logic c_imm12;
+logic c_imm6hi;
+logic c_imm6lo;
+logic c_nzimm10hi;
+logic c_nzimm10lo;
+logic c_nzimm18hi;
+logic c_nzimm18lo;
+logic c_nzimm6hi;
+logic c_nzimm6lo;
+logic c_nzuimm10;
+logic c_rs2;
+logic c_uimm7hi;
+logic c_uimm7lo;
+logic c_uimm8sp_s;
+logic c_uimm8sphi;
+logic c_uimm8splo;
+logic fm;
+logic imm12;
+logic imm12hi;
+logic imm12lo;
+logic imm20;
+logic jimm20;
+logic pred;
+logic rd;
+logic rd_p;
+logic rd_rs1;
+logic rd_rs1_p;
+logic rs1;
+logic rs1_p;
+logic rs2;
+logic rs2_p;
+logic succ;
+
 always_comb
    begin
    ifu_is_illegal = '0;
@@ -110,6 +217,7 @@ always_comb
    
    end
 
+riscv_decode decode (.data(ifu_data),.*);
 
 always_ff @(posedge clock)
    begin
