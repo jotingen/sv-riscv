@@ -2,233 +2,380 @@ import axi4_pkg::*;
 import riscv_pkg::*;
 
 module riscv_idu (
-   input    logic                   clock,
-   input    logic                   reset,
+    input logic clock,
+    input logic reset,
 
-   input    logic                   ifu_vld,
-   input    logic      [31:0]       ifu_addr,
-   input    logic      [31:0]       ifu_data,
+    input logic        ifu_vld,
+    input logic [31:0] ifu_addr,
+    input logic [31:0] ifu_data,
 
-   output   logic                   idu_vld,
-   output   logic      [31:0]       idu_addr,
-   output   riscv_pkg::instr_type   idu_data
+    output logic                        idu_vld,
+    output logic                 [31:0] idu_addr,
+    output riscv_pkg::instr_type        idu_data
 );
 
-logic          ifu_is_compressed;
-riscv_pkg::cinstr_type  ifu_cdata;
-riscv_pkg::instr_type   ifu_cdata_converted;
+   logic                  ifu_is_compressed;
+   riscv_pkg::cinstr_type ifu_cdata;
+   riscv_pkg::instr_type  ifu_cdata_converted;
 
-logic          ifu_is_illegal;
+   logic                  ifu_is_illegal;
 
-logic ADD;
-logic ADDI;
-logic AND;
-logic ANDI;
-logic AUIPC;
-logic BEQ;
-logic BGE;
-logic BGEU;
-logic BLT;
-logic BLTU;
-logic BNE;
-logic C_ADD;
-logic C_ADDI;
-logic C_ADDI16SP;
-logic C_ADDI4SPN;
-logic C_AND;
-logic C_ANDI;
-logic C_BEQZ;
-logic C_BNEZ;
-logic C_EBREAK;
-logic C_J;
-logic C_JAL;
-logic C_JALR;
-logic C_JR;
-logic C_LI;
-logic C_LUI;
-logic C_LW;
-logic C_LWSP;
-logic C_MV;
-logic C_NOP;
-logic C_OR;
-logic C_SUB;
-logic C_SW;
-logic C_SWSP;
-logic C_XOR;
-logic DIV;
-logic DIVU;
-logic EBREAK;
-logic ECALL;
-logic FENCE;
-logic JAL;
-logic JALR;
-logic LB;
-logic LBU;
-logic LH;
-logic LHU;
-logic LUI;
-logic LW;
-logic MUL;
-logic MULH;
-logic MULHSU;
-logic MULHU;
-logic OR;
-logic ORI;
-logic REM;
-logic REMU;
-logic SB;
-logic SH;
-logic SLL;
-logic SLT;
-logic SLTI;
-logic SLTIU;
-logic SLTU;
-logic SRA;
-logic SRL;
-logic SUB;
-logic SW;
-logic XOR;
-logic XORI;
-logic defined;
-logic bimm12hi;
-logic bimm12lo;
-logic c_bimm9hi;
-logic c_bimm9lo;
-logic c_imm12;
-logic c_imm6hi;
-logic c_imm6lo;
-logic c_nzimm10hi;
-logic c_nzimm10lo;
-logic c_nzimm18hi;
-logic c_nzimm18lo;
-logic c_nzimm6hi;
-logic c_nzimm6lo;
-logic c_nzuimm10;
-logic c_rs2;
-logic c_uimm7hi;
-logic c_uimm7lo;
-logic c_uimm8sp_s;
-logic c_uimm8sphi;
-logic c_uimm8splo;
-logic fm;
-logic imm12;
-logic imm12hi;
-logic imm12lo;
-logic imm20;
-logic jimm20;
-logic pred;
-logic rd;
-logic rd_p;
-logic rd_rs1;
-logic rd_rs1_p;
-logic rs1;
-logic rs1_p;
-logic rs2;
-logic rs2_p;
-logic succ;
+   logic                  ADD;
+   logic                  ADDI;
+   logic                  AND;
+   logic                  ANDI;
+   logic                  AUIPC;
+   logic                  BEQ;
+   logic                  BGE;
+   logic                  BGEU;
+   logic                  BLT;
+   logic                  BLTU;
+   logic                  BNE;
+   logic                  DIV;
+   logic                  DIVU;
+   logic                  EBREAK;
+   logic                  ECALL;
+   logic                  FENCE;
+   logic                  JAL;
+   logic                  JALR;
+   logic                  LB;
+   logic                  LBU;
+   logic                  LH;
+   logic                  LHU;
+   logic                  LUI;
+   logic                  LW;
+   logic                  MUL;
+   logic                  MULH;
+   logic                  MULHSU;
+   logic                  MULHU;
+   logic                  OR;
+   logic                  ORI;
+   logic                  REM;
+   logic                  REMU;
+   logic                  SB;
+   logic                  SH;
+   logic                  SLL;
+   logic                  SLT;
+   logic                  SLTI;
+   logic                  SLTIU;
+   logic                  SLTU;
+   logic                  SRA;
+   logic                  SRL;
+   logic                  SUB;
+   logic                  SW;
+   logic                  XOR;
+   logic                  XORI;
+   logic                  defined;
+   logic                  bimm12hi;
+   logic                  bimm12lo;
+   logic                  c_bimm9hi;
+   logic                  c_bimm9lo;
+   logic                  c_imm12;
+   logic                  c_imm6hi;
+   logic                  c_imm6lo;
+   logic                  c_nzimm10hi;
+   logic                  c_nzimm10lo;
+   logic                  c_nzimm18hi;
+   logic                  c_nzimm18lo;
+   logic                  c_nzimm6hi;
+   logic                  c_nzimm6lo;
+   logic                  c_nzuimm10;
+   logic                  c_rs2;
+   logic                  c_uimm7hi;
+   logic                  c_uimm7lo;
+   logic                  c_uimm8sp_s;
+   logic                  c_uimm8sphi;
+   logic                  c_uimm8splo;
+   logic                  fm;
+   logic                  imm12;
+   logic                  imm12hi;
+   logic                  imm12lo;
+   logic                  imm20;
+   logic                  jimm20;
+   logic                  pred;
+   logic                  rd;
+   logic                  rd_p;
+   logic                  rd_rs1;
+   logic                  rd_rs1_p;
+   logic                  rs1;
+   logic                  rs1_p;
+   logic                  rs2;
+   logic                  rs2_p;
+   logic                  succ;
 
-always_comb
-   begin
-   ifu_is_illegal = '0;
+   logic                  dcd_ADD;
+   logic                  dcd_ADDI;
+   logic                  dcd_AND;
+   logic                  dcd_ANDI;
+   logic                  dcd_AUIPC;
+   logic                  dcd_BEQ;
+   logic                  dcd_BGE;
+   logic                  dcd_BGEU;
+   logic                  dcd_BLT;
+   logic                  dcd_BLTU;
+   logic                  dcd_BNE;
+   logic                  dcd_C_ADD;
+   logic                  dcd_C_ADDI;
+   logic                  dcd_C_ADDI16SP;
+   logic                  dcd_C_ADDI4SPN;
+   logic                  dcd_C_AND;
+   logic                  dcd_C_ANDI;
+   logic                  dcd_C_BEQZ;
+   logic                  dcd_C_BNEZ;
+   logic                  dcd_C_EBREAK;
+   logic                  dcd_C_J;
+   logic                  dcd_C_JAL;
+   logic                  dcd_C_JALR;
+   logic                  dcd_C_JR;
+   logic                  dcd_C_LI;
+   logic                  dcd_C_LUI;
+   logic                  dcd_C_LW;
+   logic                  dcd_C_LWSP;
+   logic                  dcd_C_MV;
+   logic                  dcd_C_NOP;
+   logic                  dcd_C_OR;
+   logic                  dcd_C_SUB;
+   logic                  dcd_C_SW;
+   logic                  dcd_C_SWSP;
+   logic                  dcd_C_XOR;
+   logic                  dcd_DIV;
+   logic                  dcd_DIVU;
+   logic                  dcd_EBREAK;
+   logic                  dcd_ECALL;
+   logic                  dcd_FENCE;
+   logic                  dcd_JAL;
+   logic                  dcd_JALR;
+   logic                  dcd_LB;
+   logic                  dcd_LBU;
+   logic                  dcd_LH;
+   logic                  dcd_LHU;
+   logic                  dcd_LUI;
+   logic                  dcd_LW;
+   logic                  dcd_MUL;
+   logic                  dcd_MULH;
+   logic                  dcd_MULHSU;
+   logic                  dcd_MULHU;
+   logic                  dcd_OR;
+   logic                  dcd_ORI;
+   logic                  dcd_REM;
+   logic                  dcd_REMU;
+   logic                  dcd_SB;
+   logic                  dcd_SH;
+   logic                  dcd_SLL;
+   logic                  dcd_SLT;
+   logic                  dcd_SLTI;
+   logic                  dcd_SLTIU;
+   logic                  dcd_SLTU;
+   logic                  dcd_SRA;
+   logic                  dcd_SRL;
+   logic                  dcd_SUB;
+   logic                  dcd_SW;
+   logic                  dcd_XOR;
+   logic                  dcd_XORI;
+   logic                  dcd_defined;
+   logic                  dcd_bimm12hi;
+   logic                  dcd_bimm12lo;
+   logic                  dcd_c_bimm9hi;
+   logic                  dcd_c_bimm9lo;
+   logic                  dcd_c_imm12;
+   logic                  dcd_c_imm6hi;
+   logic                  dcd_c_imm6lo;
+   logic                  dcd_c_nzimm10hi;
+   logic                  dcd_c_nzimm10lo;
+   logic                  dcd_c_nzimm18hi;
+   logic                  dcd_c_nzimm18lo;
+   logic                  dcd_c_nzimm6hi;
+   logic                  dcd_c_nzimm6lo;
+   logic                  dcd_c_nzuimm10;
+   logic                  dcd_c_rs2;
+   logic                  dcd_c_uimm7hi;
+   logic                  dcd_c_uimm7lo;
+   logic                  dcd_c_uimm8sp_s;
+   logic                  dcd_c_uimm8sphi;
+   logic                  dcd_c_uimm8splo;
+   logic                  dcd_fm;
+   logic                  dcd_imm12;
+   logic                  dcd_imm12hi;
+   logic                  dcd_imm12lo;
+   logic                  dcd_imm20;
+   logic                  dcd_jimm20;
+   logic                  dcd_pred;
+   logic                  dcd_rd;
+   logic                  dcd_rd_p;
+   logic                  dcd_rd_rs1;
+   logic                  dcd_rd_rs1_p;
+   logic                  dcd_rs1;
+   logic                  dcd_rs1_p;
+   logic                  dcd_rs2;
+   logic                  dcd_rs2_p;
+   logic                  dcd_succ;
 
-   ifu_cdata = 
-         ifu_data[15:0];
+   riscv_decode decode (
+       .data       (ifu_data),
+       .ADD        (dcd_ADD),
+       .ADDI       (dcd_ADDI),
+       .AND        (dcd_AND),
+       .ANDI       (dcd_ANDI),
+       .AUIPC      (dcd_AUIPC),
+       .BEQ        (dcd_BEQ),
+       .BGE        (dcd_BGE),
+       .BGEU       (dcd_BGEU),
+       .BLT        (dcd_BLT),
+       .BLTU       (dcd_BLTU),
+       .BNE        (dcd_BNE),
+       .C_ADD      (dcd_C_ADD),
+       .C_ADDI     (dcd_C_ADDI),
+       .C_ADDI16SP (dcd_C_ADDI16SP),
+       .C_ADDI4SPN (dcd_C_ADDI4SPN),
+       .C_AND      (dcd_C_AND),
+       .C_ANDI     (dcd_C_ANDI),
+       .C_BEQZ     (dcd_C_BEQZ),
+       .C_BNEZ     (dcd_C_BNEZ),
+       .C_EBREAK   (dcd_C_EBREAK),
+       .C_J        (dcd_C_J),
+       .C_JAL      (dcd_C_JAL),
+       .C_JALR     (dcd_C_JALR),
+       .C_JR       (dcd_C_JR),
+       .C_LI       (dcd_C_LI),
+       .C_LUI      (dcd_C_LUI),
+       .C_LW       (dcd_C_LW),
+       .C_LWSP     (dcd_C_LWSP),
+       .C_MV       (dcd_C_MV),
+       .C_NOP      (dcd_C_NOP),
+       .C_OR       (dcd_C_OR),
+       .C_SUB      (dcd_C_SUB),
+       .C_SW       (dcd_C_SW),
+       .C_SWSP     (dcd_C_SWSP),
+       .C_XOR      (dcd_C_XOR),
+       .DIV        (dcd_DIV),
+       .DIVU       (dcd_DIVU),
+       .EBREAK     (dcd_EBREAK),
+       .ECALL      (dcd_ECALL),
+       .FENCE      (dcd_FENCE),
+       .JAL        (dcd_JAL),
+       .JALR       (dcd_JALR),
+       .LB         (dcd_LB),
+       .LBU        (dcd_LBU),
+       .LH         (dcd_LH),
+       .LHU        (dcd_LHU),
+       .LUI        (dcd_LUI),
+       .LW         (dcd_LW),
+       .MUL        (dcd_MUL),
+       .MULH       (dcd_MULH),
+       .MULHSU     (dcd_MULHSU),
+       .MULHU      (dcd_MULHU),
+       .OR         (dcd_OR),
+       .ORI        (dcd_ORI),
+       .REM        (dcd_REM),
+       .REMU       (dcd_REMU),
+       .SB         (dcd_SB),
+       .SH         (dcd_SH),
+       .SLL        (dcd_SLL),
+       .SLT        (dcd_SLT),
+       .SLTI       (dcd_SLTI),
+       .SLTIU      (dcd_SLTIU),
+       .SLTU       (dcd_SLTU),
+       .SRA        (dcd_SRA),
+       .SRL        (dcd_SRL),
+       .SUB        (dcd_SUB),
+       .SW         (dcd_SW),
+       .XOR        (dcd_XOR),
+       .XORI       (dcd_XORI),
+       .defined    (dcd_defined),
+       .bimm12hi   (dcd_bimm12hi),
+       .bimm12lo   (dcd_bimm12lo),
+       .c_bimm9hi  (dcd_c_bimm9hi),
+       .c_bimm9lo  (dcd_c_bimm9lo),
+       .c_imm12    (dcd_c_imm12),
+       .c_imm6hi   (dcd_c_imm6hi),
+       .c_imm6lo   (dcd_c_imm6lo),
+       .c_nzimm10hi(dcd_c_nzimm10hi),
+       .c_nzimm10lo(dcd_c_nzimm10lo),
+       .c_nzimm18hi(dcd_c_nzimm18hi),
+       .c_nzimm18lo(dcd_c_nzimm18lo),
+       .c_nzimm6hi (dcd_c_nzimm6hi),
+       .c_nzimm6lo (dcd_c_nzimm6lo),
+       .c_nzuimm10 (dcd_c_nzuimm10),
+       .c_rs2      (dcd_c_rs2),
+       .c_uimm7hi  (dcd_c_uimm7hi),
+       .c_uimm7lo  (dcd_c_uimm7lo),
+       .c_uimm8sp_s(dcd_c_uimm8sp_s),
+       .c_uimm8sphi(dcd_c_uimm8sphi),
+       .c_uimm8splo(dcd_c_uimm8splo),
+       .fm         (dcd_fm),
+       .imm12      (dcd_imm12),
+       .imm12hi    (dcd_imm12hi),
+       .imm12lo    (dcd_imm12lo),
+       .imm20      (dcd_imm20),
+       .jimm20     (dcd_jimm20),
+       .pred       (dcd_pred),
+       .rd         (dcd_rd),
+       .rd_p       (dcd_rd_p),
+       .rd_rs1     (dcd_rd_rs1),
+       .rd_rs1_p   (dcd_rd_rs1_p),
+       .rs1        (dcd_rs1),
+       .rs1_p      (dcd_rs1_p),
+       .rs2        (dcd_rs2),
+       .rs2_p      (dcd_rs2_p),
+       .succ       (dcd_succ)
+   );
 
-   ifu_is_compressed = 
-         ifu_data[1:0] != 2'd11;
-
-   unique case (ifu_cdata) inside
-      //Illegal instruction
-      //000 nzuimm[5:4|9:6|2|3] rd ′ 00 C.ADDI4SPN (RES, nzuimm=0)
-      //001 uimm[5:3] rs1 ′ uimm[7:6] rd ′ 00 C.FLD (RV32/64)
-      //001 uimm[5:4|8] rs1 ′ uimm[7:6] rd ′ 00 C.LQ (RV128)
-      //010 uimm[5:3] rs1 ′ uimm[2|6] rd ′ 00 C.LW
-      //011 uimm[5:3] rs1 ′ uimm[2|6] rd ′ 00 C.FLW (RV32)
-      //011 uimm[5:3] rs1 ′ uimm[7:6] rd ′ 00 C.LD (RV64/128)
-      //100 — 00 Reserved
-      //101 uimm[5:3] rs1 ′ uimm[7:6] rs2 ′ 00 C.FSD (RV32/64)
-      //101 uimm[5:4|8] rs1 ′ uimm[7:6] rs2 ′ 00 C.SQ (RV128)
-      //110 uimm[5:3] rs1 ′ uimm[2|6] rs2 ′ 00 C.SW
-      //111 uimm[5:3] rs1 ′ uimm[2|6] rs2 ′ 00 C.FSW (RV32)
-      //111 uimm[5:3] rs1 ′ uimm[7:6] rs2 ′ 00 C.SD (RV64/128)
-      //Table 16.5: Instruction listing for RVC, Quadrant 0.
-      //Volume I: RISC-V Unprivileged ISA V20191213 113
-      //15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
-      //000 nzimm[5] 0 nzimm[4:0] 01 C.NOP (HINT, nzimm̸=0)
-      //000 nzimm[5] rs1/rd̸=0 nzimm[4:0] 01 C.ADDI (HINT, nzimm=0)
-      //001 imm[11|4|9:8|10|6|7|3:1|5] 01 C.JAL (RV32)
-      //001 imm[5] rs1/rd̸=0 imm[4:0] 01 C.ADDIW (RV64/128; RES, rd=0)
-      //010 imm[5] rd̸=0 imm[4:0] 01 C.LI (HINT, rd=0)
-      //011 nzimm[9] 2 nzimm[4|6|8:7|5] 01 C.ADDI16SP (RES, nzimm=0)
-      //011 nzimm[17] rd̸={0, 2} nzimm[16:12] 01 C.LUI (RES, nzimm=0; HINT, rd=0)
-      //100 nzuimm[5] 00 rs1 ′/rd ′ nzuimm[4:0] 01 C.SRLI (RV32 NSE, nzuimm[5]=1)
-      //100 0 00 rs1 ′/rd ′ 0 01 C.SRLI64 (RV128; RV32/64 HINT)
-      //100 nzuimm[5] 01 rs1 ′/rd ′ nzuimm[4:0] 01 C.SRAI (RV32 NSE, nzuimm[5]=1)
-      //100 0 01 rs1 ′/rd ′ 0 01 C.SRAI64 (RV128; RV32/64 HINT)
-      //100 imm[5] 10 rs1 ′/rd ′
-      //imm[4:0] 01 C.ANDI
-      //100 0 11 rs1 ′/rd ′ 00 rs2 ′ 01 C.SUB
-      //100 0 11 rs1 ′/rd ′ 01 rs2 ′ 01 C.XOR
-      //100 0 11 rs1 ′/rd ′ 10 rs2 ′ 01 C.OR
-      //100 0 11 rs1 ′/rd ′ 11 rs2 ′ 01 C.AND
-      //100 1 11 rs1 ′/rd ′ 00 rs2 ′ 01 C.SUBW (RV64/128; RV32 RES)
-      //100 1 11 rs1 ′/rd ′ 01 rs2 ′ 01 C.ADDW (RV64/128; RV32 RES)
-      //100 1 11 — 10 — 01 Reserved
-      //100 1 11 — 11 — 01 Reserved
-      //101 imm[11|4|9:8|10|6|7|3:1|5] 01 C.J
-      //110 imm[8|4:3] rs1 ′
-      //imm[7:6|2:1|5] 01 C.BEQZ
-      //111 imm[8|4:3] rs1 ′
-      //imm[7:6|2:1|5] 01 C.BNEZ
-      //Table 16.6: Instruction listing for RVC, Quadrant 1.
-      //15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
-      //000 nzuimm[5] rs1/rd̸=0 nzuimm[4:0] 10 C.SLLI (HINT, rd=0; RV32 NSE, nzuimm[5]=1)
-      //000 0 rs1/rd̸=0 0 10 C.SLLI64 (RV128; RV32/64 HINT; HINT, rd=0)
-      //001 uimm[5] rd uimm[4:3|8:6] 10 C.FLDSP (RV32/64)
-      //001 uimm[5] rd̸=0 uimm[4|9:6] 10 C.LQSP (RV128; RES, rd=0)
-      //010 uimm[5] rd̸=0 uimm[4:2|7:6] 10 C.LWSP (RES, rd=0)
-      //011 uimm[5] rd uimm[4:2|7:6] 10 C.FLWSP (RV32)
-      //011 uimm[5] rd̸=0 uimm[4:3|8:6] 10 C.LDSP (RV64/128; RES, rd=0)
-      //100 0 rs1̸=0 0 10 C.JR (RES, rs1=0)
-      //100 0 rd̸=0 rs2̸=0 10 C.MV (HINT, rd=0)
-      //100 1 0 0 10 C.EBREAK
-      //100 1 rs1̸=0 0 10 C.JALR
-      //100 1 rs1/rd̸=0 rs2̸=0 10 C.ADD (HINT, rd=0)
-      //101 uimm[5:3|8:6] rs2 10 C.FSDSP (RV32/64)
-      //101 uimm[5:4|9:6] rs2 10 C.SQSP (RV128)
-      //110 uimm[5:2|7:6] rs2 10 C.SWSP
-      //111 uimm[5:2|7:6] rs2 10 C.FSWSP (RV32)
-      //111 uimm[5:3|8:6] rs2 10 C.SDSP (RV64/128)
-
-      default:
-         begin
-         ifu_is_illegal = '1;
-         end
-   endcase
-
-   //If it was compressed, update data, else reset flags
-   if( ifu_is_compressed )
-      begin
-      end
-   else
-      begin
-      ifu_is_illegal = '0;
-      end
-   
+   always_comb begin
+      ADD    = dcd_ADD | dcd_C_ADD | dcd_C_MV;
+      ADDI   = dcd_ADDI | dcd_C_ADDI | dcd_C_ADDI16SP | dcd_C_ADDI4SPN | dcd_C_LI | dcd_C_NOP;
+      AND    = dcd_AND | dcd_C_AND;
+      ANDI   = dcd_ANDI | dcd_C_ANDI;
+      AUIPC  = dcd_AUIPC;
+      BEQ    = dcd_BEQ | dcd_C_BEQZ;
+      BGE    = dcd_BGE;
+      BGEU   = dcd_BGEU;
+      BLT    = dcd_BLT;
+      BLTU   = dcd_BLTU;
+      BNE    = dcd_BNE | dcd_C_BNEZ;
+      DIV    = dcd_DIV;
+      DIVU   = dcd_DIVU;
+      EBREAK = dcd_EBREAK | dcd_C_EBREAK;
+      ECALL  = dcd_ECALL;
+      FENCE  = dcd_FENCE;
+      JAL    = dcd_JAL | dcd_C_J | dcd_C_JAL;
+      JALR   = dcd_JALR | dcd_C_JALR | dcd_C_JR;
+      LB     = dcd_LB;
+      LBU    = dcd_LBU;
+      LH     = dcd_LH;
+      LHU    = dcd_LHU;
+      LUI    = dcd_LUI | dcd_C_LUI;
+      LW     = dcd_LW | dcd_C_LW | dcd_C_LWSP;
+      MUL    = dcd_MUL;
+      MULH   = dcd_MULH;
+      MULHSU = dcd_MULHSU;
+      MULHU  = dcd_MULHU;
+      OR     = dcd_OR | dcd_C_OR;
+      ORI    = dcd_ORI;
+      REM    = dcd_REM;
+      REMU   = dcd_REMU;
+      SB     = dcd_SB;
+      SH     = dcd_SH;
+      SLL    = dcd_SLL;
+      SLT    = dcd_SLT;
+      SLTI   = dcd_SLTI;
+      SLTIU  = dcd_SLTIU;
+      SLTU   = dcd_SLTU;
+      SRA    = dcd_SRA;
+      SRL    = dcd_SRL;
+      SUB    = dcd_SUB | dcd_C_SUB;
+      SW     = dcd_SW | dcd_C_SW | dcd_C_SWSP;
+      XOR    = dcd_XOR | dcd_C_XOR;
+      XORI   = dcd_XORI;
    end
 
-riscv_decode decode (.data(ifu_data),.*);
+   always_ff @(posedge clock) begin
+      idu_vld  <= ifu_vld;
+      idu_addr <= ifu_addr;
+      idu_data <= ifu_data;
 
-always_ff @(posedge clock)
-   begin
-   idu_vld <= ifu_vld;
-   idu_addr <= ifu_addr;
-   idu_data <= ifu_data;
-
-   if( reset )
-      begin
-      idu_vld <= '0;
+      if (reset) begin
+         idu_vld <= '0;
       end
    end
 
-endmodule: riscv_idu
+endmodule : riscv_idu

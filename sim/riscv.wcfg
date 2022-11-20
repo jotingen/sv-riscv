@@ -13,14 +13,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="217.790 ns"></ZoomEndTime>
+      <ZoomEndTime time="1,587.087 ns"></ZoomEndTime>
       <Cursor1Time time="130.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="361"></NameColumnWidth>
-      <ValueColumnWidth column_width="232"></ValueColumnWidth>
+      <ValueColumnWidth column_width="228"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="28" />
+   <WVObjectSize size="135" />
    <wvobject fp_name="/tb/clock" type="logic">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -208,5 +208,437 @@
       <obj_property name="ElementShortName">idu_data</obj_property>
       <obj_property name="ObjectShortName">idu_data</obj_property>
       <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="group62" type="group">
+      <obj_property name="label">Decode</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb/DUT/idu_data.j" type="array">
+         <obj_property name="ElementShortName">.j</obj_property>
+         <obj_property name="ObjectShortName">.j</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/defined" type="logic">
+      <obj_property name="ElementShortName">defined</obj_property>
+      <obj_property name="ObjectShortName">defined</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/ADD" type="logic">
+      <obj_property name="ElementShortName">ADD</obj_property>
+      <obj_property name="ObjectShortName">ADD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/ADDI" type="logic">
+      <obj_property name="ElementShortName">ADDI</obj_property>
+      <obj_property name="ObjectShortName">ADDI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/AND" type="logic">
+      <obj_property name="ElementShortName">AND</obj_property>
+      <obj_property name="ObjectShortName">AND</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/ANDI" type="logic">
+      <obj_property name="ElementShortName">ANDI</obj_property>
+      <obj_property name="ObjectShortName">ANDI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/AUIPC" type="logic">
+      <obj_property name="ElementShortName">AUIPC</obj_property>
+      <obj_property name="ObjectShortName">AUIPC</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/BEQ" type="logic">
+      <obj_property name="ElementShortName">BEQ</obj_property>
+      <obj_property name="ObjectShortName">BEQ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/BGE" type="logic">
+      <obj_property name="ElementShortName">BGE</obj_property>
+      <obj_property name="ObjectShortName">BGE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/BGEU" type="logic">
+      <obj_property name="ElementShortName">BGEU</obj_property>
+      <obj_property name="ObjectShortName">BGEU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/BLT" type="logic">
+      <obj_property name="ElementShortName">BLT</obj_property>
+      <obj_property name="ObjectShortName">BLT</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/BLTU" type="logic">
+      <obj_property name="ElementShortName">BLTU</obj_property>
+      <obj_property name="ObjectShortName">BLTU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/BNE" type="logic">
+      <obj_property name="ElementShortName">BNE</obj_property>
+      <obj_property name="ObjectShortName">BNE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_ADD" type="logic">
+      <obj_property name="ElementShortName">C_ADD</obj_property>
+      <obj_property name="ObjectShortName">C_ADD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_ADDI" type="logic">
+      <obj_property name="ElementShortName">C_ADDI</obj_property>
+      <obj_property name="ObjectShortName">C_ADDI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_ADDI16SP" type="logic">
+      <obj_property name="ElementShortName">C_ADDI16SP</obj_property>
+      <obj_property name="ObjectShortName">C_ADDI16SP</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_ADDI4SPN" type="logic">
+      <obj_property name="ElementShortName">C_ADDI4SPN</obj_property>
+      <obj_property name="ObjectShortName">C_ADDI4SPN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_AND" type="logic">
+      <obj_property name="ElementShortName">C_AND</obj_property>
+      <obj_property name="ObjectShortName">C_AND</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_ANDI" type="logic">
+      <obj_property name="ElementShortName">C_ANDI</obj_property>
+      <obj_property name="ObjectShortName">C_ANDI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_BEQZ" type="logic">
+      <obj_property name="ElementShortName">C_BEQZ</obj_property>
+      <obj_property name="ObjectShortName">C_BEQZ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_BNEZ" type="logic">
+      <obj_property name="ElementShortName">C_BNEZ</obj_property>
+      <obj_property name="ObjectShortName">C_BNEZ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_EBREAK" type="logic">
+      <obj_property name="ElementShortName">C_EBREAK</obj_property>
+      <obj_property name="ObjectShortName">C_EBREAK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_J" type="logic">
+      <obj_property name="ElementShortName">C_J</obj_property>
+      <obj_property name="ObjectShortName">C_J</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_JAL" type="logic">
+      <obj_property name="ElementShortName">C_JAL</obj_property>
+      <obj_property name="ObjectShortName">C_JAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_JALR" type="logic">
+      <obj_property name="ElementShortName">C_JALR</obj_property>
+      <obj_property name="ObjectShortName">C_JALR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_JR" type="logic">
+      <obj_property name="ElementShortName">C_JR</obj_property>
+      <obj_property name="ObjectShortName">C_JR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_LI" type="logic">
+      <obj_property name="ElementShortName">C_LI</obj_property>
+      <obj_property name="ObjectShortName">C_LI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_LUI" type="logic">
+      <obj_property name="ElementShortName">C_LUI</obj_property>
+      <obj_property name="ObjectShortName">C_LUI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_LW" type="logic">
+      <obj_property name="ElementShortName">C_LW</obj_property>
+      <obj_property name="ObjectShortName">C_LW</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_LWSP" type="logic">
+      <obj_property name="ElementShortName">C_LWSP</obj_property>
+      <obj_property name="ObjectShortName">C_LWSP</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_MV" type="logic">
+      <obj_property name="ElementShortName">C_MV</obj_property>
+      <obj_property name="ObjectShortName">C_MV</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_NOP" type="logic">
+      <obj_property name="ElementShortName">C_NOP</obj_property>
+      <obj_property name="ObjectShortName">C_NOP</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_OR" type="logic">
+      <obj_property name="ElementShortName">C_OR</obj_property>
+      <obj_property name="ObjectShortName">C_OR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_SUB" type="logic">
+      <obj_property name="ElementShortName">C_SUB</obj_property>
+      <obj_property name="ObjectShortName">C_SUB</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_SW" type="logic">
+      <obj_property name="ElementShortName">C_SW</obj_property>
+      <obj_property name="ObjectShortName">C_SW</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_SWSP" type="logic">
+      <obj_property name="ElementShortName">C_SWSP</obj_property>
+      <obj_property name="ObjectShortName">C_SWSP</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/C_XOR" type="logic">
+      <obj_property name="ElementShortName">C_XOR</obj_property>
+      <obj_property name="ObjectShortName">C_XOR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/DIV" type="logic">
+      <obj_property name="ElementShortName">DIV</obj_property>
+      <obj_property name="ObjectShortName">DIV</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/DIVU" type="logic">
+      <obj_property name="ElementShortName">DIVU</obj_property>
+      <obj_property name="ObjectShortName">DIVU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/EBREAK" type="logic">
+      <obj_property name="ElementShortName">EBREAK</obj_property>
+      <obj_property name="ObjectShortName">EBREAK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/ECALL" type="logic">
+      <obj_property name="ElementShortName">ECALL</obj_property>
+      <obj_property name="ObjectShortName">ECALL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/FENCE" type="logic">
+      <obj_property name="ElementShortName">FENCE</obj_property>
+      <obj_property name="ObjectShortName">FENCE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/JAL" type="logic">
+      <obj_property name="ElementShortName">JAL</obj_property>
+      <obj_property name="ObjectShortName">JAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/JALR" type="logic">
+      <obj_property name="ElementShortName">JALR</obj_property>
+      <obj_property name="ObjectShortName">JALR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/LB" type="logic">
+      <obj_property name="ElementShortName">LB</obj_property>
+      <obj_property name="ObjectShortName">LB</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/LBU" type="logic">
+      <obj_property name="ElementShortName">LBU</obj_property>
+      <obj_property name="ObjectShortName">LBU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/LH" type="logic">
+      <obj_property name="ElementShortName">LH</obj_property>
+      <obj_property name="ObjectShortName">LH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/LHU" type="logic">
+      <obj_property name="ElementShortName">LHU</obj_property>
+      <obj_property name="ObjectShortName">LHU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/LUI" type="logic">
+      <obj_property name="ElementShortName">LUI</obj_property>
+      <obj_property name="ObjectShortName">LUI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/LW" type="logic">
+      <obj_property name="ElementShortName">LW</obj_property>
+      <obj_property name="ObjectShortName">LW</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/MUL" type="logic">
+      <obj_property name="ElementShortName">MUL</obj_property>
+      <obj_property name="ObjectShortName">MUL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/MULH" type="logic">
+      <obj_property name="ElementShortName">MULH</obj_property>
+      <obj_property name="ObjectShortName">MULH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/MULHSU" type="logic">
+      <obj_property name="ElementShortName">MULHSU</obj_property>
+      <obj_property name="ObjectShortName">MULHSU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/MULHU" type="logic">
+      <obj_property name="ElementShortName">MULHU</obj_property>
+      <obj_property name="ObjectShortName">MULHU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/OR" type="logic">
+      <obj_property name="ElementShortName">OR</obj_property>
+      <obj_property name="ObjectShortName">OR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/ORI" type="logic">
+      <obj_property name="ElementShortName">ORI</obj_property>
+      <obj_property name="ObjectShortName">ORI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/REM" type="logic">
+      <obj_property name="ElementShortName">REM</obj_property>
+      <obj_property name="ObjectShortName">REM</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/REMU" type="logic">
+      <obj_property name="ElementShortName">REMU</obj_property>
+      <obj_property name="ObjectShortName">REMU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SB" type="logic">
+      <obj_property name="ElementShortName">SB</obj_property>
+      <obj_property name="ObjectShortName">SB</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SH" type="logic">
+      <obj_property name="ElementShortName">SH</obj_property>
+      <obj_property name="ObjectShortName">SH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SLL" type="logic">
+      <obj_property name="ElementShortName">SLL</obj_property>
+      <obj_property name="ObjectShortName">SLL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SLT" type="logic">
+      <obj_property name="ElementShortName">SLT</obj_property>
+      <obj_property name="ObjectShortName">SLT</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SLTI" type="logic">
+      <obj_property name="ElementShortName">SLTI</obj_property>
+      <obj_property name="ObjectShortName">SLTI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SLTIU" type="logic">
+      <obj_property name="ElementShortName">SLTIU</obj_property>
+      <obj_property name="ObjectShortName">SLTIU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SLTU" type="logic">
+      <obj_property name="ElementShortName">SLTU</obj_property>
+      <obj_property name="ObjectShortName">SLTU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SRA" type="logic">
+      <obj_property name="ElementShortName">SRA</obj_property>
+      <obj_property name="ObjectShortName">SRA</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SRL" type="logic">
+      <obj_property name="ElementShortName">SRL</obj_property>
+      <obj_property name="ObjectShortName">SRL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SUB" type="logic">
+      <obj_property name="ElementShortName">SUB</obj_property>
+      <obj_property name="ObjectShortName">SUB</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/SW" type="logic">
+      <obj_property name="ElementShortName">SW</obj_property>
+      <obj_property name="ObjectShortName">SW</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/XOR" type="logic">
+      <obj_property name="ElementShortName">XOR</obj_property>
+      <obj_property name="ObjectShortName">XOR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/XORI" type="logic">
+      <obj_property name="ElementShortName">XORI</obj_property>
+      <obj_property name="ObjectShortName">XORI</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/bimm12hi" type="logic">
+      <obj_property name="ElementShortName">bimm12hi</obj_property>
+      <obj_property name="ObjectShortName">bimm12hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/bimm12lo" type="logic">
+      <obj_property name="ElementShortName">bimm12lo</obj_property>
+      <obj_property name="ObjectShortName">bimm12lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_bimm9hi" type="logic">
+      <obj_property name="ElementShortName">c_bimm9hi</obj_property>
+      <obj_property name="ObjectShortName">c_bimm9hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_bimm9lo" type="logic">
+      <obj_property name="ElementShortName">c_bimm9lo</obj_property>
+      <obj_property name="ObjectShortName">c_bimm9lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_imm12" type="logic">
+      <obj_property name="ElementShortName">c_imm12</obj_property>
+      <obj_property name="ObjectShortName">c_imm12</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_imm6hi" type="logic">
+      <obj_property name="ElementShortName">c_imm6hi</obj_property>
+      <obj_property name="ObjectShortName">c_imm6hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_imm6lo" type="logic">
+      <obj_property name="ElementShortName">c_imm6lo</obj_property>
+      <obj_property name="ObjectShortName">c_imm6lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_nzimm10hi" type="logic">
+      <obj_property name="ElementShortName">c_nzimm10hi</obj_property>
+      <obj_property name="ObjectShortName">c_nzimm10hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_nzimm10lo" type="logic">
+      <obj_property name="ElementShortName">c_nzimm10lo</obj_property>
+      <obj_property name="ObjectShortName">c_nzimm10lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_nzimm18hi" type="logic">
+      <obj_property name="ElementShortName">c_nzimm18hi</obj_property>
+      <obj_property name="ObjectShortName">c_nzimm18hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_nzimm18lo" type="logic">
+      <obj_property name="ElementShortName">c_nzimm18lo</obj_property>
+      <obj_property name="ObjectShortName">c_nzimm18lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_nzimm6hi" type="logic">
+      <obj_property name="ElementShortName">c_nzimm6hi</obj_property>
+      <obj_property name="ObjectShortName">c_nzimm6hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_nzimm6lo" type="logic">
+      <obj_property name="ElementShortName">c_nzimm6lo</obj_property>
+      <obj_property name="ObjectShortName">c_nzimm6lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_nzuimm10" type="logic">
+      <obj_property name="ElementShortName">c_nzuimm10</obj_property>
+      <obj_property name="ObjectShortName">c_nzuimm10</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_rs2" type="logic">
+      <obj_property name="ElementShortName">c_rs2</obj_property>
+      <obj_property name="ObjectShortName">c_rs2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_uimm7hi" type="logic">
+      <obj_property name="ElementShortName">c_uimm7hi</obj_property>
+      <obj_property name="ObjectShortName">c_uimm7hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_uimm7lo" type="logic">
+      <obj_property name="ElementShortName">c_uimm7lo</obj_property>
+      <obj_property name="ObjectShortName">c_uimm7lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_uimm8sp_s" type="logic">
+      <obj_property name="ElementShortName">c_uimm8sp_s</obj_property>
+      <obj_property name="ObjectShortName">c_uimm8sp_s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_uimm8sphi" type="logic">
+      <obj_property name="ElementShortName">c_uimm8sphi</obj_property>
+      <obj_property name="ObjectShortName">c_uimm8sphi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/c_uimm8splo" type="logic">
+      <obj_property name="ElementShortName">c_uimm8splo</obj_property>
+      <obj_property name="ObjectShortName">c_uimm8splo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/fm" type="logic">
+      <obj_property name="ElementShortName">fm</obj_property>
+      <obj_property name="ObjectShortName">fm</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/imm12" type="logic">
+      <obj_property name="ElementShortName">imm12</obj_property>
+      <obj_property name="ObjectShortName">imm12</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/imm12hi" type="logic">
+      <obj_property name="ElementShortName">imm12hi</obj_property>
+      <obj_property name="ObjectShortName">imm12hi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/imm12lo" type="logic">
+      <obj_property name="ElementShortName">imm12lo</obj_property>
+      <obj_property name="ObjectShortName">imm12lo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/imm20" type="logic">
+      <obj_property name="ElementShortName">imm20</obj_property>
+      <obj_property name="ObjectShortName">imm20</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/jimm20" type="logic">
+      <obj_property name="ElementShortName">jimm20</obj_property>
+      <obj_property name="ObjectShortName">jimm20</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/pred" type="logic">
+      <obj_property name="ElementShortName">pred</obj_property>
+      <obj_property name="ObjectShortName">pred</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rd" type="logic">
+      <obj_property name="ElementShortName">rd</obj_property>
+      <obj_property name="ObjectShortName">rd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rd_p" type="logic">
+      <obj_property name="ElementShortName">rd_p</obj_property>
+      <obj_property name="ObjectShortName">rd_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rd_rs1" type="logic">
+      <obj_property name="ElementShortName">rd_rs1</obj_property>
+      <obj_property name="ObjectShortName">rd_rs1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rd_rs1_p" type="logic">
+      <obj_property name="ElementShortName">rd_rs1_p</obj_property>
+      <obj_property name="ObjectShortName">rd_rs1_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rs1" type="logic">
+      <obj_property name="ElementShortName">rs1</obj_property>
+      <obj_property name="ObjectShortName">rs1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rs1_p" type="logic">
+      <obj_property name="ElementShortName">rs1_p</obj_property>
+      <obj_property name="ObjectShortName">rs1_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rs2" type="logic">
+      <obj_property name="ElementShortName">rs2</obj_property>
+      <obj_property name="ObjectShortName">rs2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/rs2_p" type="logic">
+      <obj_property name="ElementShortName">rs2_p</obj_property>
+      <obj_property name="ObjectShortName">rs2_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/DUT/idu/decode/succ" type="logic">
+      <obj_property name="ElementShortName">succ</obj_property>
+      <obj_property name="ObjectShortName">succ</obj_property>
    </wvobject>
 </wave_config>

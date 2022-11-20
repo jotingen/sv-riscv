@@ -87,12 +87,11 @@ for instr_out in sorted(instructions.keys()):
             if field_out.removesuffix("_n2") == "c_rs2":
                 eq = And(Not(PLA.Eq(PLA.Vec(data, 6, 2), PLA.Bin("00010"))), eq)
 
-   
-   
-   
-   
     instruction_processed = copy.deepcopy(instructions[instr_out])
-    instruction_processed["variable_fields"] = [variable_field.removesuffix("_n0").removesuffix("_n2") for variable_field in instruction_processed["variable_fields"]]
+    instruction_processed["variable_fields"] = [
+        variable_field.removesuffix("_n0").removesuffix("_n2")
+        for variable_field in instruction_processed["variable_fields"]
+    ]
     instruction_processed["encoding"] = []
     for match in re.finditer(r"And\(.*?\)", str(espresso_exprs(eq.to_dnf()))):
         s = ""
@@ -115,78 +114,80 @@ for instr_out in sorted(instructions.keys()):
 
     instructions_processed[instr_out] = instruction_processed
 
-#Filter out _n0 and _n2 fields now that theyve been processed
-variable_fields = [variable_field for variable_field in variable_fields if not variable_field.endswith("_n0")]
-variable_fields = [variable_field for variable_field in variable_fields if not variable_field.endswith("_n2")]
+# Filter out _n0 and _n2 fields now that theyve been processed
+variable_fields = [
+    variable_field
+    for variable_field in variable_fields
+    if not variable_field.endswith("_n0")
+]
+variable_fields = [
+    variable_field
+    for variable_field in variable_fields
+    if not variable_field.endswith("_n2")
+]
 
 # make table
-#print(sorted(instructions.keys()))
-#print(sorted(variable_fields))
+# print(sorted(instructions.keys()))
+# print(sorted(variable_fields))
 s = "module riscv_decode(\n"
 
-s += "  input  logic [31:0] data,\n"
+s += "input logic [31:0] data,\n"
 
 outputs = []
 for instr_out in sorted(instructions_processed.keys()):
-    outputs.append(f"  output logic {instr_out.upper()}")
-outputs.append(f"  output logic defined")
+    outputs.append(f"output logic {instr_out.upper()}")
+outputs.append(f"output logic defined")
 for field_out in sorted(variable_fields):
-    outputs.append(f"  output logic {field_out}")
-s+= ",\n".join(outputs)
+    outputs.append(f"output logic {field_out}")
+s += ",\n".join(outputs)
 
-s+= "\n);\n"
+s += "\n);\n"
 
-#make cse for each output
-#Instruction
+# make cse for each output
+# Instruction
 for instr_out in sorted(instructions_processed.keys()):
     s += f"//{instr_out.upper()}\n"
     s += f"always_comb begin\n"
-    s += f"  unique case (data[31:0]) inside\n"
-    s += "    "
+    s += f"unique case (data[31:0]) inside\n"
     encodings = []
     encodings.extend(instructions_processed[instr_out]["encoding"])
-    encodings = [encoding.replace("-","?") for encoding in encodings]
-    encodings = ["32'b"+encoding for encoding in encodings]
-    s += ",\n    ".join(encodings)
-    s += f": {instr_out.upper()} = '1;\n"
-    s += f"    default:                              {instr_out.upper()} = '0;\n"
-    s += f"  endcase\n"
+    encodings = [encoding.replace("-", "?") for encoding in encodings]
+    encodings = ["32'b" + encoding + f": {instr_out.upper()} = '1;\n" for encoding in encodings]
+    s += "".join(encodings)
+    s += f"default: {instr_out.upper()} = '0;\n"
+    s += f"endcase\n"
     s += f"end\n"
 
-#Defined
+# Defined
 s += f"//defined\n"
 s += f"always_comb begin\n"
-s += f"  unique case (data[31:0]) inside\n"
-s += "    "
+s += f"unique case (data[31:0]) inside\n"
 encodings = []
 for instr in sorted(instructions_processed.keys()):
     encodings.extend(instructions_processed[instr]["encoding"])
-encodings = [encoding.replace("-","?") for encoding in encodings]
-encodings = ["32'b"+encoding for encoding in encodings]
-s += ",\n    ".join(encodings)
-s += f": defined = '1;\n"
-s += f"    default:                              defined = '0;\n"
-s += f"  endcase\n"
+encodings = [encoding.replace("-", "?") for encoding in encodings]
+encodings = ["32'b" + encoding + f": defined = '1;\n" for encoding in encodings]
+s += "".join(encodings)
+s += f"default: defined = '0;\n"
+s += f"endcase\n"
 s += f"end\n"
 
-#Fields
+# Fields
 for field_out in sorted(variable_fields):
     s += f"//{field_out}\n"
     s += f"always_comb begin\n"
-    s += f"  unique case (data[31:0]) inside\n"
-    s += "    "
+    s += f"unique case (data[31:0]) inside\n"
     encodings = []
     for instr in sorted(instructions_processed.keys()):
         for encoding in instructions_processed[instr]["encoding"]:
             if field_out in instructions_processed[instr]["variable_fields"]:
                 encodings.extend(instructions_processed[instr]["encoding"])
-    encodings = [encoding.replace("-","?") for encoding in encodings]
-    encodings = ["32'b"+encoding for encoding in encodings]
-    s += ",\n    ".join(encodings)
-    s += f": {field_out} = '1;\n"
-    s += f"    default:                              {field_out} = '0;\n"
-    s += f"  endcase\n"
+    encodings = [encoding.replace("-", "?") for encoding in encodings]
+    encodings = ["32'b" + encoding + f": {field_out} = '1;\n" for encoding in encodings]
+    s += "".join(encodings)
+    s += f"default: {field_out} = '0;\n"
+    s += f"endcase\n"
     s += f"end\n"
 
-s+= "endmodule\n"
+s += "endmodule\n"
 print(s)

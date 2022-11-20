@@ -1,4 +1,5 @@
 {
     "editor.tabSize": 3,
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "systemverilogFormatter.commandLineArguments": "--indentation_spaces 3",
 }
