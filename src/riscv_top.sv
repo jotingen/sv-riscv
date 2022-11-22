@@ -16,16 +16,16 @@ module riscv_top (
     output axi4_pkg::r_m  [1:0] AXI_R_M
 );
 
-   logic                        clock;
-   logic                        reset;
+   logic        clock;
+   logic        reset;
 
-   logic                        ifu_vld;
-   logic                 [31:0] ifu_addr;
-   logic                 [31:0] ifu_data;
+   logic        ifu_vld;
+   logic [31:0] ifu_addr;
+   logic [31:0] ifu_data;
 
-   logic                        idu_vld;
-   logic                 [31:0] idu_addr;
-   riscv_pkg::instr_type        idu_data;
+   logic        idu_vld;
+   logic [31:0] idu_addr;
+   logic [31:0] idu_data;
 
    //Extract clock and reset
    assign clock = AXI_COMMON.ACLK;

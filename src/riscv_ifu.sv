@@ -140,7 +140,7 @@ module riscv_ifu (
             ifu_vld = '0;
             ifu_addr = 'x;
             ifu_data = 'x;
-            rsp_ack = '0;
+            rsp_ack = '1;
             buffer_vld_next[0] = buffer_vld[0];
             buffer_addr_next[0] = buffer_addr[0];
             buffer_data_next[0] = buffer_data[0][15:0];

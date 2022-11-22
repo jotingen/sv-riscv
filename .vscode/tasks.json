@@ -61,7 +61,7 @@
 			"options": {
 				"cwd": "${workspaceFolder}\\sim"
 			},
-			"command": "C:\\Xilinx\\Vivado\\2022.2\\bin\\xsim.bat --gui riscv.wdb",
+			"command": "C:\\Xilinx\\Vivado\\2022.2\\bin\\xsim.bat --nolog --gui riscv.wdb",
 			"group": "test",
 			"presentation": {
 				"reveal": "never",

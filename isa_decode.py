@@ -17,6 +17,9 @@ isa = yaml.safe_load(isa_file)
 
 instructions = {}
 
+output_file = open("src/riscv_decode.sv", "w")
+output_function_file = open("tb/riscv_decode_fn.svh", "w")
+
 pla = PLA.PLA()
 #  last_main_desc = ""
 #  last_main_id = ""
@@ -127,8 +130,6 @@ variable_fields = [
 ]
 
 # make table
-# print(sorted(instructions.keys()))
-# print(sorted(variable_fields))
 s = "module riscv_decode(\n"
 
 s += "input logic [31:0] data,\n"
@@ -137,18 +138,19 @@ outputs = []
 for instr_out in sorted(instructions_processed.keys()):
     outputs.append(f"output logic {instr_out.upper()}")
 outputs.append(f"output logic defined")
+outputs.append(f"output logic compressed")
 for field_out in sorted(variable_fields):
     outputs.append(f"output logic {field_out}")
 s += ",\n".join(outputs)
 
 s += "\n);\n"
 
-# make cse for each output
+# make case for each output
 # Instruction
 for instr_out in sorted(instructions_processed.keys()):
     s += f"//{instr_out.upper()}\n"
     s += f"always_comb begin\n"
-    s += f"unique case (data[31:0]) inside\n"
+    s += f"casez (data[31:0])\n"
     encodings = []
     encodings.extend(instructions_processed[instr_out]["encoding"])
     encodings = [encoding.replace("-", "?") for encoding in encodings]
@@ -161,7 +163,7 @@ for instr_out in sorted(instructions_processed.keys()):
 # Defined
 s += f"//defined\n"
 s += f"always_comb begin\n"
-s += f"unique case (data[31:0]) inside\n"
+s += f"casez (data[31:0])\n"
 encodings = []
 for instr in sorted(instructions_processed.keys()):
     encodings.extend(instructions_processed[instr]["encoding"])
@@ -172,11 +174,26 @@ s += f"default: defined = '0;\n"
 s += f"endcase\n"
 s += f"end\n"
 
+# Compressed
+s += f"//compressed\n"
+s += f"always_comb begin\n"
+s += f"casez (data[31:0])\n"
+encodings = []
+for instr in sorted(instructions_processed.keys()):
+    if instr.startswith("c_"):
+        encodings.extend(instructions_processed[instr]["encoding"])
+encodings = [encoding.replace("-", "?") for encoding in encodings]
+encodings = ["32'b" + encoding + f": compressed = '1;\n" for encoding in encodings]
+s += "".join(encodings)
+s += f"default: compressed = '0;\n"
+s += f"endcase\n"
+s += f"end\n"
+
 # Fields
 for field_out in sorted(variable_fields):
     s += f"//{field_out}\n"
     s += f"always_comb begin\n"
-    s += f"unique case (data[31:0]) inside\n"
+    s += f"casez (data[31:0])\n"
     encodings = []
     for instr in sorted(instructions_processed.keys()):
         for encoding in instructions_processed[instr]["encoding"]:
@@ -190,4 +207,81 @@ for field_out in sorted(variable_fields):
     s += f"end\n"
 
 s += "endmodule\n"
-print(s)
+output_file.write(s);
+
+
+s=""
+# make function for each output
+# Instruction
+for instr_out in sorted(instructions_processed.keys()):
+    s += f"function automatic logic riscv_decode_{instr_out}(\n"
+    s += "input logic [31:0] data\n"
+    s += f");\n"
+    s += f"logic {instr_out.upper()};\n"
+    s += f"casez (data[31:0])\n"
+    encodings = []
+    encodings.extend(instructions_processed[instr_out]["encoding"])
+    encodings = [encoding.replace("-", "?") for encoding in encodings]
+    encodings = ["32'b" + encoding + f": {instr_out.upper()} = '1;\n" for encoding in encodings]
+    s += "".join(encodings)
+    s += f"default: {instr_out.upper()} = '0;\n"
+    s += f"endcase\n"
+    s += f"return {instr_out.upper()};\n"
+    s += f"endfunction\n"
+
+# Defined
+s += f"function automatic logic riscv_decode_defined(\n"
+s += "input logic [31:0] data\n"
+s += f");\n"
+s += f"logic defined;\n"
+s += f"casez (data[31:0])\n"
+encodings = []
+for instr in sorted(instructions_processed.keys()):
+    encodings.extend(instructions_processed[instr]["encoding"])
+encodings = [encoding.replace("-", "?") for encoding in encodings]
+encodings = ["32'b" + encoding + f": defined = '1;\n" for encoding in encodings]
+s += "".join(encodings)
+s += f"default: defined = '0;\n"
+s += f"endcase\n"
+s += f"return defined;\n"
+s += f"endfunction\n"
+
+# Compressed
+s += f"function automatic logic riscv_decode_compressed(\n"
+s += "input logic [31:0] data\n"
+s += f");\n"
+s += f"logic compressed;\n"
+s += f"casez (data[31:0])\n"
+encodings = []
+for instr in sorted(instructions_processed.keys()):
+    if instr.startswith("c_"):
+        encodings.extend(instructions_processed[instr]["encoding"])
+encodings = [encoding.replace("-", "?") for encoding in encodings]
+encodings = ["32'b" + encoding + f": compressed = '1;\n" for encoding in encodings]
+s += "".join(encodings)
+s += f"default: compressed = '0;\n"
+s += f"endcase\n"
+s += f"return compressed;\n"
+s += f"endfunction\n"
+
+# Fields
+for field_out in sorted(variable_fields):
+    s += f"function automatic logic riscv_decode_{field_out}(\n"
+    s += "input logic [31:0] data\n"
+    s += f");\n"
+    s += f"logic {field_out};\n"
+    s += f"casez (data[31:0])\n"
+    encodings = []
+    for instr in sorted(instructions_processed.keys()):
+        for encoding in instructions_processed[instr]["encoding"]:
+            if field_out in instructions_processed[instr]["variable_fields"]:
+                encodings.extend(instructions_processed[instr]["encoding"])
+    encodings = [encoding.replace("-", "?") for encoding in encodings]
+    encodings = ["32'b" + encoding + f": {field_out} = '1;\n" for encoding in encodings]
+    s += "".join(encodings)
+    s += f"default: {field_out} = '0;\n"
+    s += f"endcase\n"
+    s += f"return {field_out};\n"
+    s += f"endfunction\n"
+
+output_function_file.write(s);
