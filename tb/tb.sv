@@ -179,7 +179,6 @@ module tb ();
                   AXI_AR_M_queue[tag.atoi()].delete(random_ndx);
                   AXI_R_S.RVALID = '1;
                   AXI_R_S.RID = ar_item.ARID;
-                  $display("%0t [AXI R %s] Start", $time, tag);
                   AXI_R_S.RDATA[31:0] = mem.memory_read(ar_item.ARADDR[31:0]);
                   $display("%0t [AXI R %s] %p", $time, tag, AXI_R_S);
                end
@@ -236,6 +235,8 @@ module tb ();
        .*
    );
 
+   bind DUT.idu riscv_idu_assert riscv_idu_assert_inst (.*);
+
    always #10 clock = ~clock;
 
    initial begin
@@ -247,9 +248,7 @@ module tb ();
    initial begin
       clock = 0;
       reset = 1;
-      #10000;
-      //assert (sum == 5) else // Unless something went really wrong in the universe, we'd expect that 1+2=3
-      //   $fatal(1, "Well if we cant add 1 and 2 to get 3 then we really screwed something up");
+      #100000;
       $display("TB passed");
       $finish;
    end

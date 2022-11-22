@@ -8,4 +8,5 @@ sv  riscv ../src/riscv_decode.sv
 sv  riscv ../src/riscv_axi_driver.sv
 
 sv  riscv ../asserts/axi4_assert.sv
+sv  riscv ../asserts/riscv_idu_assert.sv
 sv  riscv ../tb/tb.sv
