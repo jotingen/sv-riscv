@@ -9,208 +9,140 @@ module riscv_idu (
     input logic [31:0] ifu_addr,
     input logic [31:0] ifu_data,
 
-    output logic        idu_vld,
-    output logic [63:0] idu_seq,
-    output logic [31:0] idu_addr,
-    output logic [31:0] idu_data,
-    output logic        idu_defined
+    output logic                idu_vld,
+    output logic         [63:0] idu_seq,
+    output logic         [31:0] idu_addr,
+    output logic         [31:0] idu_data,
+    output riscv_pkg::op        idu_op,
+    output logic         [ 5:0] idu_rd,
+    output logic         [ 5:0] idu_rs1,
+    output logic         [ 5:0] idu_rs2,
+    output logic         [31:0] idu_immed
 );
 
-   logic        idu_ADD_next;
-   logic        idu_ADDI_next;
-   logic        idu_AND_next;
-   logic        idu_ANDI_next;
-   logic        idu_AUIPC_next;
-   logic        idu_BEQ_next;
-   logic        idu_BGE_next;
-   logic        idu_BGEU_next;
-   logic        idu_BLT_next;
-   logic        idu_BLTU_next;
-   logic        idu_BNE_next;
-   logic        idu_DIV_next;
-   logic        idu_DIVU_next;
-   logic        idu_EBREAK_next;
-   logic        idu_ECALL_next;
-   logic        idu_FENCE_next;
-   logic        idu_JAL_next;
-   logic        idu_JALR_next;
-   logic        idu_LB_next;
-   logic        idu_LBU_next;
-   logic        idu_LH_next;
-   logic        idu_LHU_next;
-   logic        idu_LUI_next;
-   logic        idu_LW_next;
-   logic        idu_MUL_next;
-   logic        idu_MULH_next;
-   logic        idu_MULHSU_next;
-   logic        idu_MULHU_next;
-   logic        idu_OR_next;
-   logic        idu_ORI_next;
-   logic        idu_REM_next;
-   logic        idu_REMU_next;
-   logic        idu_SB_next;
-   logic        idu_SH_next;
-   logic        idu_SLL_next;
-   logic        idu_SLT_next;
-   logic        idu_SLTI_next;
-   logic        idu_SLTIU_next;
-   logic        idu_SLTU_next;
-   logic        idu_SRA_next;
-   logic        idu_SRL_next;
-   logic        idu_SUB_next;
-   logic        idu_SW_next;
-   logic        idu_XOR_next;
-   logic        idu_XORI_next;
-   logic        idu_defined_next;
-   logic        idu_compressed_next;
-   logic        idu_bimm12hi_next;
-   logic        idu_bimm12lo_next;
-   logic        idu_c_bimm9hi_next;
-   logic        idu_c_bimm9lo_next;
-   logic        idu_c_imm12_next;
-   logic        idu_c_imm6hi_next;
-   logic        idu_c_imm6lo_next;
-   logic        idu_c_nzimm10hi_next;
-   logic        idu_c_nzimm10lo_next;
-   logic        idu_c_nzimm18hi_next;
-   logic        idu_c_nzimm18lo_next;
-   logic        idu_c_nzimm6hi_next;
-   logic        idu_c_nzimm6lo_next;
-   logic        idu_c_nzuimm10_next;
-   logic        idu_c_rs2_next;
-   logic        idu_c_uimm7hi_next;
-   logic        idu_c_uimm7lo_next;
-   logic        idu_c_uimm8sp_s_next;
-   logic        idu_c_uimm8sphi_next;
-   logic        idu_c_uimm8splo_next;
-   logic        idu_fm_next;
-   logic        idu_imm12_next;
-   logic        idu_imm12hi_next;
-   logic        idu_imm12lo_next;
-   logic        idu_imm20_next;
-   logic        idu_jimm20_next;
-   logic        idu_pred_next;
-   logic        idu_rd_next;
-   logic        idu_rd_p_next;
-   logic        idu_rd_rs1_next;
-   logic        idu_rd_rs1_p_next;
-   logic        idu_rs1_next;
-   logic        idu_rs1_p_next;
-   logic        idu_rs2_next;
-   logic        idu_rs2_p_next;
-   logic        idu_succ_next;
+   riscv_pkg::op        idu_op_next;
 
-   logic [63:0] idu_seq_next;
-   logic [31:0] idu_addr_next;
-   logic [31:0] idu_data_next;
+   logic         [63:0] idu_seq_next;
+   logic         [31:0] idu_addr_next;
+   logic         [31:0] idu_data_next;
+   logic         [ 5:0] idu_rd_next;
+   logic         [ 5:0] idu_rs1_next;
+   logic         [ 5:0] idu_rs2_next;
+   logic         [31:0] idu_immed_next;
 
-   logic        dcd_ADD;
-   logic        dcd_ADDI;
-   logic        dcd_AND;
-   logic        dcd_ANDI;
-   logic        dcd_AUIPC;
-   logic        dcd_BEQ;
-   logic        dcd_BGE;
-   logic        dcd_BGEU;
-   logic        dcd_BLT;
-   logic        dcd_BLTU;
-   logic        dcd_BNE;
-   logic        dcd_C_ADD;
-   logic        dcd_C_ADDI;
-   logic        dcd_C_ADDI16SP;
-   logic        dcd_C_ADDI4SPN;
-   logic        dcd_C_AND;
-   logic        dcd_C_ANDI;
-   logic        dcd_C_BEQZ;
-   logic        dcd_C_BNEZ;
-   logic        dcd_C_EBREAK;
-   logic        dcd_C_J;
-   logic        dcd_C_JAL;
-   logic        dcd_C_JALR;
-   logic        dcd_C_JR;
-   logic        dcd_C_LI;
-   logic        dcd_C_LUI;
-   logic        dcd_C_LW;
-   logic        dcd_C_LWSP;
-   logic        dcd_C_MV;
-   logic        dcd_C_NOP;
-   logic        dcd_C_OR;
-   logic        dcd_C_SUB;
-   logic        dcd_C_SW;
-   logic        dcd_C_SWSP;
-   logic        dcd_C_XOR;
-   logic        dcd_DIV;
-   logic        dcd_DIVU;
-   logic        dcd_EBREAK;
-   logic        dcd_ECALL;
-   logic        dcd_FENCE;
-   logic        dcd_JAL;
-   logic        dcd_JALR;
-   logic        dcd_LB;
-   logic        dcd_LBU;
-   logic        dcd_LH;
-   logic        dcd_LHU;
-   logic        dcd_LUI;
-   logic        dcd_LW;
-   logic        dcd_MUL;
-   logic        dcd_MULH;
-   logic        dcd_MULHSU;
-   logic        dcd_MULHU;
-   logic        dcd_OR;
-   logic        dcd_ORI;
-   logic        dcd_REM;
-   logic        dcd_REMU;
-   logic        dcd_SB;
-   logic        dcd_SH;
-   logic        dcd_SLL;
-   logic        dcd_SLT;
-   logic        dcd_SLTI;
-   logic        dcd_SLTIU;
-   logic        dcd_SLTU;
-   logic        dcd_SRA;
-   logic        dcd_SRL;
-   logic        dcd_SUB;
-   logic        dcd_SW;
-   logic        dcd_XOR;
-   logic        dcd_XORI;
-   logic        dcd_defined;
-   logic        dcd_compressed;
-   logic        dcd_bimm12hi;
-   logic        dcd_bimm12lo;
-   logic        dcd_c_bimm9hi;
-   logic        dcd_c_bimm9lo;
-   logic        dcd_c_imm12;
-   logic        dcd_c_imm6hi;
-   logic        dcd_c_imm6lo;
-   logic        dcd_c_nzimm10hi;
-   logic        dcd_c_nzimm10lo;
-   logic        dcd_c_nzimm18hi;
-   logic        dcd_c_nzimm18lo;
-   logic        dcd_c_nzimm6hi;
-   logic        dcd_c_nzimm6lo;
-   logic        dcd_c_nzuimm10;
-   logic        dcd_c_rs2;
-   logic        dcd_c_uimm7hi;
-   logic        dcd_c_uimm7lo;
-   logic        dcd_c_uimm8sp_s;
-   logic        dcd_c_uimm8sphi;
-   logic        dcd_c_uimm8splo;
-   logic        dcd_fm;
-   logic        dcd_imm12;
-   logic        dcd_imm12hi;
-   logic        dcd_imm12lo;
-   logic        dcd_imm20;
-   logic        dcd_jimm20;
-   logic        dcd_pred;
-   logic        dcd_rd;
-   logic        dcd_rd_p;
-   logic        dcd_rd_rs1;
-   logic        dcd_rd_rs1_p;
-   logic        dcd_rs1;
-   logic        dcd_rs1_p;
-   logic        dcd_rs2;
-   logic        dcd_rs2_p;
-   logic        dcd_succ;
+   logic                dcd_ADD;
+   logic                dcd_ADDI;
+   logic                dcd_AND;
+   logic                dcd_ANDI;
+   logic                dcd_AUIPC;
+   logic                dcd_BEQ;
+   logic                dcd_BGE;
+   logic                dcd_BGEU;
+   logic                dcd_BLT;
+   logic                dcd_BLTU;
+   logic                dcd_BNE;
+   logic                dcd_C_ADD;
+   logic                dcd_C_ADDI;
+   logic                dcd_C_ADDI16SP;
+   logic                dcd_C_ADDI4SPN;
+   logic                dcd_C_AND;
+   logic                dcd_C_ANDI;
+   logic                dcd_C_BEQZ;
+   logic                dcd_C_BNEZ;
+   logic                dcd_C_EBREAK;
+   logic                dcd_C_J;
+   logic                dcd_C_JAL;
+   logic                dcd_C_JALR;
+   logic                dcd_C_JR;
+   logic                dcd_C_LI;
+   logic                dcd_C_LUI;
+   logic                dcd_C_LW;
+   logic                dcd_C_LWSP;
+   logic                dcd_C_MV;
+   logic                dcd_C_NOP;
+   logic                dcd_C_OR;
+   logic                dcd_C_SUB;
+   logic                dcd_C_SW;
+   logic                dcd_C_SWSP;
+   logic                dcd_C_XOR;
+   logic                dcd_DIV;
+   logic                dcd_DIVU;
+   logic                dcd_EBREAK;
+   logic                dcd_ECALL;
+   logic                dcd_FENCE;
+   logic                dcd_JAL;
+   logic                dcd_JALR;
+   logic                dcd_LB;
+   logic                dcd_LBU;
+   logic                dcd_LH;
+   logic                dcd_LHU;
+   logic                dcd_LUI;
+   logic                dcd_LW;
+   logic                dcd_MUL;
+   logic                dcd_MULH;
+   logic                dcd_MULHSU;
+   logic                dcd_MULHU;
+   logic                dcd_OR;
+   logic                dcd_ORI;
+   logic                dcd_REM;
+   logic                dcd_REMU;
+   logic                dcd_SB;
+   logic                dcd_SH;
+   logic                dcd_SLL;
+   logic                dcd_SLT;
+   logic                dcd_SLTI;
+   logic                dcd_SLTIU;
+   logic                dcd_SLTU;
+   logic                dcd_SRA;
+   logic                dcd_SRL;
+   logic                dcd_SUB;
+   logic                dcd_SW;
+   logic                dcd_XOR;
+   logic                dcd_XORI;
+   logic                dcd_defined;
+   logic                dcd_compressed;
+   logic                dcd_bimm12hi;
+   logic                dcd_bimm12lo;
+   logic                dcd_c_bimm9hi;
+   logic                dcd_c_bimm9lo;
+   logic                dcd_c_imm12;
+   logic                dcd_c_imm6hi;
+   logic                dcd_c_imm6lo;
+   logic                dcd_c_nzimm10hi;
+   logic                dcd_c_nzimm10lo;
+   logic                dcd_c_nzimm18hi;
+   logic                dcd_c_nzimm18lo;
+   logic                dcd_c_nzimm6hi;
+   logic                dcd_c_nzimm6lo;
+   logic                dcd_c_nzuimm10;
+   logic                dcd_c_rs2;
+   logic                dcd_c_uimm7hi;
+   logic                dcd_c_uimm7lo;
+   logic                dcd_c_uimm8sp_s;
+   logic                dcd_c_uimm8sphi;
+   logic                dcd_c_uimm8splo;
+   logic                dcd_fm;
+   logic                dcd_imm12;
+   logic                dcd_imm12hi;
+   logic                dcd_imm12lo;
+   logic                dcd_imm20;
+   logic                dcd_jimm20;
+   logic                dcd_pred;
+   logic                dcd_rd;
+   logic                dcd_rd_p;
+   logic                dcd_rd_rs1;
+   logic                dcd_rd_rs1_p;
+   logic                dcd_rs1;
+   logic                dcd_rs1_p;
+   logic                dcd_rs2;
+   logic                dcd_rs2_p;
+   logic                dcd_succ;
+
+   logic         [31:0] immed_i;
+   logic         [31:0] immed_s;
+   logic         [31:0] immed_b;
+   logic         [31:0] immed_u;
+   logic         [31:0] immed_j;
 
    riscv_decode decode (
        .data       (ifu_data),
@@ -324,63 +256,266 @@ module riscv_idu (
    );
 
    always_comb begin
-      idu_ADD_next = dcd_ADD | dcd_C_ADD | dcd_C_MV;
-      idu_ADDI_next      = dcd_ADDI | dcd_C_ADDI | dcd_C_ADDI16SP | dcd_C_ADDI4SPN | dcd_C_LI | dcd_C_NOP;
-      idu_AND_next = dcd_AND | dcd_C_AND;
-      idu_ANDI_next = dcd_ANDI | dcd_C_ANDI;
-      idu_AUIPC_next = dcd_AUIPC;
-      idu_BEQ_next = dcd_BEQ | dcd_C_BEQZ;
-      idu_BGE_next = dcd_BGE;
-      idu_BGEU_next = dcd_BGEU;
-      idu_BLT_next = dcd_BLT;
-      idu_BLTU_next = dcd_BLTU;
-      idu_BNE_next = dcd_BNE | dcd_C_BNEZ;
-      idu_DIV_next = dcd_DIV;
-      idu_DIVU_next = dcd_DIVU;
-      idu_EBREAK_next = dcd_EBREAK | dcd_C_EBREAK;
-      idu_ECALL_next = dcd_ECALL;
-      idu_FENCE_next = dcd_FENCE;
-      idu_JAL_next = dcd_JAL | dcd_C_J | dcd_C_JAL;
-      idu_JALR_next = dcd_JALR | dcd_C_JALR | dcd_C_JR;
-      idu_LB_next = dcd_LB;
-      idu_LBU_next = dcd_LBU;
-      idu_LH_next = dcd_LH;
-      idu_LHU_next = dcd_LHU;
-      idu_LUI_next = dcd_LUI | dcd_C_LUI;
-      idu_LW_next = dcd_LW | dcd_C_LW | dcd_C_LWSP;
-      idu_MUL_next = dcd_MUL;
-      idu_MULH_next = dcd_MULH;
-      idu_MULHSU_next = dcd_MULHSU;
-      idu_MULHU_next = dcd_MULHU;
-      idu_OR_next = dcd_OR | dcd_C_OR;
-      idu_ORI_next = dcd_ORI;
-      idu_REM_next = dcd_REM;
-      idu_REMU_next = dcd_REMU;
-      idu_SB_next = dcd_SB;
-      idu_SH_next = dcd_SH;
-      idu_SLL_next = dcd_SLL;
-      idu_SLT_next = dcd_SLT;
-      idu_SLTI_next = dcd_SLTI;
-      idu_SLTIU_next = dcd_SLTIU;
-      idu_SLTU_next = dcd_SLTU;
-      idu_SRA_next = dcd_SRA;
-      idu_SRL_next = dcd_SRL;
-      idu_SUB_next = dcd_SUB | dcd_C_SUB;
-      idu_SW_next = dcd_SW | dcd_C_SW | dcd_C_SWSP;
-      idu_XOR_next = dcd_XOR | dcd_C_XOR;
-      idu_XORI_next = dcd_XORI;
 
-      idu_defined_next = dcd_defined;
-      idu_compressed_next = dcd_compressed;
+      idu_seq_next = idu_seq + 'd1;
 
       idu_addr_next = ifu_addr;
 
       idu_data_next = ifu_data;
-      if (dcd_compressed) begin
-         idu_data_next[31:16] = '0;
+
+      idu_op_next.ADD = dcd_ADD | dcd_C_ADD | dcd_C_MV;
+      idu_op_next.ADDI = dcd_ADDI | dcd_C_ADDI | dcd_C_ADDI16SP | dcd_C_ADDI4SPN | dcd_C_LI | dcd_C_NOP;
+      idu_op_next.AND = dcd_AND | dcd_C_AND;
+      idu_op_next.ANDI = dcd_ANDI | dcd_C_ANDI;
+      idu_op_next.AUIPC = dcd_AUIPC;
+      idu_op_next.BEQ = dcd_BEQ | dcd_C_BEQZ;
+      idu_op_next.BGE = dcd_BGE;
+      idu_op_next.BGEU = dcd_BGEU;
+      idu_op_next.BLT = dcd_BLT;
+      idu_op_next.BLTU = dcd_BLTU;
+      idu_op_next.BNE = dcd_BNE | dcd_C_BNEZ;
+      idu_op_next.DIV = dcd_DIV;
+      idu_op_next.DIVU = dcd_DIVU;
+      idu_op_next.EBREAK = dcd_EBREAK | dcd_C_EBREAK;
+      idu_op_next.ECALL = dcd_ECALL;
+      idu_op_next.FENCE = dcd_FENCE;
+      idu_op_next.JAL = dcd_JAL | dcd_C_J | dcd_C_JAL;
+      idu_op_next.JALR = dcd_JALR | dcd_C_JALR | dcd_C_JR;
+      idu_op_next.LB = dcd_LB;
+      idu_op_next.LBU = dcd_LBU;
+      idu_op_next.LH = dcd_LH;
+      idu_op_next.LHU = dcd_LHU;
+      idu_op_next.LUI = dcd_LUI | dcd_C_LUI;
+      idu_op_next.LW = dcd_LW | dcd_C_LW | dcd_C_LWSP;
+      idu_op_next.MUL = dcd_MUL;
+      idu_op_next.MULH = dcd_MULH;
+      idu_op_next.MULHSU = dcd_MULHSU;
+      idu_op_next.MULHU = dcd_MULHU;
+      idu_op_next.OR = dcd_OR | dcd_C_OR;
+      idu_op_next.ORI = dcd_ORI;
+      idu_op_next.REM = dcd_REM;
+      idu_op_next.REMU = dcd_REMU;
+      idu_op_next.SB = dcd_SB;
+      idu_op_next.SH = dcd_SH;
+      idu_op_next.SLL = dcd_SLL;
+      idu_op_next.SLT = dcd_SLT;
+      idu_op_next.SLTI = dcd_SLTI;
+      idu_op_next.SLTIU = dcd_SLTIU;
+      idu_op_next.SLTU = dcd_SLTU;
+      idu_op_next.SRA = dcd_SRA;
+      idu_op_next.SRL = dcd_SRL;
+      idu_op_next.SUB = dcd_SUB | dcd_C_SUB;
+      idu_op_next.SW = dcd_SW | dcd_C_SW | dcd_C_SWSP;
+      idu_op_next.XOR = dcd_XOR | dcd_C_XOR;
+      idu_op_next.XORI = dcd_XORI;
+
+      idu_op_next.ILLEGAL = ~dcd_defined;
+
+      //Registers
+      idu_rd_next[5:0] = idu_data_next[11:7];
+      idu_rs1_next[5:0] = idu_data_next[19:15];
+      idu_rs2_next[5:0] = idu_data_next[24:20];
+
+      //Immediates
+      immed_i[31:0] = {20'd0, idu_data_next[31:20]};
+      immed_s[31:0] = {20'd0, idu_data_next[31:15], idu_data_next[11:7]};
+      immed_b[31:0] = {
+         idu_data_next[31], idu_data_next[7], idu_data_next[30:25], idu_data_next[11:8], 1'd0
+      };
+      immed_u[31:0] = {12'd0, idu_data_next[31:12]};
+      immed_j[31:0] = {
+         11'd0,
+         idu_data_next[31],
+         idu_data_next[19:12],
+         idu_data_next[20],
+         idu_data_next[30:21],
+         1'd0
+      };
+
+      idu_immed_next[31:0] = '0;
+      if (dcd_imm12) begin
+         idu_immed_next[31:0] = immed_i[31:0];
+      end else if (dcd_imm12hi) begin
+         idu_immed_next[31:0] = immed_s[31:0];
+      end else if (dcd_bimm12hi) begin
+         idu_immed_next[31:0] = immed_b[31:0];
+      end else if (dcd_imm20) begin
+         idu_immed_next[31:0] = immed_u[31:0];
+      end else if (dcd_jimm20) begin
+         idu_immed_next[31:0] = immed_j[31:0];
       end
 
-      idu_seq_next = idu_seq + 'd1;
+      if (dcd_compressed) begin
+         idu_data_next[31:16] = '0;
+         if (dcd_C_ADD) begin
+            idu_rd_next  = idu_data_next[11:7];
+            idu_rs1_next = idu_data_next[11:7];
+            idu_rs2_next = idu_data_next[6:2];
+         end
+         if (dcd_C_ADDI) begin
+            idu_rd_next = idu_data_next[11:7];
+            idu_rs1_next = idu_data_next[11:7];
+            idu_rs2_next = idu_data_next[6:2];
+            idu_immed_next[31:0] = {{27{idu_data_next[12]}}, idu_data_next[6:2]};
+         end
+         if (dcd_C_ADDI16SP) begin
+            idu_rd_next = idu_data_next[11:7];
+            idu_rs1_next = idu_data_next[11:7];
+            idu_immed_next[31:0] = {
+               {23{idu_data_next[12]}},
+               idu_data_next[4:3],
+               idu_data_next[5],
+               idu_data_next[2],
+               idu_data_next[6],
+               4'd0
+            };
+         end
+         if (dcd_C_ADDI4SPN) begin
+            idu_rd_next = {2'd0, idu_data_next[4:2]};
+            idu_immed_next[31:0] = {
+               22'd0,
+               idu_data_next[10:7],
+               idu_data_next[12:11],
+               idu_data_next[5],
+               idu_data_next[6],
+               2'd0
+            };
+         end
+         if (dcd_C_AND) begin
+            idu_rd_next  = {2'd0, idu_data_next[9:7]};
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+         end
+         if (dcd_C_ANDI) begin
+            idu_rd_next = {2'd0, idu_data_next[9:7]};
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_immed_next[31:0] = {{26{idu_data_next[12]}}, idu_data_next[6:2]};
+         end
+         if (dcd_C_BEQZ) begin
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_rs1_next = 'd0;
+            idu_immed_next[31:0] = {
+               {23{idu_data_next[12]}},
+               idu_data_next[6:5],
+               idu_data_next[2],
+               idu_data_next[11:10],
+               idu_data_next[4:3],
+               1'd0
+            };
+         end
+         if (dcd_C_BNEZ) begin
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_rs1_next = 'd0;
+            idu_immed_next[31:0] = {
+               {23{idu_data_next[12]}},
+               idu_data_next[6:5],
+               idu_data_next[2],
+               idu_data_next[11:10],
+               idu_data_next[4:3],
+               1'd0
+            };
+         end
+         if (dcd_C_EBREAK) begin
+         end
+         if (dcd_C_J) begin
+            idu_rd_next = 'd0;
+            idu_immed_next[31:0] = {
+               {9{idu_data_next[12]}},
+               idu_data_next[8],
+               idu_data_next[10:9],
+               idu_data_next[6],
+               idu_data_next[7],
+               idu_data_next[2],
+               idu_data_next[11],
+               idu_data_next[5:3],
+               1'd0
+            };
+         end
+         if (dcd_C_JAL) begin
+            idu_rd_next = 'd1;
+            idu_immed_next[31:0] = {
+               {9{idu_data_next[12]}},
+               idu_data_next[8],
+               idu_data_next[10:9],
+               idu_data_next[6],
+               idu_data_next[7],
+               idu_data_next[2],
+               idu_data_next[11],
+               idu_data_next[5:3],
+               1'd0
+            };
+         end
+         if (dcd_C_JALR) begin
+            idu_rd_next = 'd0;
+            idu_rs1_next = idu_data_next[11:7];
+            idu_rs2_next = idu_data_next[6:2];
+            idu_immed_next[31:0] = 'd0;
+         end
+         if (dcd_C_JR) begin
+            idu_rd_next = 'd1;
+            idu_rs1_next = idu_data_next[11:7];
+            idu_rs2_next = idu_data_next[6:2];
+            idu_immed_next[31:0] = 'd0;
+         end
+         if (dcd_C_LI) begin
+            idu_rd_next = idu_data_next[11:7];
+            idu_rs1_next = 'd0;
+            idu_immed_next[31:0] = {{27{idu_data_next[12]}}, idu_data_next[6:2]};
+         end
+         if (dcd_C_LUI) begin
+            idu_rd_next = idu_data_next[11:7];
+            idu_immed_next[31:0] = {{14{idu_data_next[12]}}, idu_data_next[6:2], 12'd0};
+         end
+         if (dcd_C_LW) begin
+            idu_rd_next = {2'd0, idu_data_next[4:2]};
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_immed_next[31:0] = {
+               25'd0, idu_data_next[5], idu_data_next[12:10], idu_data_next[6], 2'd0
+            };
+         end
+         if (dcd_C_LWSP) begin
+            idu_rd_next = idu_data_next[11:7];
+            idu_immed_next[31:0] = {
+               24'd0, idu_data_next[3:2], idu_data_next[12], idu_data_next[6:4], 2'd0
+            };
+         end
+         if (dcd_C_MV) begin
+            idu_rd_next  = idu_data_next[11:7];
+            idu_rs1_next = idu_data_next[11:7];
+            idu_rs2_next = idu_data_next[6:2];
+         end
+         if (dcd_C_NOP) begin
+            idu_rd_next = '0;
+            idu_rs1_next = '0;
+            idu_immed_next[31:0] = '0;
+         end
+         if (dcd_C_OR) begin
+            idu_rd_next  = {2'd0, idu_data_next[9:7]};
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+         end
+         if (dcd_C_SUB) begin
+            idu_rd_next  = {2'd0, idu_data_next[9:7]};
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+         end
+         if (dcd_C_SW) begin
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+            idu_immed_next[31:0] = {
+               25'd0, idu_data_next[5], idu_data_next[12:10], idu_data_next[6], 2'd0
+            };
+         end
+         if (dcd_C_SWSP) begin
+            idu_rs2_next = idu_data_next[6:2];
+            idu_immed_next[31:0] = {24'd0, idu_data_next[7:6], idu_data_next[12:9], 2'd0};
+         end
+         if (dcd_C_XOR) begin
+            idu_rd_next  = {2'd0, idu_data_next[9:7]};
+            idu_rs1_next = {2'd0, idu_data_next[9:7]};
+            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+         end
+      end
 
    end
 
@@ -389,13 +524,21 @@ module riscv_idu (
       idu_seq <= idu_seq;
       idu_addr <= idu_addr;
       idu_data <= idu_data;
-      idu_defined <= idu_defined;
+      idu_op <= idu_op;
+      idu_rd <= idu_rd_next;
+      idu_rs1 <= idu_rs1_next;
+      idu_rs2 <= idu_rs2_next;
+      idu_immed[31:0] <= idu_immed_next[31:0];
       if (ifu_vld) begin
          idu_vld <= '1;
          idu_seq <= idu_seq_next;
          idu_addr <= idu_addr_next;
          idu_data <= idu_data_next;
-         idu_defined <= idu_defined_next;
+         idu_op <= idu_op_next;
+         idu_rd <= idu_rd_next;
+         idu_rs1 <= idu_rs1_next;
+         idu_rs2 <= idu_rs2_next;
+         idu_immed[31:0] <= idu_immed_next[31:0];
       end
 
       if (reset) begin

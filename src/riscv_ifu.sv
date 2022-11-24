@@ -130,7 +130,7 @@ module riscv_ifu (
          5'b0_1_?01: begin
             ifu_vld = '1;
             ifu_addr = buffer_addr[0];
-            ifu_data = {16'dx, buffer_data[0]};
+            ifu_data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next = '0;
             buffer_addr_next = 'x;
@@ -154,7 +154,7 @@ module riscv_ifu (
          5'b1_1_?01: begin
             ifu_vld = '1;
             ifu_addr = buffer_addr[0];
-            ifu_data = {16'dx, buffer_data[0]};
+            ifu_data = {16'd0, buffer_data[0]};
             rsp_ack = '1;
             buffer_vld_next[0] = rsp_vld;
             buffer_addr_next[0] = rsp_addr;
@@ -179,7 +179,7 @@ module riscv_ifu (
          5'b0_1_011: begin
             ifu_vld = '1;
             ifu_addr = buffer_addr[0];
-            ifu_data = {16'dx, buffer_data[0]};
+            ifu_data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];
@@ -209,7 +209,7 @@ module riscv_ifu (
          5'b1_1_011: begin
             ifu_vld = '1;
             ifu_addr = buffer_addr[0];
-            ifu_data = {16'dx, buffer_data[0]};
+            ifu_data = {16'd0, buffer_data[0]};
             rsp_ack = '1;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];
@@ -240,7 +240,7 @@ module riscv_ifu (
          5'b0_1_111: begin
             ifu_vld = '1;
             ifu_addr = buffer_addr[0];
-            ifu_data = {16'dx, buffer_data[0]};
+            ifu_data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];
@@ -270,7 +270,7 @@ module riscv_ifu (
          5'b1_1_111: begin
             ifu_vld = '1;
             ifu_addr = buffer_addr[0];
-            ifu_data = {16'dx, buffer_data[0]};
+            ifu_data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];

@@ -7,11 +7,15 @@ module riscv_idu_assert (
     input logic [31:0] ifu_addr,
     input logic [31:0] ifu_data,
 
-    input logic        idu_vld,
-    input logic [63:0] idu_seq,
-    input logic [31:0] idu_addr,
-    input logic [31:0] idu_data,
-    input logic        idu_defined
+    input logic                idu_vld,
+    input logic         [63:0] idu_seq,
+    input logic         [31:0] idu_addr,
+    input logic         [31:0] idu_data,
+    input riscv_pkg::op        idu_op,
+    input logic         [ 5:0] idu_rd,
+    input logic         [ 5:0] idu_rs1,
+    input logic         [ 5:0] idu_rs2,
+    input logic         [31:0] idu_immed
 );
 
    //Wait for reset for most asserts
@@ -63,13 +67,17 @@ module riscv_idu_assert (
                   ^{idu_seq,
                     idu_addr,
                     idu_data,
-                    idu_defined} !== 'x
+                    idu_op,
+                     idu_rd,
+                     idu_rs1,
+                     idu_rs2,
+                     idu_immed} !== 'x
       )
    else $fatal(1, "%m assertion fail");
 
    //Temporary, always defined
    idu_defined_assert :
-   assert property (@(posedge clock) if (enable_assert) if (idu_vld) idu_defined == '1)
+   assert property (@(posedge clock) if (enable_assert) if (idu_vld) idu_op.ILLEGAL == '0)
    else $fatal(1, "%m assertion fail");
 
 
