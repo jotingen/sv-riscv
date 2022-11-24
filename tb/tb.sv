@@ -17,37 +17,174 @@ module tb ();
    `include "riscv_decode_fn.svh"
 
    class instruction;
+      rand logic [31:0] instr_data;
+      rand logic [15:0] instr_cdata;
+
+      constraint data_c {
+         riscv_decode_defined(instr_data);
+         !riscv_decode_compressed(instr_data);
+      }
+
+      constraint cdata_c {
+         riscv_decode_defined({16'd0, instr_cdata});
+         riscv_decode_compressed({16'd0, instr_cdata});
+      }
 
       function logic [31:0] data;
-         int retry_max = 100000;
-         int try = 0;
-         do begin
-            if (try > retry_max) begin
-               $fatal(1, "Failed to generate 32-bit instruction");
-            end
-            try += 1;
-            data = $urandom();
-         end while (~(riscv_decode_defined(
-             data
-         ) & ~riscv_decode_compressed(
-             data
-         )));
+         return instr_data;
       endfunction
 
       function logic [15:0] cdata;
-         int retry_max = 100000;
-         int try = 0;
-         do begin
-            if (try > retry_max) begin
-               $fatal(1, "Failed to generate 16-bit instruction");
-            end
-            try += 1;
-            cdata = $urandom();
-         end while (~(riscv_decode_defined(
-             {{16{1'b0}}, cdata}
-         ) & riscv_decode_compressed(
-             {{16{1'b0}}, cdata}
-         )));
+         return instr_cdata;
+      endfunction
+
+      function string disasm(input [31:0] data);
+
+         if (riscv_decode_add(data)) begin
+            return "ADD";
+         end else if (riscv_decode_addi(data)) begin
+            return "ADDI";
+         end else if (riscv_decode_and(data)) begin
+            return "AND";
+         end else if (riscv_decode_andi(data)) begin
+            return "ANDI";
+         end else if (riscv_decode_auipc(data)) begin
+            return "AUIPC";
+         end else if (riscv_decode_beq(data)) begin
+            return "BEQ";
+         end else if (riscv_decode_bge(data)) begin
+            return "BGE";
+         end else if (riscv_decode_bgeu(data)) begin
+            return "BGEU";
+         end else if (riscv_decode_blt(data)) begin
+            return "BLT";
+         end else if (riscv_decode_bltu(data)) begin
+            return "BLTU";
+         end else if (riscv_decode_bne(data)) begin
+            return "BNE";
+         end else if (riscv_decode_c_add(data)) begin
+            return "C.ADD";
+         end else if (riscv_decode_c_addi(data)) begin
+            return "C.ADDI";
+         end else if (riscv_decode_c_addi16sp(data)) begin
+            return "C.ADDI16SP";
+         end else if (riscv_decode_c_addi4spn(data)) begin
+            return "C.ADDI4SPN";
+         end else if (riscv_decode_c_and(data)) begin
+            return "C.AND";
+         end else if (riscv_decode_c_andi(data)) begin
+            return "C.ANDI";
+         end else if (riscv_decode_c_beqz(data)) begin
+            return "C.BEQZ";
+         end else if (riscv_decode_c_bnez(data)) begin
+            return "C.BNEZ";
+         end else if (riscv_decode_c_ebreak(data)) begin
+            return "C.EBREAK";
+         end else if (riscv_decode_c_j(data)) begin
+            return "C.J";
+         end else if (riscv_decode_c_jal(data)) begin
+            return "C.JAL";
+         end else if (riscv_decode_c_jalr(data)) begin
+            return "C.JALR";
+         end else if (riscv_decode_c_jr(data)) begin
+            return "C.JR";
+         end else if (riscv_decode_c_li(data)) begin
+            return "C.LI";
+         end else if (riscv_decode_c_lui(data)) begin
+            return "C.LUI";
+         end else if (riscv_decode_c_lw(data)) begin
+            return "C.LW";
+         end else if (riscv_decode_c_lwsp(data)) begin
+            return "C.LWSP";
+         end else if (riscv_decode_c_mv(data)) begin
+            return "C.MV";
+         end else if (riscv_decode_c_nop(data)) begin
+            return "C.NOP";
+         end else if (riscv_decode_c_or(data)) begin
+            return "C.OR";
+         end else if (riscv_decode_c_sub(data)) begin
+            return "C.SUB";
+         end else if (riscv_decode_c_sw(data)) begin
+            return "C.SW";
+         end else if (riscv_decode_c_swsp(data)) begin
+            return "C.SWSP";
+         end else if (riscv_decode_c_xor(data)) begin
+            return "C.XOR";
+         end else if (riscv_decode_div(data)) begin
+            return "DIV";
+         end else if (riscv_decode_divu(data)) begin
+            return "DIVU";
+         end else if (riscv_decode_ebreak(data)) begin
+            return "EBREAK";
+         end else if (riscv_decode_ecall(data)) begin
+            return "ECALL";
+         end else if (riscv_decode_fence(data)) begin
+            return "FENCE";
+         end else if (riscv_decode_jal(data)) begin
+            return "JAL";
+         end else if (riscv_decode_jalr(data)) begin
+            return "JALR";
+         end else if (riscv_decode_lb(data)) begin
+            return "LB";
+         end else if (riscv_decode_lbu(data)) begin
+            return "LBU";
+         end else if (riscv_decode_lh(data)) begin
+            return "LH";
+         end else if (riscv_decode_lhu(data)) begin
+            return "LHU";
+         end else if (riscv_decode_lui(data)) begin
+            return "LUI";
+         end else if (riscv_decode_lw(data)) begin
+            return "LW";
+         end else if (riscv_decode_mul(data)) begin
+            return "MUL";
+         end else if (riscv_decode_mulh(data)) begin
+            return "MULH";
+         end else if (riscv_decode_mulhsu(data)) begin
+            return "MULHSU";
+         end else if (riscv_decode_mulhu(data)) begin
+            return "MULHU";
+         end else if (riscv_decode_or(data)) begin
+            return "OR";
+         end else if (riscv_decode_ori(data)) begin
+            return "ORI";
+         end else if (riscv_decode_rem(data)) begin
+            return "REM";
+         end else if (riscv_decode_remu(data)) begin
+            return "REMU";
+         end else if (riscv_decode_sb(data)) begin
+            return "SB";
+         end else if (riscv_decode_sh(data)) begin
+            return "SH";
+         end else if (riscv_decode_sll(data)) begin
+            return "SLL";
+         end else if (riscv_decode_slt(data)) begin
+            return "SLT";
+         end else if (riscv_decode_slti(data)) begin
+            return "SLTI";
+         end else if (riscv_decode_sltiu(data)) begin
+            return "SLTIU";
+         end else if (riscv_decode_sltu(data)) begin
+            return "SLTU";
+         end else if (riscv_decode_sra(data)) begin
+            return "SRA";
+         end else if (riscv_decode_srl(data)) begin
+            return "SRL";
+         end else if (riscv_decode_sub(data)) begin
+            return "SUB";
+         end else if (riscv_decode_sw(data)) begin
+            return "SW";
+         end else if (riscv_decode_xor(data)) begin
+            return "XOR";
+         end else if (riscv_decode_xori(data)) begin
+            return "XORI";
+         end else begin
+            return "ILLEGAL";
+         end
+
+
+         return;
+
       endfunction
 
    endclass
@@ -75,54 +212,66 @@ module tb ();
 
       function automatic logic [31:0] memory_read(logic [31:0] addr);
          //For now only generate valid instructions
-         if (memory.exists(
+         if (!memory.exists(
                  addr[31:1] + 'd2
-             ) == 0 && memory.exists(
+             ) && !memory.exists(
                  addr[31:1] + 'd1
-             ) == 0 && memory.exists(
+             ) && !memory.exists(
                  addr[31:1]
-             ) == 0) begin
+             )) begin
             if (compressed_0) begin
+               while (!inst.randomize());
                memory[addr[31:1]][15:0] = inst.cdata();
-               $display("%0t [MEM] Created - Addr:%08x Data:%04x", $time, addr,
-                        memory[addr[31:1]][15:0]);
+               $display("%0t [MEM] Created - Addr:%08x Data:%04x %s", $time, addr,
+                        memory[addr[31:1]][15:0], inst.disasm(memory[addr[31:1]][15:0]));
                if (compressed_1) begin
+                  while (!inst.randomize());
                   memory[addr[31:1]+'d1][15:0] = inst.cdata();
-                  $display("%0t [MEM] Created - Addr:%08x Data:%04x", $time, addr + 'd2,
-                           memory[addr[31:1]+'d1][15:0]);
+                  $display("%0t [MEM] Created - Addr:%08x Data:%04x %s", $time, addr + 'd2,
+                           memory[addr[31:1]+'d1][15:0], inst.disasm(memory[addr[31:1]+'d1][15:0]));
                end else begin
+                  while (!inst.randomize());
                   {memory[addr[31:1]+'d2][15:0], memory[addr[31:1]+'d1][15:0]} = inst.data();
-                  $display("%0t [MEM] Created - Addr:%08x Data:%08x", $time, addr + 'd2, {
-                           memory[addr[31:1]+'d2][15:0], memory[addr[31:1]+'d1][15:0]});
+                  $display("%0t [MEM] Created - Addr:%08x Data:%08x %s", $time, addr + 'd2, {
+                           memory[addr[31:1]+'d2][15:0], memory[addr[31:1]+'d1][15:0]}, inst.disasm(
+                           {memory[addr[31:1]+'d2][15:0], memory[addr[31:1]+'d1][15:0]}));
                end
             end else begin
+               while (!inst.randomize());
                {memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]} = inst.data();
-               $display("%0t [MEM] Created - Addr:%08x Data:%08x", $time, addr, {
-                        memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]});
+               $display("%0t [MEM] Created - Addr:%08x Data:%08x %s", $time, addr, {
+                        memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]}, inst.disasm(
+                        {memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]}));
             end
-         end else if (memory.exists(addr[31:1] + 'd1) == 0 && memory.exists(addr[31:1]) == 0) begin
+         end else if (!memory.exists(addr[31:1] + 'd1) && !memory.exists(addr[31:1])) begin
             if (compressed_0) begin
+               while (!inst.randomize());
                memory[addr[31:1]][15:0] = inst.cdata();
-               $display("%0t [MEM] Created - Addr:%08x Data:%04x", $time, addr,
-                        memory[addr[31:1]][15:0]);
+               $display("%0t [MEM] Created - Addr:%08x Data:%04x %s", $time, addr,
+                        memory[addr[31:1]][15:0], inst.disasm(memory[addr[31:1]][15:0]));
+               while (!inst.randomize());
                memory[addr[31:1]+'d1][15:0] = inst.cdata();
-               $display("%0t [MEM] Created - Addr:%08x Data:%04x", $time, addr + 'd2,
-                        memory[addr[31:1]+'d1][15:0]);
+               $display("%0t [MEM] Created - Addr:%08x Data:%04x %s", $time, addr + 'd2,
+                        memory[addr[31:1]+'d1][15:0], inst.disasm(memory[addr[31:1]+'d1][15:0]));
             end else begin
+               while (!inst.randomize());
                {memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]} = inst.data();
-               $display("%0t [MEM] Created - Addr:%08x Data:%08x", $time, addr, {
-                        memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]});
+               $display("%0t [MEM] Created - Addr:%08x Data:%08x %s", $time, addr, {
+                        memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]}, inst.disasm(
+                        {memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]}));
             end
          end else begin
-            if (memory.exists(addr[31:1]) == 0) begin
+            if (!memory.exists(addr[31:1])) begin
+               while (!inst.randomize());
                memory[addr[31:1]][15:0] = inst.cdata();
-               $display("%0t [MEM] Created - Addr:%08x Data:%04x", $time, addr,
-                        memory[addr[31:1]][15:0]);
+               $display("%0t [MEM] Created - Addr:%08x Data:%04x %s", $time, addr,
+                        memory[addr[31:1]][15:0], inst.disasm(memory[addr[31:1]][15:0]));
             end
-            if (memory.exists(addr[31:1] + 'd1) == 0) begin
+            if (!memory.exists(addr[31:1] + 'd1)) begin
+               while (!inst.randomize());
                memory[addr[31:1]+'d1][15:0] = inst.cdata();
-               $display("%0t [MEM] Created - Addr:%08x Data:%04x", $time, addr + 'd2,
-                        memory[addr[31:1]+'d1][15:0]);
+               $display("%0t [MEM] Created - Addr:%08x Data:%04x %s", $time, addr + 'd2,
+                        memory[addr[31:1]+'d1][15:0], inst.disasm(memory[addr[31:1]+'d1][15:0]));
             end
          end
          return {memory[addr[31:1]+'d1][15:0], memory[addr[31:1]][15:0]};
