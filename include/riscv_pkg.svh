@@ -1,5 +1,7 @@
 package riscv_pkg;
 
+   parameter REGISTER_PORTS = 1;
+
    //typedef enum {
 
    //}
@@ -181,5 +183,24 @@ package riscv_pkg;
       logic XORI;
       logic ILLEGAL;
    } op;
+
+   typedef struct packed {
+      logic [31:0] addr;
+      logic [31:0] data;
+   } ifu_t;
+
+   typedef struct packed {
+      logic [63:0]  seq;
+      logic [31:0]  addr;
+      logic [31:0]  data;
+      riscv_pkg::op op;
+      logic         rd_used;
+      logic [5:0]   rd;
+      logic         rs1_used;
+      logic [5:0]   rs1;
+      logic         rs2_used;
+      logic [5:0]   rs2;
+      logic [31:0]  immed;
+   } idu_t;
 
 endpackage : riscv_pkg

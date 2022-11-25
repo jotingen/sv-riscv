@@ -17,71 +17,93 @@ module tb ();
    `include "riscv_decode_fn.svh"
 
    class instruction;
-      rand logic [15:0] instr_cdata;
-
       logic [45:0] instr_op_ndx;
+      logic [45:0] instr_cop_ndx;
 
       function void pre_randomize();
          std::randomize(
              instr_op_ndx
          ) with {
             instr_op_ndx dist {
-               45 := 100,  //ADD := 100,
-               44 := 100,  //ADDI := 100,
-               43 := 100,  //AND := 100,
-               42 := 100,  //ANDI := 100,
-               41 := 100,  //AUIPC := 100,
-               40 := 100,  //BEQ := 100,
-               39 := 100,  //BGE := 100,
-               38 := 100,  //BGEU := 100,
-               37 := 100,  //BLT := 100,
-               36 := 100,  //BLTU := 100,
-               35 := 100,  //BNE := 100,
-               34 := 100,  //DIV := 100,
-               33 := 100,  //DIVU := 100,
-               32 := 100,  //EBREAK := 100,
-               31 := 100,  //ECALL := 100,
-               30 := 100,  //FENCE := 100,
-               29 := 100,  //JAL := 100,
-               28 := 100,  //JALR := 100,
-               27 := 100,  //LB := 100,
-               26 := 100,  //LBU := 100,
-               25 := 100,  //LH := 100,
-               24 := 100,  //LHU := 100,
-               23 := 100,  //LUI := 100,
-               22 := 100,  //LW := 100,
-               21 := 100,  //MUL := 100,
-               20 := 100,  //MULH := 100,
-               19 := 100,  //MULHSU := 100,
-               18 := 100,  //MULHU := 100,
-               17 := 100,  //OR := 100,
-               16 := 100,  //ORI := 100,
-               15 := 100,  //REM := 100,
-               14 := 100,  //REMU := 100,
-               13 := 100,  //SB := 100,
-               12 := 100,  //SH := 100,
-               11 := 100,  //SLL := 100,
-               10 := 100,  //SLT := 100,
-               9  := 100,  //SLTI := 100,
-               8  := 100,  //SLTIU := 100,
-               7  := 100,  //SLTU := 100,
-               6  := 100,  //SRA := 100,
-               5  := 100,  //SRL := 100,
-               4  := 100,  //SUB := 100,
-               3  := 100,  //SW := 100,
-               2  := 100,  //XOR := 100,
-               1  := 100,  //XORI := 100,
-               0  := 0  //ILLEGAL := 0
+               45 := 100,  //ADD
+               44 := 100,  //ADDI
+               43 := 0,  //AND
+               42 := 0,  //ANDI
+               41 := 0,  //AUIPC
+               40 := 0,  //BEQ
+               39 := 0,  //BGE
+               38 := 0,  //BGEU
+               37 := 0,  //BLT
+               36 := 0,  //BLTU
+               35 := 0,  //BNE
+               34 := 0,  //DIV
+               33 := 0,  //DIVU
+               32 := 0,  //EBREAK
+               31 := 0,  //ECALL
+               30 := 0,  //FENCE
+               29 := 0,  //JAL
+               28 := 0,  //JALR
+               27 := 0,  //LB
+               26 := 0,  //LBU
+               25 := 0,  //LH
+               24 := 0,  //LHU
+               23 := 0,  //LUI
+               22 := 0,  //LW
+               21 := 0,  //MUL
+               20 := 0,  //MULH
+               19 := 0,  //MULHSU
+               18 := 0,  //MULHU
+               17 := 0,  //OR
+               16 := 0,  //ORI
+               15 := 0,  //REM
+               14 := 0,  //REMU
+               13 := 0,  //SB
+               12 := 0,  //SH
+               11 := 0,  //SLL
+               10 := 0,  //SLT
+               9  := 0,  //SLTI
+               8  := 0,  //SLTIU
+               7  := 0,  //SLTU
+               6  := 0,  //SRA
+               5  := 0,  //SRL
+               4  := 0,  //SUB
+               3  := 0,  //SW
+               2  := 0,  //XOR
+               1  := 0,  //XORI
+               0  := 0  //ILLEGAL
             };
          };
-         $display("TEST: %d", instr_op_ndx);
+         std::randomize(
+             instr_cop_ndx
+         ) with {
+            instr_cop_ndx dist {
+               23 := 100, //C_ADD
+               22 := 100, //C_ADDI
+               21 := 100, //C_ADDI16SP
+               20 := 100, //C_ADDI4SPN
+               19 := 0, //C_AND
+               18 := 0, //C_ANDI
+               17 := 0, //C_BEQZ
+               16 := 0, //C_BNEZ
+               15 := 0, //C_EBREAK
+               14 := 0, //C_J
+               13 := 0, //C_JAL
+               12 := 0, //C_JALR
+               11 := 0, //C_JR
+               10 := 0, //C_LI
+                9 := 0, //C_LUI
+                8 := 0, //C_LW
+                7 := 0, //C_LWSP
+                6 := 0, //C_MV
+                5 := 0, //C_NOP
+                4 := 0, //C_OR
+                3 := 0, //C_SUB
+                2 := 0, //C_SW
+                1 := 0, //C_SWSP
+                0 := 0 //C_XOR
+            };
+         };
       endfunction
-
-
-      constraint cdata_c {
-         riscv_decode_defined({16'd0, instr_cdata});
-         riscv_decode_compressed({16'd0, instr_cdata});
-      }
 
       function logic [31:0] data;
          do begin
@@ -364,7 +386,156 @@ module tb ();
       endfunction
 
       function logic [15:0] cdata;
-         return instr_cdata;
+         logic [31:0] data;
+         do begin
+            data = $urandom();
+            if (instr_cop_ndx == 23) begin
+               data &= ~riscv_decode_c_add_mask();
+               data |= riscv_decode_c_add_match();
+            end
+            if (instr_cop_ndx == 22) begin
+               data &= ~riscv_decode_c_addi_mask();
+               data |= riscv_decode_c_addi_match();
+            end
+            if (instr_cop_ndx == 21) begin
+               data &= ~riscv_decode_c_addi16sp_mask();
+               data |= riscv_decode_c_addi16sp_match();
+            end
+            if (instr_cop_ndx == 20) begin
+               data &= ~riscv_decode_c_addi4spn_mask();
+               data |= riscv_decode_c_addi4spn_match();
+            end
+            if (instr_cop_ndx == 19) begin
+               data &= ~riscv_decode_c_and_mask();
+               data |= riscv_decode_c_and_match();
+            end
+            if (instr_cop_ndx == 18) begin
+               data &= ~riscv_decode_c_andi_mask();
+               data |= riscv_decode_c_andi_match();
+            end
+            if (instr_cop_ndx == 17) begin
+               data &= ~riscv_decode_c_beqz_mask();
+               data |= riscv_decode_c_beqz_match();
+            end
+            if (instr_cop_ndx == 16) begin
+               data &= ~riscv_decode_c_bnez_mask();
+               data |= riscv_decode_c_bnez_match();
+            end
+            if (instr_cop_ndx == 15) begin
+               data &= ~riscv_decode_c_ebreak_mask();
+               data |= riscv_decode_c_ebreak_match();
+            end
+            if (instr_cop_ndx == 14) begin
+               data &= ~riscv_decode_c_j_mask();
+               data |= riscv_decode_c_j_match();
+            end
+            if (instr_cop_ndx == 13) begin
+               data &= ~riscv_decode_c_jal_mask();
+               data |= riscv_decode_c_jal_match();
+            end
+            if (instr_cop_ndx == 12) begin
+               data &= ~riscv_decode_c_jalr_mask();
+               data |= riscv_decode_c_jalr_match();
+            end
+            if (instr_cop_ndx == 11) begin
+               data &= ~riscv_decode_c_jr_mask();
+               data |= riscv_decode_c_jr_match();
+            end
+            if (instr_cop_ndx == 10) begin
+               data &= ~riscv_decode_c_li_mask();
+               data |= riscv_decode_c_li_match();
+            end
+            if (instr_cop_ndx == 9) begin
+               data &= ~riscv_decode_c_lui_mask();
+               data |= riscv_decode_c_lui_match();
+            end
+            if (instr_cop_ndx == 8) begin
+               data &= ~riscv_decode_c_lw_mask();
+               data |= riscv_decode_c_lw_match();
+            end
+            if (instr_cop_ndx == 7) begin
+               data &= ~riscv_decode_c_lwsp_mask();
+               data |= riscv_decode_c_lwsp_match();
+            end
+            if (instr_cop_ndx == 6) begin
+               data &= ~riscv_decode_c_mv_mask();
+               data |= riscv_decode_c_mv_match();
+            end
+            if (instr_cop_ndx == 5) begin
+               data &= ~riscv_decode_c_nop_mask();
+               data |= riscv_decode_c_nop_match();
+            end
+            if (instr_cop_ndx == 4) begin
+               data &= ~riscv_decode_c_or_mask();
+               data |= riscv_decode_c_or_match();
+            end
+            if (instr_cop_ndx == 3) begin
+               data &= ~riscv_decode_c_sub_mask();
+               data |= riscv_decode_c_sub_match();
+            end
+            if (instr_cop_ndx == 2) begin
+               data &= ~riscv_decode_c_sw_mask();
+               data |= riscv_decode_c_sw_match();
+            end
+            if (instr_cop_ndx == 1) begin
+               data &= ~riscv_decode_c_swsp_mask();
+               data |= riscv_decode_c_swsp_match();
+            end
+            if (instr_cop_ndx == 0) begin
+               data &= ~riscv_decode_c_xor_mask();
+               data |= riscv_decode_c_xor_match();
+            end
+
+         end while (!(((instr_cop_ndx == 23) & riscv_decode_c_add(
+             data
+         )) | ((instr_cop_ndx == 22) & riscv_decode_c_addi(
+             data
+         )) | ((instr_cop_ndx == 21) & riscv_decode_c_addi16sp(
+             data
+         )) | ((instr_cop_ndx == 20) & riscv_decode_c_addi4spn(
+             data
+         )) | ((instr_cop_ndx == 19) & riscv_decode_c_and(
+             data
+         )) | ((instr_cop_ndx == 18) & riscv_decode_c_andi(
+             data
+         )) | ((instr_cop_ndx == 17) & riscv_decode_c_beqz(
+             data
+         )) | ((instr_cop_ndx == 16) & riscv_decode_c_bnez(
+             data
+         )) | ((instr_cop_ndx == 15) & riscv_decode_c_ebreak(
+             data
+         )) | ((instr_cop_ndx == 14) & riscv_decode_c_j(
+             data
+         )) | ((instr_cop_ndx == 13) & riscv_decode_c_jal(
+             data
+         )) | ((instr_cop_ndx == 12) & riscv_decode_c_jalr(
+             data
+         )) | ((instr_cop_ndx == 11) & riscv_decode_c_jr(
+             data
+         )) | ((instr_cop_ndx == 10) & riscv_decode_c_li(
+             data
+         )) | ((instr_cop_ndx == 9) & riscv_decode_c_lui(
+             data
+         )) | ((instr_cop_ndx == 8) & riscv_decode_c_lw(
+             data
+         )) | ((instr_cop_ndx == 7) & riscv_decode_c_lwsp(
+             data
+         )) | ((instr_cop_ndx == 6) & riscv_decode_c_mv(
+             data
+         )) | ((instr_cop_ndx == 5) & riscv_decode_c_nop(
+             data
+         )) | ((instr_cop_ndx == 4) & riscv_decode_c_or(
+             data
+         )) | ((instr_cop_ndx == 3) & riscv_decode_c_sub(
+             data
+         )) | ((instr_cop_ndx == 2) & riscv_decode_c_sw(
+             data
+         )) | ((instr_cop_ndx == 1) & riscv_decode_c_swsp(
+             data
+         )) | ((instr_cop_ndx == 0) & riscv_decode_c_xor(
+             data
+         ))));
+         return data[15:0];
       endfunction
 
       function string disasm(input [31:0] data);
@@ -528,14 +699,14 @@ module tb ();
 
       constraint c_compressed_0 {
          compressed_0 dist {
-            0 := 95,
-            1 := 5
+            0 := 40,
+            1 := 60
          };
       }
       constraint c_compressed_1 {
          compressed_1 dist {
-            0 := 95,
-            1 := 5
+            0 := 40,
+            1 := 60
          };
       }
 
@@ -713,7 +884,7 @@ module tb ();
        .*
    );
 
-   bind DUT.idu riscv_idu_assert riscv_idu_assert_inst (.*);
+   bind DUT.riscv_idu riscv_idu_assert riscv_idu_assert_inst (.*);
 
    always #10 clock = ~clock;
 

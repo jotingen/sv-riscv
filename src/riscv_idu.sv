@@ -6,29 +6,13 @@ module riscv_idu (
     input logic reset,
 
     input logic        ifu_vld,
-    input logic [31:0] ifu_addr,
-    input logic [31:0] ifu_data,
+    input riscv_pkg::ifu_t ifu,
 
     output logic                idu_vld,
-    output logic         [63:0] idu_seq,
-    output logic         [31:0] idu_addr,
-    output logic         [31:0] idu_data,
-    output riscv_pkg::op        idu_op,
-    output logic         [ 5:0] idu_rd,
-    output logic         [ 5:0] idu_rs1,
-    output logic         [ 5:0] idu_rs2,
-    output logic         [31:0] idu_immed
+    output riscv_pkg::idu_t     idu
 );
 
-   riscv_pkg::op        idu_op_next;
-
-   logic         [63:0] idu_seq_next;
-   logic         [31:0] idu_addr_next;
-   logic         [31:0] idu_data_next;
-   logic         [ 5:0] idu_rd_next;
-   logic         [ 5:0] idu_rs1_next;
-   logic         [ 5:0] idu_rs2_next;
-   logic         [31:0] idu_immed_next;
+   riscv_pkg::idu_t     idu_next;
 
    logic                dcd_ADD;
    logic                dcd_ADDI;
@@ -145,7 +129,7 @@ module riscv_idu (
    logic         [31:0] immed_j;
 
    riscv_decode decode (
-       .data       (ifu_data),
+       .data       (ifu.data),
        .ADD        (dcd_ADD),
        .ADDI       (dcd_ADDI),
        .AND        (dcd_AND),
@@ -257,263 +241,266 @@ module riscv_idu (
 
    always_comb begin
 
-      idu_seq_next = idu_seq + 'd1;
+      idu_next.seq = idu.seq + 'd1;
 
-      idu_addr_next = ifu_addr;
+      idu_next.addr = ifu.addr;
 
-      idu_data_next = ifu_data;
+      idu_next.data = ifu.data;
 
-      idu_op_next.ADD = dcd_ADD | dcd_C_ADD | dcd_C_MV;
-      idu_op_next.ADDI = dcd_ADDI | dcd_C_ADDI | dcd_C_ADDI16SP | dcd_C_ADDI4SPN | dcd_C_LI | dcd_C_NOP;
-      idu_op_next.AND = dcd_AND | dcd_C_AND;
-      idu_op_next.ANDI = dcd_ANDI | dcd_C_ANDI;
-      idu_op_next.AUIPC = dcd_AUIPC;
-      idu_op_next.BEQ = dcd_BEQ | dcd_C_BEQZ;
-      idu_op_next.BGE = dcd_BGE;
-      idu_op_next.BGEU = dcd_BGEU;
-      idu_op_next.BLT = dcd_BLT;
-      idu_op_next.BLTU = dcd_BLTU;
-      idu_op_next.BNE = dcd_BNE | dcd_C_BNEZ;
-      idu_op_next.DIV = dcd_DIV;
-      idu_op_next.DIVU = dcd_DIVU;
-      idu_op_next.EBREAK = dcd_EBREAK | dcd_C_EBREAK;
-      idu_op_next.ECALL = dcd_ECALL;
-      idu_op_next.FENCE = dcd_FENCE;
-      idu_op_next.JAL = dcd_JAL | dcd_C_J | dcd_C_JAL;
-      idu_op_next.JALR = dcd_JALR | dcd_C_JALR | dcd_C_JR;
-      idu_op_next.LB = dcd_LB;
-      idu_op_next.LBU = dcd_LBU;
-      idu_op_next.LH = dcd_LH;
-      idu_op_next.LHU = dcd_LHU;
-      idu_op_next.LUI = dcd_LUI | dcd_C_LUI;
-      idu_op_next.LW = dcd_LW | dcd_C_LW | dcd_C_LWSP;
-      idu_op_next.MUL = dcd_MUL;
-      idu_op_next.MULH = dcd_MULH;
-      idu_op_next.MULHSU = dcd_MULHSU;
-      idu_op_next.MULHU = dcd_MULHU;
-      idu_op_next.OR = dcd_OR | dcd_C_OR;
-      idu_op_next.ORI = dcd_ORI;
-      idu_op_next.REM = dcd_REM;
-      idu_op_next.REMU = dcd_REMU;
-      idu_op_next.SB = dcd_SB;
-      idu_op_next.SH = dcd_SH;
-      idu_op_next.SLL = dcd_SLL;
-      idu_op_next.SLT = dcd_SLT;
-      idu_op_next.SLTI = dcd_SLTI;
-      idu_op_next.SLTIU = dcd_SLTIU;
-      idu_op_next.SLTU = dcd_SLTU;
-      idu_op_next.SRA = dcd_SRA;
-      idu_op_next.SRL = dcd_SRL;
-      idu_op_next.SUB = dcd_SUB | dcd_C_SUB;
-      idu_op_next.SW = dcd_SW | dcd_C_SW | dcd_C_SWSP;
-      idu_op_next.XOR = dcd_XOR | dcd_C_XOR;
-      idu_op_next.XORI = dcd_XORI;
+      idu_next.op.ADD = dcd_ADD | dcd_C_ADD | dcd_C_MV;
+      idu_next.op.ADDI = dcd_ADDI | dcd_C_ADDI | dcd_C_ADDI16SP | dcd_C_ADDI4SPN | dcd_C_LI | dcd_C_NOP;
+      idu_next.op.AND = dcd_AND | dcd_C_AND;
+      idu_next.op.ANDI = dcd_ANDI | dcd_C_ANDI;
+      idu_next.op.AUIPC = dcd_AUIPC;
+      idu_next.op.BEQ = dcd_BEQ | dcd_C_BEQZ;
+      idu_next.op.BGE = dcd_BGE;
+      idu_next.op.BGEU = dcd_BGEU;
+      idu_next.op.BLT = dcd_BLT;
+      idu_next.op.BLTU = dcd_BLTU;
+      idu_next.op.BNE = dcd_BNE | dcd_C_BNEZ;
+      idu_next.op.DIV = dcd_DIV;
+      idu_next.op.DIVU = dcd_DIVU;
+      idu_next.op.EBREAK = dcd_EBREAK | dcd_C_EBREAK;
+      idu_next.op.ECALL = dcd_ECALL;
+      idu_next.op.FENCE = dcd_FENCE;
+      idu_next.op.JAL = dcd_JAL | dcd_C_J | dcd_C_JAL;
+      idu_next.op.JALR = dcd_JALR | dcd_C_JALR | dcd_C_JR;
+      idu_next.op.LB = dcd_LB;
+      idu_next.op.LBU = dcd_LBU;
+      idu_next.op.LH = dcd_LH;
+      idu_next.op.LHU = dcd_LHU;
+      idu_next.op.LUI = dcd_LUI | dcd_C_LUI;
+      idu_next.op.LW = dcd_LW | dcd_C_LW | dcd_C_LWSP;
+      idu_next.op.MUL = dcd_MUL;
+      idu_next.op.MULH = dcd_MULH;
+      idu_next.op.MULHSU = dcd_MULHSU;
+      idu_next.op.MULHU = dcd_MULHU;
+      idu_next.op.OR = dcd_OR | dcd_C_OR;
+      idu_next.op.ORI = dcd_ORI;
+      idu_next.op.REM = dcd_REM;
+      idu_next.op.REMU = dcd_REMU;
+      idu_next.op.SB = dcd_SB;
+      idu_next.op.SH = dcd_SH;
+      idu_next.op.SLL = dcd_SLL;
+      idu_next.op.SLT = dcd_SLT;
+      idu_next.op.SLTI = dcd_SLTI;
+      idu_next.op.SLTIU = dcd_SLTIU;
+      idu_next.op.SLTU = dcd_SLTU;
+      idu_next.op.SRA = dcd_SRA;
+      idu_next.op.SRL = dcd_SRL;
+      idu_next.op.SUB = dcd_SUB | dcd_C_SUB;
+      idu_next.op.SW = dcd_SW | dcd_C_SW | dcd_C_SWSP;
+      idu_next.op.XOR = dcd_XOR | dcd_C_XOR;
+      idu_next.op.XORI = dcd_XORI;
 
-      idu_op_next.ILLEGAL = ~dcd_defined;
+      idu_next.op.ILLEGAL = ~dcd_defined;
 
       //Registers
-      idu_rd_next[5:0] = idu_data_next[11:7];
-      idu_rs1_next[5:0] = idu_data_next[19:15];
-      idu_rs2_next[5:0] = idu_data_next[24:20];
+      idu_next.rd_used = dcd_rd | dcd_rd_p | dcd_rd_rs1 | dcd_rd_rs1_p;
+      idu_next.rd[5:0] = idu_next.data[11:7];
+      idu_next.rs1_used = dcd_rs1 | dcd_rs1_p;
+      idu_next.rs1[5:0] = idu_next.data[19:15];
+      idu_next.rs2_used = dcd_rs2 | dcd_rs2_p;
+      idu_next.rs2[5:0] = idu_next.data[24:20];
 
       //Immediates
-      immed_i[31:0] = {20'd0, idu_data_next[31:20]};
-      immed_s[31:0] = {20'd0, idu_data_next[31:15], idu_data_next[11:7]};
+      immed_i[31:0] = {20'd0, idu_next.data[31:20]};
+      immed_s[31:0] = {20'd0, idu_next.data[31:15], idu_next.data[11:7]};
       immed_b[31:0] = {
-         idu_data_next[31], idu_data_next[7], idu_data_next[30:25], idu_data_next[11:8], 1'd0
+         idu_next.data[31], idu_next.data[7], idu_next.data[30:25], idu_next.data[11:8], 1'd0
       };
-      immed_u[31:0] = {12'd0, idu_data_next[31:12]};
+      immed_u[31:0] = {12'd0, idu_next.data[31:12]};
       immed_j[31:0] = {
          11'd0,
-         idu_data_next[31],
-         idu_data_next[19:12],
-         idu_data_next[20],
-         idu_data_next[30:21],
+         idu_next.data[31],
+         idu_next.data[19:12],
+         idu_next.data[20],
+         idu_next.data[30:21],
          1'd0
       };
 
-      idu_immed_next[31:0] = '0;
+      idu_next.immed[31:0] = '0;
       if (dcd_imm12) begin
-         idu_immed_next[31:0] = immed_i[31:0];
+         idu_next.immed[31:0] = immed_i[31:0];
       end else if (dcd_imm12hi) begin
-         idu_immed_next[31:0] = immed_s[31:0];
+         idu_next.immed[31:0] = immed_s[31:0];
       end else if (dcd_bimm12hi) begin
-         idu_immed_next[31:0] = immed_b[31:0];
+         idu_next.immed[31:0] = immed_b[31:0];
       end else if (dcd_imm20) begin
-         idu_immed_next[31:0] = immed_u[31:0];
+         idu_next.immed[31:0] = immed_u[31:0];
       end else if (dcd_jimm20) begin
-         idu_immed_next[31:0] = immed_j[31:0];
+         idu_next.immed[31:0] = immed_j[31:0];
       end
 
       if (dcd_compressed) begin
-         idu_data_next[31:16] = '0;
+         idu_next.data[31:16] = '0;
          if (dcd_C_ADD) begin
-            idu_rd_next  = idu_data_next[11:7];
-            idu_rs1_next = idu_data_next[11:7];
-            idu_rs2_next = idu_data_next[6:2];
+            idu_next.rd  = idu_next.data[11:7];
+            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.rs2 = idu_next.data[6:2];
          end
          if (dcd_C_ADDI) begin
-            idu_rd_next = idu_data_next[11:7];
-            idu_rs1_next = idu_data_next[11:7];
-            idu_rs2_next = idu_data_next[6:2];
-            idu_immed_next[31:0] = {{27{idu_data_next[12]}}, idu_data_next[6:2]};
+            idu_next.rd = idu_next.data[11:7];
+            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.rs2 = idu_next.data[6:2];
+            idu_next.immed[31:0] = {{27{idu_next.data[12]}}, idu_next.data[6:2]};
          end
          if (dcd_C_ADDI16SP) begin
-            idu_rd_next = idu_data_next[11:7];
-            idu_rs1_next = idu_data_next[11:7];
-            idu_immed_next[31:0] = {
-               {23{idu_data_next[12]}},
-               idu_data_next[4:3],
-               idu_data_next[5],
-               idu_data_next[2],
-               idu_data_next[6],
+            idu_next.rd = idu_next.data[11:7];
+            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.immed[31:0] = {
+               {23{idu_next.data[12]}},
+               idu_next.data[4:3],
+               idu_next.data[5],
+               idu_next.data[2],
+               idu_next.data[6],
                4'd0
             };
          end
          if (dcd_C_ADDI4SPN) begin
-            idu_rd_next = {2'd0, idu_data_next[4:2]};
-            idu_immed_next[31:0] = {
+            idu_next.rd = {2'd0, idu_next.data[4:2]};
+            idu_next.immed[31:0] = {
                22'd0,
-               idu_data_next[10:7],
-               idu_data_next[12:11],
-               idu_data_next[5],
-               idu_data_next[6],
+               idu_next.data[10:7],
+               idu_next.data[12:11],
+               idu_next.data[5],
+               idu_next.data[6],
                2'd0
             };
          end
          if (dcd_C_AND) begin
-            idu_rd_next  = {2'd0, idu_data_next[9:7]};
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+            idu_next.rd  = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
          end
          if (dcd_C_ANDI) begin
-            idu_rd_next = {2'd0, idu_data_next[9:7]};
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_immed_next[31:0] = {{26{idu_data_next[12]}}, idu_data_next[6:2]};
+            idu_next.rd = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.immed[31:0] = {{26{idu_next.data[12]}}, idu_next.data[6:2]};
          end
          if (dcd_C_BEQZ) begin
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_rs1_next = 'd0;
-            idu_immed_next[31:0] = {
-               {23{idu_data_next[12]}},
-               idu_data_next[6:5],
-               idu_data_next[2],
-               idu_data_next[11:10],
-               idu_data_next[4:3],
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = 'd0;
+            idu_next.immed[31:0] = {
+               {23{idu_next.data[12]}},
+               idu_next.data[6:5],
+               idu_next.data[2],
+               idu_next.data[11:10],
+               idu_next.data[4:3],
                1'd0
             };
          end
          if (dcd_C_BNEZ) begin
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_rs1_next = 'd0;
-            idu_immed_next[31:0] = {
-               {23{idu_data_next[12]}},
-               idu_data_next[6:5],
-               idu_data_next[2],
-               idu_data_next[11:10],
-               idu_data_next[4:3],
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = 'd0;
+            idu_next.immed[31:0] = {
+               {23{idu_next.data[12]}},
+               idu_next.data[6:5],
+               idu_next.data[2],
+               idu_next.data[11:10],
+               idu_next.data[4:3],
                1'd0
             };
          end
          if (dcd_C_EBREAK) begin
          end
          if (dcd_C_J) begin
-            idu_rd_next = 'd0;
-            idu_immed_next[31:0] = {
-               {9{idu_data_next[12]}},
-               idu_data_next[8],
-               idu_data_next[10:9],
-               idu_data_next[6],
-               idu_data_next[7],
-               idu_data_next[2],
-               idu_data_next[11],
-               idu_data_next[5:3],
+            idu_next.rd = 'd0;
+            idu_next.immed[31:0] = {
+               {9{idu_next.data[12]}},
+               idu_next.data[8],
+               idu_next.data[10:9],
+               idu_next.data[6],
+               idu_next.data[7],
+               idu_next.data[2],
+               idu_next.data[11],
+               idu_next.data[5:3],
                1'd0
             };
          end
          if (dcd_C_JAL) begin
-            idu_rd_next = 'd1;
-            idu_immed_next[31:0] = {
-               {9{idu_data_next[12]}},
-               idu_data_next[8],
-               idu_data_next[10:9],
-               idu_data_next[6],
-               idu_data_next[7],
-               idu_data_next[2],
-               idu_data_next[11],
-               idu_data_next[5:3],
+            idu_next.rd = 'd1;
+            idu_next.immed[31:0] = {
+               {9{idu_next.data[12]}},
+               idu_next.data[8],
+               idu_next.data[10:9],
+               idu_next.data[6],
+               idu_next.data[7],
+               idu_next.data[2],
+               idu_next.data[11],
+               idu_next.data[5:3],
                1'd0
             };
          end
          if (dcd_C_JALR) begin
-            idu_rd_next = 'd0;
-            idu_rs1_next = idu_data_next[11:7];
-            idu_rs2_next = idu_data_next[6:2];
-            idu_immed_next[31:0] = 'd0;
+            idu_next.rd = 'd0;
+            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.rs2 = idu_next.data[6:2];
+            idu_next.immed[31:0] = 'd0;
          end
          if (dcd_C_JR) begin
-            idu_rd_next = 'd1;
-            idu_rs1_next = idu_data_next[11:7];
-            idu_rs2_next = idu_data_next[6:2];
-            idu_immed_next[31:0] = 'd0;
+            idu_next.rd = 'd1;
+            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.rs2 = idu_next.data[6:2];
+            idu_next.immed[31:0] = 'd0;
          end
          if (dcd_C_LI) begin
-            idu_rd_next = idu_data_next[11:7];
-            idu_rs1_next = 'd0;
-            idu_immed_next[31:0] = {{27{idu_data_next[12]}}, idu_data_next[6:2]};
+            idu_next.rd = idu_next.data[11:7];
+            idu_next.rs1 = 'd0;
+            idu_next.immed[31:0] = {{27{idu_next.data[12]}}, idu_next.data[6:2]};
          end
          if (dcd_C_LUI) begin
-            idu_rd_next = idu_data_next[11:7];
-            idu_immed_next[31:0] = {{14{idu_data_next[12]}}, idu_data_next[6:2], 12'd0};
+            idu_next.rd = idu_next.data[11:7];
+            idu_next.immed[31:0] = {{14{idu_next.data[12]}}, idu_next.data[6:2], 12'd0};
          end
          if (dcd_C_LW) begin
-            idu_rd_next = {2'd0, idu_data_next[4:2]};
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_immed_next[31:0] = {
-               25'd0, idu_data_next[5], idu_data_next[12:10], idu_data_next[6], 2'd0
+            idu_next.rd = {2'd0, idu_next.data[4:2]};
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.immed[31:0] = {
+               25'd0, idu_next.data[5], idu_next.data[12:10], idu_next.data[6], 2'd0
             };
          end
          if (dcd_C_LWSP) begin
-            idu_rd_next = idu_data_next[11:7];
-            idu_immed_next[31:0] = {
-               24'd0, idu_data_next[3:2], idu_data_next[12], idu_data_next[6:4], 2'd0
+            idu_next.rd = idu_next.data[11:7];
+            idu_next.immed[31:0] = {
+               24'd0, idu_next.data[3:2], idu_next.data[12], idu_next.data[6:4], 2'd0
             };
          end
          if (dcd_C_MV) begin
-            idu_rd_next  = idu_data_next[11:7];
-            idu_rs1_next = idu_data_next[11:7];
-            idu_rs2_next = idu_data_next[6:2];
+            idu_next.rd  = idu_next.data[11:7];
+            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.rs2 = idu_next.data[6:2];
          end
          if (dcd_C_NOP) begin
-            idu_rd_next = '0;
-            idu_rs1_next = '0;
-            idu_immed_next[31:0] = '0;
+            idu_next.rd = '0;
+            idu_next.rs1 = '0;
+            idu_next.immed[31:0] = '0;
          end
          if (dcd_C_OR) begin
-            idu_rd_next  = {2'd0, idu_data_next[9:7]};
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+            idu_next.rd  = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
          end
          if (dcd_C_SUB) begin
-            idu_rd_next  = {2'd0, idu_data_next[9:7]};
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+            idu_next.rd  = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
          end
          if (dcd_C_SW) begin
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_rs2_next = {2'd0, idu_data_next[4:2]};
-            idu_immed_next[31:0] = {
-               25'd0, idu_data_next[5], idu_data_next[12:10], idu_data_next[6], 2'd0
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
+            idu_next.immed[31:0] = {
+               25'd0, idu_next.data[5], idu_next.data[12:10], idu_next.data[6], 2'd0
             };
          end
          if (dcd_C_SWSP) begin
-            idu_rs2_next = idu_data_next[6:2];
-            idu_immed_next[31:0] = {24'd0, idu_data_next[7:6], idu_data_next[12:9], 2'd0};
+            idu_next.rs2 = idu_next.data[6:2];
+            idu_next.immed[31:0] = {24'd0, idu_next.data[7:6], idu_next.data[12:9], 2'd0};
          end
          if (dcd_C_XOR) begin
-            idu_rd_next  = {2'd0, idu_data_next[9:7]};
-            idu_rs1_next = {2'd0, idu_data_next[9:7]};
-            idu_rs2_next = {2'd0, idu_data_next[4:2]};
+            idu_next.rd  = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
          end
       end
 
@@ -521,29 +508,15 @@ module riscv_idu (
 
    always_ff @(posedge clock) begin
       idu_vld <= '0;
-      idu_seq <= idu_seq;
-      idu_addr <= idu_addr;
-      idu_data <= idu_data;
-      idu_op <= idu_op;
-      idu_rd <= idu_rd_next;
-      idu_rs1 <= idu_rs1_next;
-      idu_rs2 <= idu_rs2_next;
-      idu_immed[31:0] <= idu_immed_next[31:0];
+      idu <= idu;
       if (ifu_vld) begin
          idu_vld <= '1;
-         idu_seq <= idu_seq_next;
-         idu_addr <= idu_addr_next;
-         idu_data <= idu_data_next;
-         idu_op <= idu_op_next;
-         idu_rd <= idu_rd_next;
-         idu_rs1 <= idu_rs1_next;
-         idu_rs2 <= idu_rs2_next;
-         idu_immed[31:0] <= idu_immed_next[31:0];
+         idu <= idu_next;
       end
 
       if (reset) begin
          idu_vld <= '0;
-         idu_seq <= '0;
+         idu.seq <= '0;
       end
    end
 

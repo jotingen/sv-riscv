@@ -11,9 +11,8 @@ module riscv_ifu (
     output axi4_pkg::ar_m AXI_AR_M,
     output axi4_pkg::r_m  AXI_R_M,
 
-    output logic        ifu_vld,
-    output logic [31:0] ifu_addr,
-    output logic [31:0] ifu_data
+    output logic            ifu_vld,
+    output riscv_pkg::ifu_t ifu
 
 );
 
@@ -82,15 +81,15 @@ module riscv_ifu (
    // Flag if bottom of buffer is compressed instruction
    always_comb begin
 
-      buffer_is_compressed = buffer_data[0][1:0] != 2'd11;
+      buffer_is_compressed = buffer_data[0][1:0] != 2'b11;
 
       unique case ({
          rsp_vld, buffer_is_compressed, buffer_vld[2:0]
       }) inside
          5'b0_?_??0: begin
             ifu_vld = '0;
-            ifu_addr = 'x;
-            ifu_data = 'x;
+            ifu.addr = 'x;
+            ifu.data = 'x;
             rsp_ack = '0;
             buffer_vld_next = '0;
             buffer_addr_next = 'x;
@@ -98,8 +97,8 @@ module riscv_ifu (
          end
          5'b1_?_??0: begin
             ifu_vld = '0;
-            ifu_addr = 'x;
-            ifu_data = 'x;
+            ifu.addr = 'x;
+            ifu.data = 'x;
             rsp_ack = '1;
             buffer_vld_next[0] = rsp_vld;
             buffer_addr_next[0] = rsp_addr;
@@ -114,8 +113,8 @@ module riscv_ifu (
 
          5'b0_0_?01: begin
             ifu_vld = '0;
-            ifu_addr = 'x;
-            ifu_data = 'x;
+            ifu.addr = 'x;
+            ifu.data = 'x;
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[0];
             buffer_addr_next[0] = buffer_addr[0];
@@ -129,8 +128,8 @@ module riscv_ifu (
          end
          5'b0_1_?01: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {16'd0, buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next = '0;
             buffer_addr_next = 'x;
@@ -138,8 +137,8 @@ module riscv_ifu (
          end
          5'b1_0_?01: begin
             ifu_vld = '0;
-            ifu_addr = 'x;
-            ifu_data = 'x;
+            ifu.addr = 'x;
+            ifu.data = 'x;
             rsp_ack = '1;
             buffer_vld_next[0] = buffer_vld[0];
             buffer_addr_next[0] = buffer_addr[0];
@@ -153,8 +152,8 @@ module riscv_ifu (
          end
          5'b1_1_?01: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {16'd0, buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {16'd0, buffer_data[0]};
             rsp_ack = '1;
             buffer_vld_next[0] = rsp_vld;
             buffer_addr_next[0] = rsp_addr;
@@ -169,8 +168,8 @@ module riscv_ifu (
 
          5'b0_0_011: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {buffer_data[1], buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {buffer_data[1], buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next = '0;
             buffer_addr_next = 'x;
@@ -178,8 +177,8 @@ module riscv_ifu (
          end
          5'b0_1_011: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {16'd0, buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];
@@ -193,8 +192,8 @@ module riscv_ifu (
          end
          5'b1_0_011: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {buffer_data[1], buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {buffer_data[1], buffer_data[0]};
             rsp_ack = '1;
             buffer_vld_next[0] = rsp_vld;
             buffer_addr_next[0] = rsp_addr;
@@ -208,8 +207,8 @@ module riscv_ifu (
          end
          5'b1_1_011: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {16'd0, buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {16'd0, buffer_data[0]};
             rsp_ack = '1;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];
@@ -224,8 +223,8 @@ module riscv_ifu (
 
          5'b0_0_111: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {buffer_data[1], buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {buffer_data[1], buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[2];
             buffer_addr_next[0] = buffer_addr[2];
@@ -239,8 +238,8 @@ module riscv_ifu (
          end
          5'b0_1_111: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {16'd0, buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];
@@ -254,8 +253,8 @@ module riscv_ifu (
          end
          5'b1_0_111: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {buffer_data[1], buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {buffer_data[1], buffer_data[0]};
             rsp_ack = '1;
             buffer_vld_next[0] = buffer_vld[2];
             buffer_addr_next[0] = buffer_addr[2];
@@ -269,8 +268,8 @@ module riscv_ifu (
          end
          5'b1_1_111: begin
             ifu_vld = '1;
-            ifu_addr = buffer_addr[0];
-            ifu_data = {16'd0, buffer_data[0]};
+            ifu.addr = buffer_addr[0];
+            ifu.data = {16'd0, buffer_data[0]};
             rsp_ack = '0;
             buffer_vld_next[0] = buffer_vld[1];
             buffer_addr_next[0] = buffer_addr[1];
@@ -285,8 +284,8 @@ module riscv_ifu (
 
          default: begin
             ifu_vld = 'x;
-            ifu_addr = 'x;
-            ifu_data = 'x;
+            ifu.addr = 'x;
+            ifu.data = 'x;
             rsp_ack = 'x;
             buffer_vld_next = 'x;
             buffer_addr_next = 'x;

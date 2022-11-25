@@ -7,20 +7,21 @@
          <top_modules>
             <top_module name="axi4_pkg" />
             <top_module name="riscv_pkg" />
+            <top_module name="std" />
             <top_module name="tb" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="100.000001 us"></ZoomEndTime>
-      <Cursor1Time time="0.910000 us"></Cursor1Time>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,859.001 ns"></ZoomEndTime>
+      <Cursor1Time time="270.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="361"></NameColumnWidth>
-      <ValueColumnWidth column_width="148"></ValueColumnWidth>
+      <NameColumnWidth column_width="321"></NameColumnWidth>
+      <ValueColumnWidth column_width="116"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="40" />
+   <WVObjectSize size="18" />
    <wvobject fp_name="/tb/clock" type="logic">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -77,188 +78,129 @@
       <obj_property name="ElementShortName">AXI_R_M[1:0]</obj_property>
       <obj_property name="ObjectShortName">AXI_R_M[1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="group21" type="group">
+   <wvobject fp_name="group51" type="group">
       <obj_property name="label">ifu</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/tb/DUT/ifu/AXI_AR_M" type="array">
-         <obj_property name="ElementShortName">AXI_AR_M</obj_property>
-         <obj_property name="ObjectShortName">AXI_AR_M</obj_property>
+      <wvobject fp_name="/tb/DUT/riscv_ifu/ifu_vld" type="logic">
+         <obj_property name="ElementShortName">ifu_vld</obj_property>
+         <obj_property name="ObjectShortName">ifu_vld</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb/DUT/ifu/AXI_AR_S" type="array">
-         <obj_property name="ElementShortName">AXI_AR_S</obj_property>
-         <obj_property name="ObjectShortName">AXI_AR_S</obj_property>
+      <wvobject fp_name="/tb/DUT/riscv_ifu/ifu" type="array">
+         <obj_property name="ElementShortName">ifu</obj_property>
+         <obj_property name="ObjectShortName">ifu</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb/DUT/ifu/AXI_R_M" type="array">
-         <obj_property name="ElementShortName">AXI_R_M</obj_property>
-         <obj_property name="ObjectShortName">AXI_R_M</obj_property>
+   </wvobject>
+   <wvobject fp_name="group50" type="group">
+      <obj_property name="label">idu</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb/DUT/idu_vld" type="logic">
+         <obj_property name="ElementShortName">idu_vld</obj_property>
+         <obj_property name="ObjectShortName">idu_vld</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb/DUT/ifu/AXI_R_S" type="array">
-         <obj_property name="ElementShortName">AXI_R_S</obj_property>
-         <obj_property name="ObjectShortName">AXI_R_S</obj_property>
+      <wvobject fp_name="/tb/DUT/riscv_idu/idu" type="array">
+         <obj_property name="ElementShortName">idu</obj_property>
+         <obj_property name="ObjectShortName">idu</obj_property>
       </wvobject>
-      <wvobject fp_name="group40" type="group">
-         <obj_property name="label">axi_driver</obj_property>
+   </wvobject>
+   <wvobject fp_name="group33" type="group">
+      <obj_property name="label">exu</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb/DUT/riscv_exu/idu_vld" type="logic">
+         <obj_property name="ElementShortName">idu_vld</obj_property>
+         <obj_property name="ObjectShortName">idu_vld</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_exu/idu" type="array">
+         <obj_property name="ElementShortName">idu</obj_property>
+         <obj_property name="ObjectShortName">idu</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_exu/register_locked" type="array">
+         <obj_property name="ElementShortName">register_locked[31:0]</obj_property>
+         <obj_property name="ObjectShortName">register_locked[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_exu/register" type="array">
+         <obj_property name="ElementShortName">register[31:0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">register[31:0][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_exu/hold" type="logic">
+         <obj_property name="ElementShortName">hold</obj_property>
+         <obj_property name="ObjectShortName">hold</obj_property>
+      </wvobject>
+      <wvobject fp_name="group41" type="group">
+         <obj_property name="label">alu</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/reset" type="logic">
-            <obj_property name="ElementShortName">reset</obj_property>
-            <obj_property name="ObjectShortName">reset</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/vld" type="logic">
+            <obj_property name="ElementShortName">vld</obj_property>
+            <obj_property name="ObjectShortName">vld</obj_property>
          </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/req_vld" type="logic">
-            <obj_property name="ElementShortName">req_vld</obj_property>
-            <obj_property name="ObjectShortName">req_vld</obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/idu" type="array">
+            <obj_property name="ElementShortName">idu</obj_property>
+            <obj_property name="ObjectShortName">idu</obj_property>
          </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/req_rnw" type="logic">
-            <obj_property name="ElementShortName">req_rnw</obj_property>
-            <obj_property name="ObjectShortName">req_rnw</obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/rs1_data" type="array">
+            <obj_property name="ElementShortName">rs1_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">rs1_data[31:0]</obj_property>
          </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/req_addr" type="array">
-            <obj_property name="ElementShortName">req_addr[31:0]</obj_property>
-            <obj_property name="ObjectShortName">req_addr[31:0]</obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/rs2_data" type="array">
+            <obj_property name="ElementShortName">rs2_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">rs2_data[31:0]</obj_property>
          </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/req_data" type="array">
-            <obj_property name="ElementShortName">req_data[31:0]</obj_property>
-            <obj_property name="ObjectShortName">req_data[31:0]</obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/done" type="logic">
+            <obj_property name="ElementShortName">done</obj_property>
+            <obj_property name="ObjectShortName">done</obj_property>
          </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/req_ack" type="logic">
-            <obj_property name="ElementShortName">req_ack</obj_property>
-            <obj_property name="ObjectShortName">req_ack</obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/register_write_en" type="logic">
+            <obj_property name="ElementShortName">register_write_en</obj_property>
+            <obj_property name="ObjectShortName">register_write_en</obj_property>
          </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/pending" type="array">
-            <obj_property name="ElementShortName">pending[15:0]</obj_property>
-            <obj_property name="ObjectShortName">pending[15:0]</obj_property>
-            <obj_property name="isExpanded"></obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/register_write" type="array">
+            <obj_property name="ElementShortName">register_write[5:0]</obj_property>
+            <obj_property name="ObjectShortName">register_write[5:0]</obj_property>
          </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/pending_wr_ptr" type="array">
-            <obj_property name="ElementShortName">pending_wr_ptr[3:0]</obj_property>
-            <obj_property name="ObjectShortName">pending_wr_ptr[3:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/pending_rd_ptr" type="array">
-            <obj_property name="ElementShortName">pending_rd_ptr[3:0]</obj_property>
-            <obj_property name="ObjectShortName">pending_rd_ptr[3:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/rsp_ack" type="logic">
-            <obj_property name="ElementShortName">rsp_ack</obj_property>
-            <obj_property name="ObjectShortName">rsp_ack</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/rsp_vld" type="logic">
-            <obj_property name="ElementShortName">rsp_vld</obj_property>
-            <obj_property name="ObjectShortName">rsp_vld</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/rsp_addr" type="array">
-            <obj_property name="ElementShortName">rsp_addr[31:0]</obj_property>
-            <obj_property name="ObjectShortName">rsp_addr[31:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb/DUT/ifu/axi_driver/rsp_data" type="array">
-            <obj_property name="ElementShortName">rsp_data[31:0]</obj_property>
-            <obj_property name="ObjectShortName">rsp_data[31:0]</obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/register_write_data" type="array">
+            <obj_property name="ElementShortName">register_write_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">register_write_data[31:0]</obj_property>
          </wvobject>
       </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_exu/register_write_en" type="array">
+         <obj_property name="ElementShortName">register_write_en[0:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write_en[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_exu/register_write" type="array">
+         <obj_property name="ElementShortName">register_write[0:0][5:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write[0:0][5:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_exu/register_write_data" type="array">
+         <obj_property name="ElementShortName">register_write_data[0:0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write_data[0:0][31:0]</obj_property>
+      </wvobject>
    </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/rsp_ack" type="logic">
-      <obj_property name="ElementShortName">rsp_ack</obj_property>
-      <obj_property name="ObjectShortName">rsp_ack</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/rsp_vld" type="logic">
-      <obj_property name="ElementShortName">rsp_vld</obj_property>
-      <obj_property name="ObjectShortName">rsp_vld</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/rsp_addr" type="array">
-      <obj_property name="ElementShortName">rsp_addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rsp_addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/buffer_is_compressed" type="logic">
-      <obj_property name="ElementShortName">buffer_is_compressed</obj_property>
-      <obj_property name="ObjectShortName">buffer_is_compressed</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/buffer_vld" type="array">
-      <obj_property name="ElementShortName">buffer_vld[2:0]</obj_property>
-      <obj_property name="ObjectShortName">buffer_vld[2:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/buffer_addr" type="array">
-      <obj_property name="ElementShortName">buffer_addr[2:0][31:0]</obj_property>
-      <obj_property name="ObjectShortName">buffer_addr[2:0][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/buffer_data" type="array">
-      <obj_property name="ElementShortName">buffer_data[2:0][15:0]</obj_property>
-      <obj_property name="ObjectShortName">buffer_data[2:0][15:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/buffer_vld_next" type="array">
-      <obj_property name="ElementShortName">buffer_vld_next[2:0]</obj_property>
-      <obj_property name="ObjectShortName">buffer_vld_next[2:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/buffer_addr_next" type="array">
-      <obj_property name="ElementShortName">buffer_addr_next[2:0][31:0]</obj_property>
-      <obj_property name="ObjectShortName">buffer_addr_next[2:0][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider162">
-      <obj_property name="label">-</obj_property>
+   <wvobject fp_name="group83" type="group">
+      <obj_property name="label">reg</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/ifu_vld" type="logic">
-      <obj_property name="ElementShortName">ifu_vld</obj_property>
-      <obj_property name="ObjectShortName">ifu_vld</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/ifu_addr" type="array">
-      <obj_property name="ElementShortName">ifu_addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ifu_addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/ifu/ifu_data" type="array">
-      <obj_property name="ElementShortName">ifu_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ifu_data[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/dcd_defined" type="logic">
-      <obj_property name="ElementShortName">dcd_defined</obj_property>
-      <obj_property name="ObjectShortName">dcd_defined</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/dcd_compressed" type="logic">
-      <obj_property name="ElementShortName">dcd_compressed</obj_property>
-      <obj_property name="ObjectShortName">dcd_compressed</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider161">
-      <obj_property name="label">-</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu_vld" type="logic">
-      <obj_property name="ElementShortName">idu_vld</obj_property>
-      <obj_property name="ObjectShortName">idu_vld</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/idu_seq" type="array">
-      <obj_property name="ElementShortName">idu_seq[63:0]</obj_property>
-      <obj_property name="ObjectShortName">idu_seq[63:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu_addr" type="array">
-      <obj_property name="ElementShortName">idu_addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">idu_addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu_data" type="array">
-      <obj_property name="ElementShortName">idu_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">idu_data[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/idu_op" type="array">
-      <obj_property name="ElementShortName">idu_op</obj_property>
-      <obj_property name="ObjectShortName">idu_op</obj_property>
       <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/idu_rd" type="array">
-      <obj_property name="ElementShortName">idu_rd[5:0]</obj_property>
-      <obj_property name="ObjectShortName">idu_rd[5:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/idu_rs1" type="array">
-      <obj_property name="ElementShortName">idu_rs1[5:0]</obj_property>
-      <obj_property name="ObjectShortName">idu_rs1[5:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/idu_rs2" type="array">
-      <obj_property name="ElementShortName">idu_rs2[5:0]</obj_property>
-      <obj_property name="ObjectShortName">idu_rs2[5:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/DUT/idu/idu_immed" type="array">
-      <obj_property name="ElementShortName">idu_immed[31:0]</obj_property>
-      <obj_property name="ObjectShortName">idu_immed[31:0]</obj_property>
+      <wvobject fp_name="/tb/DUT/riscv_reg/register_write_en" type="array">
+         <obj_property name="ElementShortName">register_write_en[0:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write_en[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_reg/register_write" type="array">
+         <obj_property name="ElementShortName">register_write[0:0][5:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write[0:0][5:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_reg/register_write_data" type="array">
+         <obj_property name="ElementShortName">register_write_data[0:0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write_data[0:0][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_reg/register_locked" type="array">
+         <obj_property name="ElementShortName">register_locked[31:0]</obj_property>
+         <obj_property name="ObjectShortName">register_locked[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/DUT/riscv_reg/register" type="array">
+         <obj_property name="ElementShortName">register[31:0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">register[31:0][31:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
    </wvobject>
 </wave_config>

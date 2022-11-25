@@ -16,22 +16,44 @@ module riscv_top (
     output axi4_pkg::r_m  [1:0] AXI_R_M
 );
 
-   logic        clock;
-   logic        reset;
+   logic                                                  clock;
+   logic                                                  reset;
 
-   logic        ifu_vld;
-   logic [31:0] ifu_addr;
-   logic [31:0] ifu_data;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0] register_lock_en;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0][ 5:0] register_lock;
 
-   logic        idu_vld;
-   logic [31:0] idu_addr;
-   logic [31:0] idu_data;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0]       register_write_en;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0][ 5:0] register_write;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0][31:0] register_write_data;
+
+   logic            [                         31:0][31:0] register;
+   logic            [                         31:0]       register_locked;
+
+   logic                                                  ifu_vld;
+   riscv_pkg::ifu_t                                       ifu;
+
+   logic                                                  idu_vld;
+   riscv_pkg::idu_t                                       idu;
+
+   logic                                                  hold;
 
    //Extract clock and reset
    assign clock = AXI_COMMON.ACLK;
    assign reset = ~AXI_COMMON.ARESETn;
 
-   riscv_ifu ifu (
+   riscv_reg riscv_reg (
+       .clock              (clock),
+       .reset              (reset),
+       .register_lock_en      (register_lock_en[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_lock      (register_lock[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_write_en  (register_write_en[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_write     (register_write[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_write_data(register_write_data[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register           (register[31:0]),
+       .register_locked    (register_locked[31:0])
+   );
+
+   riscv_ifu riscv_ifu (
        .clock   (clock),
        .reset   (reset),
        .AXI_AR_S(AXI_AR_S[1]),
@@ -39,19 +61,48 @@ module riscv_top (
        .AXI_AR_M(AXI_AR_M[1]),
        .AXI_R_M (AXI_R_M[1]),
        .ifu_vld (ifu_vld),
-       .ifu_addr(ifu_addr),
-       .ifu_data(ifu_data)
+       .ifu(ifu)
    );
 
-   riscv_idu idu (
+   riscv_idu riscv_idu (
        .clock   (clock),
        .reset   (reset),
        .ifu_vld (ifu_vld),
-       .ifu_addr(ifu_addr),
-       .ifu_data(ifu_data),
+       .ifu(ifu),
        .idu_vld (idu_vld),
-       .idu_addr(idu_addr),
-       .idu_data(idu_data)
+       .idu(idu)
+   );
+
+   riscv_exu riscv_exu (
+       .clock(clock),
+       .reset(reset),
+
+       .AXI_AW_S(AXI_AW_S),
+       .AXI_W_S (AXI_W_S),
+       .AXI_B_S (AXI_B_S),
+       .AXI_AR_S(AXI_AR_S[0]),
+       .AXI_R_S (AXI_R_S[0]),
+
+       .AXI_AW_M(AXI_AW_M),
+       .AXI_W_M (AXI_W_M),
+       .AXI_B_M (AXI_B_M),
+       .AXI_AR_M(AXI_AR_M[0]),
+       .AXI_R_M (AXI_R_M[0]),
+
+       .idu_vld(idu_vld),
+       .idu(idu),
+
+       .register_lock_en      (register_lock_en[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_lock      (register_lock[riscv_pkg::REGISTER_PORTS-1:0]),
+
+       .register(register[31:0]),
+       .register_locked(register_locked),
+
+       .register_write_en  (register_write_en[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_write     (register_write[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_write_data(register_write_data[riscv_pkg::REGISTER_PORTS-1:0]),
+
+       .hold(hold)
    );
 
 endmodule : riscv_top
