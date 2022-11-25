@@ -13,17 +13,20 @@ module riscv_top (
     output axi4_pkg::w_m        AXI_W_M,
     output axi4_pkg::b_m        AXI_B_M,
     output axi4_pkg::ar_m [1:0] AXI_AR_M,
-    output axi4_pkg::r_m  [1:0] AXI_R_M
+    output axi4_pkg::r_m  [1:0] AXI_R_M,
+
+    output logic [riscv_pkg::REGISTER_PORTS-1:0] rvfi_valid,
+    output riscv_pkg::rvfi_t [riscv_pkg::REGISTER_PORTS-1:0] rvfi
 );
 
    logic                                                  clock;
    logic                                                  reset;
 
-   logic            [riscv_pkg::REGISTER_PORTS-1:0] register_lock_en;
-   logic            [riscv_pkg::REGISTER_PORTS-1:0][ 5:0] register_lock;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0]       register_lock_en;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0][ 4:0] register_lock;
 
    logic            [riscv_pkg::REGISTER_PORTS-1:0]       register_write_en;
-   logic            [riscv_pkg::REGISTER_PORTS-1:0][ 5:0] register_write;
+   logic            [riscv_pkg::REGISTER_PORTS-1:0][ 4:0] register_write;
    logic            [riscv_pkg::REGISTER_PORTS-1:0][31:0] register_write_data;
 
    logic            [                         31:0][31:0] register;
@@ -44,7 +47,7 @@ module riscv_top (
    riscv_reg riscv_reg (
        .clock              (clock),
        .reset              (reset),
-       .register_lock_en      (register_lock_en[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_lock_en   (register_lock_en[riscv_pkg::REGISTER_PORTS-1:0]),
        .register_lock      (register_lock[riscv_pkg::REGISTER_PORTS-1:0]),
        .register_write_en  (register_write_en[riscv_pkg::REGISTER_PORTS-1:0]),
        .register_write     (register_write[riscv_pkg::REGISTER_PORTS-1:0]),
@@ -92,8 +95,8 @@ module riscv_top (
        .idu_vld(idu_vld),
        .idu(idu),
 
-       .register_lock_en      (register_lock_en[riscv_pkg::REGISTER_PORTS-1:0]),
-       .register_lock      (register_lock[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_lock_en(register_lock_en[riscv_pkg::REGISTER_PORTS-1:0]),
+       .register_lock   (register_lock[riscv_pkg::REGISTER_PORTS-1:0]),
 
        .register(register[31:0]),
        .register_locked(register_locked),
@@ -102,7 +105,10 @@ module riscv_top (
        .register_write     (register_write[riscv_pkg::REGISTER_PORTS-1:0]),
        .register_write_data(register_write_data[riscv_pkg::REGISTER_PORTS-1:0]),
 
-       .hold(hold)
+       .hold(hold),
+
+       .rvfi_valid(rvfi_valid[riscv_pkg::REGISTER_PORTS-1:0]),
+       .rvfi      (rvfi[riscv_pkg::REGISTER_PORTS-1:0])
    );
 
 endmodule : riscv_top

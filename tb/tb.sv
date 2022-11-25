@@ -1,18 +1,22 @@
 import axi4_pkg::*;
 
 module tb ();
-   logic                clock;
-   logic                reset;
-   axi4_pkg::aw_m [0:0] AXI_AW_M;
-   axi4_pkg::aw_s [0:0] AXI_AW_S;
-   axi4_pkg::w_m  [0:0] AXI_W_M;
-   axi4_pkg::w_s  [0:0] AXI_W_S;
-   axi4_pkg::b_m  [0:0] AXI_B_M;
-   axi4_pkg::b_s  [0:0] AXI_B_S;
-   axi4_pkg::ar_m [1:0] AXI_AR_M;
-   axi4_pkg::ar_s [1:0] AXI_AR_S;
-   axi4_pkg::r_m  [1:0] AXI_R_M;
-   axi4_pkg::r_s  [1:0] AXI_R_S;
+   logic                                                                             clock;
+   logic                                                                             reset;
+   axi4_pkg::aw_m    [                                                          0:0] AXI_AW_M;
+   axi4_pkg::aw_s    [                                                          0:0] AXI_AW_S;
+   axi4_pkg::w_m     [                                                          0:0] AXI_W_M;
+   axi4_pkg::w_s     [                                                          0:0] AXI_W_S;
+   axi4_pkg::b_m     [                                                          0:0] AXI_B_M;
+   axi4_pkg::b_s     [                                                          0:0] AXI_B_S;
+   axi4_pkg::ar_m    [                                                          1:0] AXI_AR_M;
+   axi4_pkg::ar_s    [                                                          1:0] AXI_AR_S;
+   axi4_pkg::r_m     [                                                          1:0] AXI_R_M;
+   axi4_pkg::r_s     [                                                          1:0] AXI_R_S;
+
+   logic               [riscv_pkg::REGISTER_PORTS-1:0]                               rvfi_valid;
+   riscv_pkg::rvfi_t [                                riscv_pkg::REGISTER_PORTS-1:0] rvfi;
+   logic               [                         15:0]                               rvfi_errcode;
 
    `include "riscv_decode_fn.svh"
 
@@ -77,30 +81,30 @@ module tb ();
              instr_cop_ndx
          ) with {
             instr_cop_ndx dist {
-               23 := 100, //C_ADD
-               22 := 100, //C_ADDI
-               21 := 100, //C_ADDI16SP
-               20 := 100, //C_ADDI4SPN
-               19 := 0, //C_AND
-               18 := 0, //C_ANDI
-               17 := 0, //C_BEQZ
-               16 := 0, //C_BNEZ
-               15 := 0, //C_EBREAK
-               14 := 0, //C_J
-               13 := 0, //C_JAL
-               12 := 0, //C_JALR
-               11 := 0, //C_JR
-               10 := 0, //C_LI
-                9 := 0, //C_LUI
-                8 := 0, //C_LW
-                7 := 0, //C_LWSP
-                6 := 0, //C_MV
-                5 := 0, //C_NOP
-                4 := 0, //C_OR
-                3 := 0, //C_SUB
-                2 := 0, //C_SW
-                1 := 0, //C_SWSP
-                0 := 0 //C_XOR
+               23 := 100,  //C_ADD
+               22 := 100,  //C_ADDI
+               21 := 100,  //C_ADDI16SP
+               20 := 100,  //C_ADDI4SPN
+               19 := 0,  //C_AND
+               18 := 0,  //C_ANDI
+               17 := 0,  //C_BEQZ
+               16 := 0,  //C_BNEZ
+               15 := 0,  //C_EBREAK
+               14 := 0,  //C_J
+               13 := 0,  //C_JAL
+               12 := 0,  //C_JALR
+               11 := 0,  //C_JR
+               10 := 0,  //C_LI
+               9  := 0,  //C_LUI
+               8  := 0,  //C_LW
+               7  := 0,  //C_LWSP
+               6  := 0,  //C_MV
+               5  := 0,  //C_NOP
+               4  := 0,  //C_OR
+               3  := 0,  //C_SUB
+               2  := 0,  //C_SW
+               1  := 0,  //C_SWSP
+               0  := 0  //C_XOR
             };
          };
       endfunction
@@ -885,6 +889,35 @@ module tb ();
    );
 
    bind DUT.riscv_idu riscv_idu_assert riscv_idu_assert_inst (.*);
+
+   riscv_rvfimon rvfimon (
+       .clock,
+       .reset,
+       .rvfi_valid     ({rvfi_valid[0]}),
+       .rvfi_order     ({rvfi[0].order}),
+       .rvfi_insn      ({rvfi[0].insn}),
+       .rvfi_trap      ({rvfi[0].trap}),
+       .rvfi_halt      ({rvfi[0].halt}),
+       .rvfi_intr      ({rvfi[0].intr}),
+       .rvfi_mode      ({rvfi[0].mode}),
+       .rvfi_rs1_addr  ({rvfi[0].rs1_addr}),
+       .rvfi_rs2_addr  ({rvfi[0].rs2_addr}),
+       .rvfi_rs1_rdata ({rvfi[0].rs1_rdata}),
+       .rvfi_rs2_rdata ({rvfi[0].rs2_rdata}),
+       .rvfi_rd_addr   ({rvfi[0].rd_addr}),
+       .rvfi_rd_wdata  ({rvfi[0].rd_wdata}),
+       .rvfi_pc_rdata  ({rvfi[0].pc_rdata}),
+       .rvfi_pc_wdata  ({rvfi[0].pc_wdata}),
+       .rvfi_mem_addr  ({rvfi[0].mem_addr}),
+       .rvfi_mem_rmask ({rvfi[0].mem_rmask}),
+       .rvfi_mem_wmask ({rvfi[0].mem_wmask}),
+       .rvfi_mem_rdata ({rvfi[0].mem_rdata}),
+       .rvfi_mem_wdata ({rvfi[0].mem_wdata}),
+       .rvfi_mem_extamo({rvfi[0].mem_extamo}),
+       .errcode        (rvfi_errcode)
+   );
+
+   bind rvfimon riscv_rvfimon_assert riscv_rvfimon_assert_inst (.*);
 
    always #10 clock = ~clock;
 

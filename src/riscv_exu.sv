@@ -23,14 +23,17 @@ module riscv_exu (
     input logic [31:0][31:0] register,
     input logic [31:0] register_locked,
 
-    output logic [riscv_pkg::REGISTER_PORTS-1:0]       register_lock_en,
-    output logic [riscv_pkg::REGISTER_PORTS-1:0][ 5:0] register_lock,
+    output logic [riscv_pkg::REGISTER_PORTS-1:0]      register_lock_en,
+    output logic [riscv_pkg::REGISTER_PORTS-1:0][4:0] register_lock,
 
     output logic [riscv_pkg::REGISTER_PORTS-1:0]       register_write_en,
-    output logic [riscv_pkg::REGISTER_PORTS-1:0][ 5:0] register_write,
+    output logic [riscv_pkg::REGISTER_PORTS-1:0][ 4:0] register_write,
     output logic [riscv_pkg::REGISTER_PORTS-1:0][31:0] register_write_data,
 
-    output logic hold
+    output logic hold,
+
+    output logic [riscv_pkg::REGISTER_PORTS-1:0] rvfi_valid,
+    output riscv_pkg::rvfi_t [riscv_pkg::REGISTER_PORTS-1:0] rvfi
 );
 
    logic alu_vld;
@@ -72,9 +75,9 @@ module riscv_exu (
                hold = '1;
             end else begin
                alu_vld = '1;
-               if(idu.rd_used) begin
-                    register_lock_en[0] = '1;
-                    register_lock[0][5:0] = idu.rd[5:0];
+               if (idu.rd_used) begin
+                  register_lock_en[0]   = '1;
+                  register_lock[0][4:0] = idu.rd[4:0];
                end
             end
       end
@@ -91,10 +94,13 @@ module riscv_exu (
        .rs2_data(register[idu.rs2][31:0]),
 
        .register_write_en  (register_write_en[0]),
-       .register_write     (register_write[0][5:0]),
+       .register_write     (register_write[0][4:0]),
        .register_write_data(register_write_data[0][31:0]),
 
-       .done(alu_done)
+       .done(alu_done),
+
+       .rvfi_valid(rvfi_valid[0]),
+       .rvfi      (rvfi[0])
    );
 
 

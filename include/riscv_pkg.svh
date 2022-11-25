@@ -192,15 +192,39 @@ package riscv_pkg;
    typedef struct packed {
       logic [63:0]  seq;
       logic [31:0]  addr;
+      logic [31:0]  addr_next;
       logic [31:0]  data;
       riscv_pkg::op op;
       logic         rd_used;
-      logic [5:0]   rd;
+      logic [4:0]   rd;
       logic         rs1_used;
-      logic [5:0]   rs1;
+      logic [4:0]   rs1;
       logic         rs2_used;
-      logic [5:0]   rs2;
+      logic [4:0]   rs2;
       logic [31:0]  immed;
    } idu_t;
+
+   typedef struct packed {
+      logic [63:0] order;
+      logic [31:0] insn;
+      logic trap;
+      logic halt;
+      logic intr;
+      logic [1:0] mode;
+      logic [4:0] rs1_addr;
+      logic [4:0] rs2_addr;
+      logic [31:0] rs1_rdata;
+      logic [31:0] rs2_rdata;
+      logic [4:0] rd_addr;
+      logic [31:0] rd_wdata;
+      logic [31:0] pc_rdata;
+      logic [31:0] pc_wdata;
+      logic [31:0] mem_addr;
+      logic [3:0] mem_rmask;
+      logic [3:0] mem_wmask;
+      logic [31:0] mem_rdata;
+      logic [31:0] mem_wdata;
+      logic mem_extamo;
+   } rvfi_t;
 
 endpackage : riscv_pkg

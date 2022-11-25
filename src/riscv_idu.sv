@@ -5,128 +5,129 @@ module riscv_idu (
     input logic clock,
     input logic reset,
 
-    input logic        ifu_vld,
+    input logic            ifu_vld,
     input riscv_pkg::ifu_t ifu,
 
-    output logic                idu_vld,
-    output riscv_pkg::idu_t     idu
+    output logic            idu_vld,
+    output riscv_pkg::idu_t idu
 );
 
-   riscv_pkg::idu_t     idu_next;
+   logic            [63:0] seq;
+   riscv_pkg::idu_t        idu_next;
 
-   logic                dcd_ADD;
-   logic                dcd_ADDI;
-   logic                dcd_AND;
-   logic                dcd_ANDI;
-   logic                dcd_AUIPC;
-   logic                dcd_BEQ;
-   logic                dcd_BGE;
-   logic                dcd_BGEU;
-   logic                dcd_BLT;
-   logic                dcd_BLTU;
-   logic                dcd_BNE;
-   logic                dcd_C_ADD;
-   logic                dcd_C_ADDI;
-   logic                dcd_C_ADDI16SP;
-   logic                dcd_C_ADDI4SPN;
-   logic                dcd_C_AND;
-   logic                dcd_C_ANDI;
-   logic                dcd_C_BEQZ;
-   logic                dcd_C_BNEZ;
-   logic                dcd_C_EBREAK;
-   logic                dcd_C_J;
-   logic                dcd_C_JAL;
-   logic                dcd_C_JALR;
-   logic                dcd_C_JR;
-   logic                dcd_C_LI;
-   logic                dcd_C_LUI;
-   logic                dcd_C_LW;
-   logic                dcd_C_LWSP;
-   logic                dcd_C_MV;
-   logic                dcd_C_NOP;
-   logic                dcd_C_OR;
-   logic                dcd_C_SUB;
-   logic                dcd_C_SW;
-   logic                dcd_C_SWSP;
-   logic                dcd_C_XOR;
-   logic                dcd_DIV;
-   logic                dcd_DIVU;
-   logic                dcd_EBREAK;
-   logic                dcd_ECALL;
-   logic                dcd_FENCE;
-   logic                dcd_JAL;
-   logic                dcd_JALR;
-   logic                dcd_LB;
-   logic                dcd_LBU;
-   logic                dcd_LH;
-   logic                dcd_LHU;
-   logic                dcd_LUI;
-   logic                dcd_LW;
-   logic                dcd_MUL;
-   logic                dcd_MULH;
-   logic                dcd_MULHSU;
-   logic                dcd_MULHU;
-   logic                dcd_OR;
-   logic                dcd_ORI;
-   logic                dcd_REM;
-   logic                dcd_REMU;
-   logic                dcd_SB;
-   logic                dcd_SH;
-   logic                dcd_SLL;
-   logic                dcd_SLT;
-   logic                dcd_SLTI;
-   logic                dcd_SLTIU;
-   logic                dcd_SLTU;
-   logic                dcd_SRA;
-   logic                dcd_SRL;
-   logic                dcd_SUB;
-   logic                dcd_SW;
-   logic                dcd_XOR;
-   logic                dcd_XORI;
-   logic                dcd_defined;
-   logic                dcd_compressed;
-   logic                dcd_bimm12hi;
-   logic                dcd_bimm12lo;
-   logic                dcd_c_bimm9hi;
-   logic                dcd_c_bimm9lo;
-   logic                dcd_c_imm12;
-   logic                dcd_c_imm6hi;
-   logic                dcd_c_imm6lo;
-   logic                dcd_c_nzimm10hi;
-   logic                dcd_c_nzimm10lo;
-   logic                dcd_c_nzimm18hi;
-   logic                dcd_c_nzimm18lo;
-   logic                dcd_c_nzimm6hi;
-   logic                dcd_c_nzimm6lo;
-   logic                dcd_c_nzuimm10;
-   logic                dcd_c_rs2;
-   logic                dcd_c_uimm7hi;
-   logic                dcd_c_uimm7lo;
-   logic                dcd_c_uimm8sp_s;
-   logic                dcd_c_uimm8sphi;
-   logic                dcd_c_uimm8splo;
-   logic                dcd_fm;
-   logic                dcd_imm12;
-   logic                dcd_imm12hi;
-   logic                dcd_imm12lo;
-   logic                dcd_imm20;
-   logic                dcd_jimm20;
-   logic                dcd_pred;
-   logic                dcd_rd;
-   logic                dcd_rd_p;
-   logic                dcd_rd_rs1;
-   logic                dcd_rd_rs1_p;
-   logic                dcd_rs1;
-   logic                dcd_rs1_p;
-   logic                dcd_rs2;
-   logic                dcd_rs2_p;
-   logic                dcd_succ;
+   logic                   dcd_ADD;
+   logic                   dcd_ADDI;
+   logic                   dcd_AND;
+   logic                   dcd_ANDI;
+   logic                   dcd_AUIPC;
+   logic                   dcd_BEQ;
+   logic                   dcd_BGE;
+   logic                   dcd_BGEU;
+   logic                   dcd_BLT;
+   logic                   dcd_BLTU;
+   logic                   dcd_BNE;
+   logic                   dcd_C_ADD;
+   logic                   dcd_C_ADDI;
+   logic                   dcd_C_ADDI16SP;
+   logic                   dcd_C_ADDI4SPN;
+   logic                   dcd_C_AND;
+   logic                   dcd_C_ANDI;
+   logic                   dcd_C_BEQZ;
+   logic                   dcd_C_BNEZ;
+   logic                   dcd_C_EBREAK;
+   logic                   dcd_C_J;
+   logic                   dcd_C_JAL;
+   logic                   dcd_C_JALR;
+   logic                   dcd_C_JR;
+   logic                   dcd_C_LI;
+   logic                   dcd_C_LUI;
+   logic                   dcd_C_LW;
+   logic                   dcd_C_LWSP;
+   logic                   dcd_C_MV;
+   logic                   dcd_C_NOP;
+   logic                   dcd_C_OR;
+   logic                   dcd_C_SUB;
+   logic                   dcd_C_SW;
+   logic                   dcd_C_SWSP;
+   logic                   dcd_C_XOR;
+   logic                   dcd_DIV;
+   logic                   dcd_DIVU;
+   logic                   dcd_EBREAK;
+   logic                   dcd_ECALL;
+   logic                   dcd_FENCE;
+   logic                   dcd_JAL;
+   logic                   dcd_JALR;
+   logic                   dcd_LB;
+   logic                   dcd_LBU;
+   logic                   dcd_LH;
+   logic                   dcd_LHU;
+   logic                   dcd_LUI;
+   logic                   dcd_LW;
+   logic                   dcd_MUL;
+   logic                   dcd_MULH;
+   logic                   dcd_MULHSU;
+   logic                   dcd_MULHU;
+   logic                   dcd_OR;
+   logic                   dcd_ORI;
+   logic                   dcd_REM;
+   logic                   dcd_REMU;
+   logic                   dcd_SB;
+   logic                   dcd_SH;
+   logic                   dcd_SLL;
+   logic                   dcd_SLT;
+   logic                   dcd_SLTI;
+   logic                   dcd_SLTIU;
+   logic                   dcd_SLTU;
+   logic                   dcd_SRA;
+   logic                   dcd_SRL;
+   logic                   dcd_SUB;
+   logic                   dcd_SW;
+   logic                   dcd_XOR;
+   logic                   dcd_XORI;
+   logic                   dcd_defined;
+   logic                   dcd_compressed;
+   logic                   dcd_bimm12hi;
+   logic                   dcd_bimm12lo;
+   logic                   dcd_c_bimm9hi;
+   logic                   dcd_c_bimm9lo;
+   logic                   dcd_c_imm12;
+   logic                   dcd_c_imm6hi;
+   logic                   dcd_c_imm6lo;
+   logic                   dcd_c_nzimm10hi;
+   logic                   dcd_c_nzimm10lo;
+   logic                   dcd_c_nzimm18hi;
+   logic                   dcd_c_nzimm18lo;
+   logic                   dcd_c_nzimm6hi;
+   logic                   dcd_c_nzimm6lo;
+   logic                   dcd_c_nzuimm10;
+   logic                   dcd_c_rs2;
+   logic                   dcd_c_uimm7hi;
+   logic                   dcd_c_uimm7lo;
+   logic                   dcd_c_uimm8sp_s;
+   logic                   dcd_c_uimm8sphi;
+   logic                   dcd_c_uimm8splo;
+   logic                   dcd_fm;
+   logic                   dcd_imm12;
+   logic                   dcd_imm12hi;
+   logic                   dcd_imm12lo;
+   logic                   dcd_imm20;
+   logic                   dcd_jimm20;
+   logic                   dcd_pred;
+   logic                   dcd_rd;
+   logic                   dcd_rd_p;
+   logic                   dcd_rd_rs1;
+   logic                   dcd_rd_rs1_p;
+   logic                   dcd_rs1;
+   logic                   dcd_rs1_p;
+   logic                   dcd_rs2;
+   logic                   dcd_rs2_p;
+   logic                   dcd_succ;
 
-   logic         [31:0] immed_i;
-   logic         [31:0] immed_s;
-   logic         [31:0] immed_b;
-   logic         [31:0] immed_u;
-   logic         [31:0] immed_j;
+   logic            [31:0] immed_i;
+   logic            [31:0] immed_s;
+   logic            [31:0] immed_b;
+   logic            [31:0] immed_u;
+   logic            [31:0] immed_j;
 
    riscv_decode decode (
        .data       (ifu.data),
@@ -241,9 +242,14 @@ module riscv_idu (
 
    always_comb begin
 
-      idu_next.seq = idu.seq + 'd1;
+      idu_next.seq = seq;
 
       idu_next.addr = ifu.addr;
+
+      idu_next.addr_next = ifu.addr + 'd4;
+      if (dcd_compressed) begin
+         idu_next.addr_next = ifu.addr + 'd2;
+      end
 
       idu_next.data = ifu.data;
 
@@ -297,21 +303,21 @@ module riscv_idu (
 
       //Registers
       idu_next.rd_used = dcd_rd | dcd_rd_p | dcd_rd_rs1 | dcd_rd_rs1_p;
-      idu_next.rd[5:0] = idu_next.data[11:7];
+      idu_next.rd[4:0] = idu_next.data[11:7];
       idu_next.rs1_used = dcd_rs1 | dcd_rs1_p;
-      idu_next.rs1[5:0] = idu_next.data[19:15];
+      idu_next.rs1[4:0] = idu_next.data[19:15];
       idu_next.rs2_used = dcd_rs2 | dcd_rs2_p;
-      idu_next.rs2[5:0] = idu_next.data[24:20];
+      idu_next.rs2[4:0] = idu_next.data[24:20];
 
       //Immediates
-      immed_i[31:0] = {20'd0, idu_next.data[31:20]};
-      immed_s[31:0] = {20'd0, idu_next.data[31:15], idu_next.data[11:7]};
+      immed_i[31:0] = {{20{idu_next.data[31]}}, idu_next.data[31:20]};
+      immed_s[31:0] = {{20{idu_next.data[31]}}, idu_next.data[31:15], idu_next.data[11:7]};
       immed_b[31:0] = {
          idu_next.data[31], idu_next.data[7], idu_next.data[30:25], idu_next.data[11:8], 1'd0
       };
-      immed_u[31:0] = {12'd0, idu_next.data[31:12]};
+      immed_u[31:0] = {{12{idu_next.data[31]}}, idu_next.data[31:12]};
       immed_j[31:0] = {
-         11'd0,
+         {11{idu_next.data[31]}},
          idu_next.data[31],
          idu_next.data[19:12],
          idu_next.data[20],
@@ -358,7 +364,8 @@ module riscv_idu (
             };
          end
          if (dcd_C_ADDI4SPN) begin
-            idu_next.rd = {2'd0, idu_next.data[4:2]};
+            idu_next.rd = {2'b01, idu_next.data[4:2]};
+            idu_next.rs1 = 'd2;
             idu_next.immed[31:0] = {
                22'd0,
                idu_next.data[10:7],
@@ -369,17 +376,17 @@ module riscv_idu (
             };
          end
          if (dcd_C_AND) begin
-            idu_next.rd  = {2'd0, idu_next.data[9:7]};
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
-            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
+            idu_next.rd  = {2'b01, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
+            idu_next.rs2 = {2'b01, idu_next.data[4:2]};
          end
          if (dcd_C_ANDI) begin
-            idu_next.rd = {2'd0, idu_next.data[9:7]};
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rd = {2'b01, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
             idu_next.immed[31:0] = {{26{idu_next.data[12]}}, idu_next.data[6:2]};
          end
          if (dcd_C_BEQZ) begin
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
             idu_next.rs1 = 'd0;
             idu_next.immed[31:0] = {
                {23{idu_next.data[12]}},
@@ -391,7 +398,7 @@ module riscv_idu (
             };
          end
          if (dcd_C_BNEZ) begin
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
             idu_next.rs1 = 'd0;
             idu_next.immed[31:0] = {
                {23{idu_next.data[12]}},
@@ -454,8 +461,8 @@ module riscv_idu (
             idu_next.immed[31:0] = {{14{idu_next.data[12]}}, idu_next.data[6:2], 12'd0};
          end
          if (dcd_C_LW) begin
-            idu_next.rd = {2'd0, idu_next.data[4:2]};
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
+            idu_next.rd = {2'b01, idu_next.data[4:2]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
             idu_next.immed[31:0] = {
                25'd0, idu_next.data[5], idu_next.data[12:10], idu_next.data[6], 2'd0
             };
@@ -477,18 +484,18 @@ module riscv_idu (
             idu_next.immed[31:0] = '0;
          end
          if (dcd_C_OR) begin
-            idu_next.rd  = {2'd0, idu_next.data[9:7]};
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
-            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
+            idu_next.rd  = {2'b01, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
+            idu_next.rs2 = {2'b01, idu_next.data[4:2]};
          end
          if (dcd_C_SUB) begin
-            idu_next.rd  = {2'd0, idu_next.data[9:7]};
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
-            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
+            idu_next.rd  = {2'b01, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
+            idu_next.rs2 = {2'b01, idu_next.data[4:2]};
          end
          if (dcd_C_SW) begin
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
-            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
+            idu_next.rs2 = {2'b01, idu_next.data[4:2]};
             idu_next.immed[31:0] = {
                25'd0, idu_next.data[5], idu_next.data[12:10], idu_next.data[6], 2'd0
             };
@@ -498,9 +505,9 @@ module riscv_idu (
             idu_next.immed[31:0] = {24'd0, idu_next.data[7:6], idu_next.data[12:9], 2'd0};
          end
          if (dcd_C_XOR) begin
-            idu_next.rd  = {2'd0, idu_next.data[9:7]};
-            idu_next.rs1 = {2'd0, idu_next.data[9:7]};
-            idu_next.rs2 = {2'd0, idu_next.data[4:2]};
+            idu_next.rd  = {2'b01, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
+            idu_next.rs2 = {2'b01, idu_next.data[4:2]};
          end
       end
 
@@ -509,14 +516,16 @@ module riscv_idu (
    always_ff @(posedge clock) begin
       idu_vld <= '0;
       idu <= idu;
+      seq <= seq;
       if (ifu_vld) begin
          idu_vld <= '1;
          idu <= idu_next;
+         seq <= seq + 1'd1;
       end
 
       if (reset) begin
          idu_vld <= '0;
-         idu.seq <= '0;
+         seq <= '0;
       end
    end
 

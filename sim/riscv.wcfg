@@ -14,14 +14,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="1,859.001 ns"></ZoomEndTime>
-      <Cursor1Time time="270.000 ns"></Cursor1Time>
+      <ZoomEndTime time="990.001 ns"></ZoomEndTime>
+      <Cursor1Time time="850.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="321"></NameColumnWidth>
+      <NameColumnWidth column_width="305"></NameColumnWidth>
       <ValueColumnWidth column_width="116"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="20" />
    <wvobject fp_name="/tb/clock" type="logic">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -138,6 +138,7 @@
          <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/idu" type="array">
             <obj_property name="ElementShortName">idu</obj_property>
             <obj_property name="ObjectShortName">idu</obj_property>
+            <obj_property name="isExpanded"></obj_property>
          </wvobject>
          <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/rs1_data" type="array">
             <obj_property name="ElementShortName">rs1_data[31:0]</obj_property>
@@ -202,5 +203,13 @@
          <obj_property name="ObjectShortName">register[31:0][31:0]</obj_property>
          <obj_property name="isExpanded"></obj_property>
       </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb/rvfi_valid" type="array">
+      <obj_property name="ElementShortName">rvfi_valid[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rvfi_valid[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/rvfi" type="array">
+      <obj_property name="ElementShortName">rvfi[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rvfi[0:0]</obj_property>
    </wvobject>
 </wave_config>

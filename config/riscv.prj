@@ -12,4 +12,6 @@ sv  riscv ../src/riscv_axi_driver.sv
 
 sv  riscv ../asserts/axi4_assert.sv
 sv  riscv ../asserts/riscv_idu_assert.sv
+sv  riscv ../tb/riscv_rvfimon.v
+sv  riscv ../tb/asserts/riscv_rvfimon_assert.sv
 sv  riscv ../tb/tb.sv

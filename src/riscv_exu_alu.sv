@@ -11,107 +11,129 @@ module riscv_exu_alu (
     input logic [31:0] rs2_data,
 
     output logic        register_write_en,
-    output logic [ 5:0] register_write,
+    output logic [ 4:0] register_write,
     output logic [31:0] register_write_data,
 
-    output logic done
+    output logic done,
+
+    output logic rvfi_valid,
+    output riscv_pkg::rvfi_t rvfi
 );
 
-    always_ff @(posedge clock) begin
-        done <= '0;
+   always_ff @(posedge clock) begin
+      done = '0;
 
-        register_write_en <= '0;
-        register_write[5:0] <= register_write[5:0];
-        register_write_data[31:0] <= register_write_data[31:0];
+      register_write_en = '0;
+      register_write[4:0] = register_write[4:0];
+      register_write_data[31:0] = register_write_data[31:0];
 
-        if(vld) begin
-            register_write[5:0] <= idu.rd[5:0];
-         if(  idu.op.ADD ) begin
-            done <= '1;
-            register_write_en <= '1;
-            register_write_data[31:0] <= rs1_data[31:0] + rs2_data[31:0];
+      rvfi_valid = '0;
+      rvfi = '0;
+
+      if (vld) begin
+         register_write[4:0] = idu.rd[4:0];
+         if (idu.op.ADD) begin
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] + rs2_data[31:0];
          end
-         if( idu.op.ADDI ) begin
-            done <= '1;
-            register_write_en <= '1;
-            register_write_data[31:0] <= rs1_data[31:0] + idu.immed[31:0];
+         if (idu.op.ADDI) begin
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] + idu.immed[31:0];
          end
-         if( idu.op.AND ) begin
+         if (idu.op.AND) begin
             //TODO
          end
-         if( idu.op.ANDI ) begin
+         if (idu.op.ANDI) begin
             //TODO
          end
-         if( idu.op.AUIPC ) begin
+         if (idu.op.AUIPC) begin
             //TODO
          end
-         if( idu.op.DIV ) begin
+         if (idu.op.DIV) begin
             //TODO
          end
-         if( idu.op.DIVU ) begin
+         if (idu.op.DIVU) begin
             //TODO
          end
-         if( idu.op.MUL ) begin
+         if (idu.op.MUL) begin
             //TODO
          end
-         if( idu.op.MULH ) begin
+         if (idu.op.MULH) begin
             //TODO
          end
-         if( idu.op.MULHSU ) begin
+         if (idu.op.MULHSU) begin
             //TODO
          end
-         if( idu.op.MULHU ) begin
+         if (idu.op.MULHU) begin
             //TODO
          end
-         if( idu.op.OR ) begin
+         if (idu.op.OR) begin
             //TODO
          end
-         if( idu.op.ORI ) begin
+         if (idu.op.ORI) begin
             //TODO
          end
-         if( idu.op.REM ) begin
+         if (idu.op.REM) begin
             //TODO
          end
-         if( idu.op.REMU ) begin
+         if (idu.op.REMU) begin
             //TODO
          end
-         if( idu.op.SLL ) begin
+         if (idu.op.SLL) begin
             //TODO
          end
-         if( idu.op.SLT ) begin
+         if (idu.op.SLT) begin
             //TODO
          end
-         if( idu.op.SLTI ) begin
+         if (idu.op.SLTI) begin
             //TODO
          end
-         if( idu.op.SLTIU ) begin
+         if (idu.op.SLTIU) begin
             //TODO
          end
-         if( idu.op.SLTU ) begin
+         if (idu.op.SLTU) begin
             //TODO
          end
-         if( idu.op.SRA ) begin
+         if (idu.op.SRA) begin
             //TODO
          end
-         if( idu.op.SRL ) begin
+         if (idu.op.SRL) begin
             //TODO
          end
-         if( idu.op.SUB ) begin
+         if (idu.op.SUB) begin
             //TODO
          end
-         if( idu.op.XOR ) begin
+         if (idu.op.XOR) begin
             //TODO
          end
-         if( idu.op.XORI ) begin
+         if (idu.op.XORI) begin
             //TODO
-         end 
-        end
+         end
+
+         rvfi_valid = '1;
+         rvfi.order[63:0] = idu.seq[63:0];
+         rvfi.insn[31:0] = idu.data[31:0];
+         rvfi.rs1_addr[4:0] = idu.rs1[4:0];
+         rvfi.rs2_addr[4:0] = idu.rs2[4:0];
+         rvfi.rs1_rdata[31:0] = rs1_data[31:0];
+         rvfi.rs2_rdata[31:0] = rs2_data[31:0];
+         rvfi.rd_addr[4:0] = idu.rd[4:0];
+         rvfi.rd_wdata[31:0] = register_write_data[31:0];
+         if (idu.rd[4:0] == 'd0) begin
+            rvfi.rd_wdata[31:0] = '0;
+         end
+         rvfi.pc_rdata[31:0] = idu.addr[31:0];
+         rvfi.pc_wdata[31:0] = idu.addr_next[31:0];
+
+      end
 
 
-        if(reset) begin
-            done <= '0;
-            register_write_en <= '0;
-        end
-    end
+      if (reset) begin
+         done = '0;
+         register_write_en = '0;
+      end
+   end
 
 endmodule : riscv_exu_alu
