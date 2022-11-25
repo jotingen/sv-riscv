@@ -229,6 +229,20 @@ for instr_out in sorted(instructions_processed.keys()):
     s += f"return {instr_out.upper()};\n"
     s += f"endfunction\n"
 
+# Instruction Mask
+for instr_out in sorted(instructions_processed.keys()):
+    s += f"function automatic logic [31:0] riscv_decode_{instr_out}_mask(\n"
+    s += f");\n"
+    s += f"return 32'h{instructions_processed[instr_out]['mask'].replace('0x','')};\n"
+    s += f"endfunction\n"
+
+# Instruction Match
+for instr_out in sorted(instructions_processed.keys()):
+    s += f"function automatic logic [31:0] riscv_decode_{instr_out}_match(\n"
+    s += f");\n"
+    s += f"return 32'h{instructions_processed[instr_out]['match'].replace('0x','')};\n"
+    s += f"endfunction\n"
+
 # Defined
 s += f"function automatic logic riscv_decode_defined(\n"
 s += "input logic [31:0] data\n"

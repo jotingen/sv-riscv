@@ -574,6 +574,420 @@ function automatic logic riscv_decode_xori(input logic [31:0] data);
    endcase
    return XORI;
 endfunction
+function automatic logic [31:0] riscv_decode_add_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_addi_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_and_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_andi_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_auipc_mask();
+   return 32'h7f;
+endfunction
+function automatic logic [31:0] riscv_decode_beq_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_bge_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_bgeu_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_blt_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_bltu_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_bne_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_c_add_mask();
+   return 32'hf003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_addi_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_addi16sp_mask();
+   return 32'hef83;
+endfunction
+function automatic logic [31:0] riscv_decode_c_addi4spn_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_and_mask();
+   return 32'hfc63;
+endfunction
+function automatic logic [31:0] riscv_decode_c_andi_mask();
+   return 32'hec03;
+endfunction
+function automatic logic [31:0] riscv_decode_c_beqz_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_bnez_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_ebreak_mask();
+   return 32'hffff;
+endfunction
+function automatic logic [31:0] riscv_decode_c_j_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_jal_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_jalr_mask();
+   return 32'hf07f;
+endfunction
+function automatic logic [31:0] riscv_decode_c_jr_mask();
+   return 32'hf07f;
+endfunction
+function automatic logic [31:0] riscv_decode_c_li_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_lui_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_lw_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_lwsp_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_mv_mask();
+   return 32'hf003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_nop_mask();
+   return 32'hef83;
+endfunction
+function automatic logic [31:0] riscv_decode_c_or_mask();
+   return 32'hfc63;
+endfunction
+function automatic logic [31:0] riscv_decode_c_sub_mask();
+   return 32'hfc63;
+endfunction
+function automatic logic [31:0] riscv_decode_c_sw_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_swsp_mask();
+   return 32'he003;
+endfunction
+function automatic logic [31:0] riscv_decode_c_xor_mask();
+   return 32'hfc63;
+endfunction
+function automatic logic [31:0] riscv_decode_div_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_divu_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_ebreak_mask();
+   return 32'hffffffff;
+endfunction
+function automatic logic [31:0] riscv_decode_ecall_mask();
+   return 32'hffffffff;
+endfunction
+function automatic logic [31:0] riscv_decode_fence_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_jal_mask();
+   return 32'h7f;
+endfunction
+function automatic logic [31:0] riscv_decode_jalr_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_lb_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_lbu_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_lh_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_lhu_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_lui_mask();
+   return 32'h7f;
+endfunction
+function automatic logic [31:0] riscv_decode_lw_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_mul_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_mulh_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_mulhsu_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_mulhu_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_or_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_ori_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_rem_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_remu_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sb_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sh_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sll_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_slt_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_slti_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sltiu_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sltu_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sra_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_srl_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sub_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_sw_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_xor_mask();
+   return 32'hfe00707f;
+endfunction
+function automatic logic [31:0] riscv_decode_xori_mask();
+   return 32'h707f;
+endfunction
+function automatic logic [31:0] riscv_decode_add_match();
+   return 32'h33;
+endfunction
+function automatic logic [31:0] riscv_decode_addi_match();
+   return 32'h13;
+endfunction
+function automatic logic [31:0] riscv_decode_and_match();
+   return 32'h7033;
+endfunction
+function automatic logic [31:0] riscv_decode_andi_match();
+   return 32'h7013;
+endfunction
+function automatic logic [31:0] riscv_decode_auipc_match();
+   return 32'h17;
+endfunction
+function automatic logic [31:0] riscv_decode_beq_match();
+   return 32'h63;
+endfunction
+function automatic logic [31:0] riscv_decode_bge_match();
+   return 32'h5063;
+endfunction
+function automatic logic [31:0] riscv_decode_bgeu_match();
+   return 32'h7063;
+endfunction
+function automatic logic [31:0] riscv_decode_blt_match();
+   return 32'h4063;
+endfunction
+function automatic logic [31:0] riscv_decode_bltu_match();
+   return 32'h6063;
+endfunction
+function automatic logic [31:0] riscv_decode_bne_match();
+   return 32'h1063;
+endfunction
+function automatic logic [31:0] riscv_decode_c_add_match();
+   return 32'h9002;
+endfunction
+function automatic logic [31:0] riscv_decode_c_addi_match();
+   return 32'h1;
+endfunction
+function automatic logic [31:0] riscv_decode_c_addi16sp_match();
+   return 32'h6101;
+endfunction
+function automatic logic [31:0] riscv_decode_c_addi4spn_match();
+   return 32'h0;
+endfunction
+function automatic logic [31:0] riscv_decode_c_and_match();
+   return 32'h8c61;
+endfunction
+function automatic logic [31:0] riscv_decode_c_andi_match();
+   return 32'h8801;
+endfunction
+function automatic logic [31:0] riscv_decode_c_beqz_match();
+   return 32'hc001;
+endfunction
+function automatic logic [31:0] riscv_decode_c_bnez_match();
+   return 32'he001;
+endfunction
+function automatic logic [31:0] riscv_decode_c_ebreak_match();
+   return 32'h9002;
+endfunction
+function automatic logic [31:0] riscv_decode_c_j_match();
+   return 32'ha001;
+endfunction
+function automatic logic [31:0] riscv_decode_c_jal_match();
+   return 32'h2001;
+endfunction
+function automatic logic [31:0] riscv_decode_c_jalr_match();
+   return 32'h9002;
+endfunction
+function automatic logic [31:0] riscv_decode_c_jr_match();
+   return 32'h8002;
+endfunction
+function automatic logic [31:0] riscv_decode_c_li_match();
+   return 32'h4001;
+endfunction
+function automatic logic [31:0] riscv_decode_c_lui_match();
+   return 32'h6001;
+endfunction
+function automatic logic [31:0] riscv_decode_c_lw_match();
+   return 32'h4000;
+endfunction
+function automatic logic [31:0] riscv_decode_c_lwsp_match();
+   return 32'h4002;
+endfunction
+function automatic logic [31:0] riscv_decode_c_mv_match();
+   return 32'h8002;
+endfunction
+function automatic logic [31:0] riscv_decode_c_nop_match();
+   return 32'h1;
+endfunction
+function automatic logic [31:0] riscv_decode_c_or_match();
+   return 32'h8c41;
+endfunction
+function automatic logic [31:0] riscv_decode_c_sub_match();
+   return 32'h8c01;
+endfunction
+function automatic logic [31:0] riscv_decode_c_sw_match();
+   return 32'hc000;
+endfunction
+function automatic logic [31:0] riscv_decode_c_swsp_match();
+   return 32'hc002;
+endfunction
+function automatic logic [31:0] riscv_decode_c_xor_match();
+   return 32'h8c21;
+endfunction
+function automatic logic [31:0] riscv_decode_div_match();
+   return 32'h2004033;
+endfunction
+function automatic logic [31:0] riscv_decode_divu_match();
+   return 32'h2005033;
+endfunction
+function automatic logic [31:0] riscv_decode_ebreak_match();
+   return 32'h100073;
+endfunction
+function automatic logic [31:0] riscv_decode_ecall_match();
+   return 32'h73;
+endfunction
+function automatic logic [31:0] riscv_decode_fence_match();
+   return 32'hf;
+endfunction
+function automatic logic [31:0] riscv_decode_jal_match();
+   return 32'h6f;
+endfunction
+function automatic logic [31:0] riscv_decode_jalr_match();
+   return 32'h67;
+endfunction
+function automatic logic [31:0] riscv_decode_lb_match();
+   return 32'h3;
+endfunction
+function automatic logic [31:0] riscv_decode_lbu_match();
+   return 32'h4003;
+endfunction
+function automatic logic [31:0] riscv_decode_lh_match();
+   return 32'h1003;
+endfunction
+function automatic logic [31:0] riscv_decode_lhu_match();
+   return 32'h5003;
+endfunction
+function automatic logic [31:0] riscv_decode_lui_match();
+   return 32'h37;
+endfunction
+function automatic logic [31:0] riscv_decode_lw_match();
+   return 32'h2003;
+endfunction
+function automatic logic [31:0] riscv_decode_mul_match();
+   return 32'h2000033;
+endfunction
+function automatic logic [31:0] riscv_decode_mulh_match();
+   return 32'h2001033;
+endfunction
+function automatic logic [31:0] riscv_decode_mulhsu_match();
+   return 32'h2002033;
+endfunction
+function automatic logic [31:0] riscv_decode_mulhu_match();
+   return 32'h2003033;
+endfunction
+function automatic logic [31:0] riscv_decode_or_match();
+   return 32'h6033;
+endfunction
+function automatic logic [31:0] riscv_decode_ori_match();
+   return 32'h6013;
+endfunction
+function automatic logic [31:0] riscv_decode_rem_match();
+   return 32'h2006033;
+endfunction
+function automatic logic [31:0] riscv_decode_remu_match();
+   return 32'h2007033;
+endfunction
+function automatic logic [31:0] riscv_decode_sb_match();
+   return 32'h23;
+endfunction
+function automatic logic [31:0] riscv_decode_sh_match();
+   return 32'h1023;
+endfunction
+function automatic logic [31:0] riscv_decode_sll_match();
+   return 32'h1033;
+endfunction
+function automatic logic [31:0] riscv_decode_slt_match();
+   return 32'h2033;
+endfunction
+function automatic logic [31:0] riscv_decode_slti_match();
+   return 32'h2013;
+endfunction
+function automatic logic [31:0] riscv_decode_sltiu_match();
+   return 32'h3013;
+endfunction
+function automatic logic [31:0] riscv_decode_sltu_match();
+   return 32'h3033;
+endfunction
+function automatic logic [31:0] riscv_decode_sra_match();
+   return 32'h40005033;
+endfunction
+function automatic logic [31:0] riscv_decode_srl_match();
+   return 32'h5033;
+endfunction
+function automatic logic [31:0] riscv_decode_sub_match();
+   return 32'h40000033;
+endfunction
+function automatic logic [31:0] riscv_decode_sw_match();
+   return 32'h2023;
+endfunction
+function automatic logic [31:0] riscv_decode_xor_match();
+   return 32'h4033;
+endfunction
+function automatic logic [31:0] riscv_decode_xori_match();
+   return 32'h4013;
+endfunction
 function automatic logic riscv_decode_defined(input logic [31:0] data);
    logic defined;
    casez (data[31:0])
