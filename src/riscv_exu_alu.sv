@@ -58,10 +58,20 @@ module riscv_exu_alu (
             register_write_data[31:0] = idu.addr[31:0] + idu.immed[31:0];
          end
          if (idu.op.DIV) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs2_data[31:0] == 32'b0 
+                                        ? {32{1'b1}} 
+                                        : rs1_data[31:0] == {1'b1, {31{1'b0}}} && rs2_data[31:0] == {32{1'b1}} 
+                                          ? {1'b1, {31{1'b0}}} 
+                                          : $signed(rs1_data[31:0]) / $signed(rs2_data[31:0]);
          end
          if (idu.op.DIVU) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs2_data[31:0] == 32'b0 
+                                        ? {32{1'b1}} 
+                                        : rs1_data[31:0] / rs2_data[31:0];
          end
          if (idu.op.LUI) begin
             done = '1;
@@ -69,16 +79,24 @@ module riscv_exu_alu (
             register_write_data[31:0] = idu.immed[31:0];
          end
          if (idu.op.MUL) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] * rs2_data[31:0];
          end
          if (idu.op.MULH) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = ({{32{rs1_data[31]}}, rs1_data[31:0]} *	{{32{rs2_data[32-1]}}, rs2_data[31:0]}) >> 32;
          end
          if (idu.op.MULHSU) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = ({{32{rs1_data[31]}}, rs1_data[31:0]} * {32'b0, rs2_data[31:0]}) >> 32;
          end
          if (idu.op.MULHU) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = ({32'b0, rs1_data[31:0]} * {32'b0, rs2_data[31:0]}) >> 32;
          end
          if (idu.op.OR) begin
             done = '1;
@@ -91,10 +109,20 @@ module riscv_exu_alu (
             register_write_data[31:0] = rs1_data[31:0] | idu.immed[31:0];
          end
          if (idu.op.REM) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs2_data[31:0] == 32'b0 
+                                        ? rs1_data[31:0] 
+                                        : rs1_data[31:0] == {1'b1, {31{1'b0}}} && rs2_data[31:0] == {32{1'b1}} 
+                                          ? {32{1'b0}} 
+                                          : $signed(rs1_data[31:0]) % $signed(rs2_data[31:0]);
          end
          if (idu.op.REMU) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs2_data[31:0] == 32'b0 
+                                        ? rs1_data[31:0] 
+                                        : rs1_data[31:0] % rs2_data[31:0];
          end
          if (idu.op.SLL) begin
             done = '1;
