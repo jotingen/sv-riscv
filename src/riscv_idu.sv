@@ -393,9 +393,9 @@ module riscv_idu (
          end
          if (dcd_C_BEQZ) begin
             idu_next.rs1 = {2'b01, idu_next.data[9:7]};
-            idu_next.rs1 = 'd0;
+            idu_next.rs2 = 'd0;
             idu_next.immed[31:0] = {
-               {23{idu_next.data[12]}},
+               {24{idu_next.data[12]}},
                idu_next.data[6:5],
                idu_next.data[2],
                idu_next.data[11:10],
@@ -405,9 +405,9 @@ module riscv_idu (
          end
          if (dcd_C_BNEZ) begin
             idu_next.rs1 = {2'b01, idu_next.data[9:7]};
-            idu_next.rs1 = 'd0;
+            idu_next.rs2 = 'd0;
             idu_next.immed[31:0] = {
-               {23{idu_next.data[12]}},
+               {24{idu_next.data[12]}},
                idu_next.data[6:5],
                idu_next.data[2],
                idu_next.data[11:10],

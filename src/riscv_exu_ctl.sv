@@ -59,14 +59,54 @@ module riscv_exu_ctl (
             end
          end
          if (idu.op.BGE) begin
+            done = '1;
+            if ($signed(rs1_data[31:0]) >= $signed(rs2_data[31:0])) begin
+               if (idu.addr[31:0] + idu.immed[31:0] != idu.addr_next[31:0]) begin
+                  flush = '1;
+                  flush_addr[31:0] = idu.addr[31:0] + idu.immed[31:0];
+                  flush_seq[63:0] = idu.seq[63:0] + 'd1;
+               end
+            end
          end
          if (idu.op.BGEU) begin
+            done = '1;
+            if (rs1_data[31:0] >= rs2_data[31:0]) begin
+               if (idu.addr[31:0] + idu.immed[31:0] != idu.addr_next[31:0]) begin
+                  flush = '1;
+                  flush_addr[31:0] = idu.addr[31:0] + idu.immed[31:0];
+                  flush_seq[63:0] = idu.seq[63:0] + 'd1;
+               end
+            end
          end
          if (idu.op.BLT) begin
+            done = '1;
+            if ($signed(rs1_data[31:0]) < $signed(rs2_data[31:0])) begin
+               if (idu.addr[31:0] + idu.immed[31:0] != idu.addr_next[31:0]) begin
+                  flush = '1;
+                  flush_addr[31:0] = idu.addr[31:0] + idu.immed[31:0];
+                  flush_seq[63:0] = idu.seq[63:0] + 'd1;
+               end
+            end
          end
          if (idu.op.BLTU) begin
+            done = '1;
+            if (rs1_data[31:0] < rs2_data[31:0]) begin
+               if (idu.addr[31:0] + idu.immed[31:0] != idu.addr_next[31:0]) begin
+                  flush = '1;
+                  flush_addr[31:0] = idu.addr[31:0] + idu.immed[31:0];
+                  flush_seq[63:0] = idu.seq[63:0] + 'd1;
+               end
+            end
          end
          if (idu.op.BNE) begin
+            done = '1;
+            if (rs1_data[31:0] != rs2_data[31:0]) begin
+               if (idu.addr[31:0] + idu.immed[31:0] != idu.addr_next[31:0]) begin
+                  flush = '1;
+                  flush_addr[31:0] = idu.addr[31:0] + idu.immed[31:0];
+                  flush_seq[63:0] = idu.seq[63:0] + 'd1;
+               end
+            end
          end
          if (idu.op.EBREAK) begin
             //TODO
