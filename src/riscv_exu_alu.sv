@@ -43,19 +43,30 @@ module riscv_exu_alu (
             register_write_data[31:0] = rs1_data[31:0] + idu.immed[31:0];
          end
          if (idu.op.AND) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] & rs2_data[31:0];
          end
          if (idu.op.ANDI) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] & idu.immed[31:0];
          end
          if (idu.op.AUIPC) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = idu.addr[31:0] + idu.immed[31:0];
          end
          if (idu.op.DIV) begin
             //TODO
          end
          if (idu.op.DIVU) begin
             //TODO
+         end
+         if (idu.op.LUI) begin
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = idu.immed[31:0];
          end
          if (idu.op.MUL) begin
             //TODO
@@ -70,10 +81,14 @@ module riscv_exu_alu (
             //TODO
          end
          if (idu.op.OR) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] | rs2_data[31:0];
          end
          if (idu.op.ORI) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] | idu.immed[31:0];
          end
          if (idu.op.REM) begin
             //TODO
@@ -82,34 +97,58 @@ module riscv_exu_alu (
             //TODO
          end
          if (idu.op.SLL) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] << idu.rs2[5:0];
          end
          if (idu.op.SLT) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:1] = '0;
+            register_write_data[0] = $signed(rs1_data[31:0]) < $signed(rs2_data[31:0]);
          end
          if (idu.op.SLTI) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:1] = '0;
+            register_write_data[0] = $signed(rs1_data[31:0]) < $signed(idu.immed[31:0]);
          end
          if (idu.op.SLTIU) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:1] = '0;
+            register_write_data[0] = rs1_data[31:0] < idu.immed[31:0];
          end
          if (idu.op.SLTU) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:1] = '0;
+            register_write_data[0] = rs1_data[31:0] < rs2_data[31:0];
          end
          if (idu.op.SRA) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] >>> idu.rs2[5:0];
          end
          if (idu.op.SRL) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] >> idu.rs2[5:0];
          end
          if (idu.op.SUB) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] - rs2_data[31:0];
          end
          if (idu.op.XOR) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] ^ rs2_data[31:0];
          end
          if (idu.op.XORI) begin
-            //TODO
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] ^ idu.immed[31:0];
          end
 
          rvfi_valid = '1;

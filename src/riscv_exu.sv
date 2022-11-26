@@ -53,6 +53,7 @@ module riscv_exu (
             | idu.op.AUIPC
             | idu.op.DIV
             | idu.op.DIVU
+            | idu.op.LUI
             | idu.op.MUL
             | idu.op.MULH
             | idu.op.MULHSU

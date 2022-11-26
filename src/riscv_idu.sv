@@ -315,7 +315,7 @@ module riscv_idu (
       immed_b[31:0] = {
          idu_next.data[31], idu_next.data[7], idu_next.data[30:25], idu_next.data[11:8], 1'd0
       };
-      immed_u[31:0] = {{12{idu_next.data[31]}}, idu_next.data[31:12]};
+      immed_u[31:0] = {idu_next.data[31:12],12'd0};
       immed_j[31:0] = {
          {11{idu_next.data[31]}},
          idu_next.data[31],
@@ -383,7 +383,7 @@ module riscv_idu (
          if (dcd_C_ANDI) begin
             idu_next.rd = {2'b01, idu_next.data[9:7]};
             idu_next.rs1 = {2'b01, idu_next.data[9:7]};
-            idu_next.immed[31:0] = {{26{idu_next.data[12]}}, idu_next.data[6:2]};
+            idu_next.immed[31:0] = {{27{idu_next.data[12]}}, idu_next.data[6:2]};
          end
          if (dcd_C_BEQZ) begin
             idu_next.rs1 = {2'b01, idu_next.data[9:7]};
@@ -458,7 +458,7 @@ module riscv_idu (
          end
          if (dcd_C_LUI) begin
             idu_next.rd = idu_next.data[11:7];
-            idu_next.immed[31:0] = {{14{idu_next.data[12]}}, idu_next.data[6:2], 12'd0};
+            idu_next.immed[31:0] = {{15{idu_next.data[12]}}, idu_next.data[6:2], 12'd0};
          end
          if (dcd_C_LW) begin
             idu_next.rd = {2'b01, idu_next.data[4:2]};
@@ -475,7 +475,7 @@ module riscv_idu (
          end
          if (dcd_C_MV) begin
             idu_next.rd  = idu_next.data[11:7];
-            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.rs1 = '0;
             idu_next.rs2 = idu_next.data[6:2];
          end
          if (dcd_C_NOP) begin

@@ -14,12 +14,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="990.001 ns"></ZoomEndTime>
-      <Cursor1Time time="850.000 ns"></Cursor1Time>
+      <ZoomEndTime time="1,777.001 ns"></ZoomEndTime>
+      <Cursor1Time time="250.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="305"></NameColumnWidth>
-      <ValueColumnWidth column_width="116"></ValueColumnWidth>
+      <NameColumnWidth column_width="351"></NameColumnWidth>
+      <ValueColumnWidth column_width="168"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="20" />
    <wvobject fp_name="/tb/clock" type="logic">
@@ -114,6 +114,55 @@
          <obj_property name="ElementShortName">idu</obj_property>
          <obj_property name="ObjectShortName">idu</obj_property>
          <obj_property name="isExpanded"></obj_property>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.seq" type="array">
+            <obj_property name="ElementShortName">.seq[63:0]</obj_property>
+            <obj_property name="ObjectShortName">.seq[63:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.addr" type="array">
+            <obj_property name="ElementShortName">.addr[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.addr[31:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.addr_next" type="array">
+            <obj_property name="ElementShortName">.addr_next[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.addr_next[31:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.data" type="array">
+            <obj_property name="ElementShortName">.data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.data[31:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.op" type="array">
+            <obj_property name="ElementShortName">.op</obj_property>
+            <obj_property name="ObjectShortName">.op</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.rd_used" type="logic">
+            <obj_property name="ElementShortName">.rd_used</obj_property>
+            <obj_property name="ObjectShortName">.rd_used</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.rd" type="array">
+            <obj_property name="ElementShortName">.rd[4:0]</obj_property>
+            <obj_property name="ObjectShortName">.rd[4:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.rs1_used" type="logic">
+            <obj_property name="ElementShortName">.rs1_used</obj_property>
+            <obj_property name="ObjectShortName">.rs1_used</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.rs1" type="array">
+            <obj_property name="ElementShortName">.rs1[4:0]</obj_property>
+            <obj_property name="ObjectShortName">.rs1[4:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.rs2_used" type="logic">
+            <obj_property name="ElementShortName">.rs2_used</obj_property>
+            <obj_property name="ObjectShortName">.rs2_used</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.rs2" type="array">
+            <obj_property name="ElementShortName">.rs2[4:0]</obj_property>
+            <obj_property name="ObjectShortName">.rs2[4:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb/DUT/riscv_exu/idu.immed" type="array">
+            <obj_property name="ElementShortName">.immed[31:0]</obj_property>
+            <obj_property name="ObjectShortName">.immed[31:0]</obj_property>
+         </wvobject>
       </wvobject>
       <wvobject fp_name="/tb/DUT/riscv_exu/register_locked" type="array">
          <obj_property name="ElementShortName">register_locked[31:0]</obj_property>
@@ -157,8 +206,8 @@
             <obj_property name="ObjectShortName">register_write_en</obj_property>
          </wvobject>
          <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/register_write" type="array">
-            <obj_property name="ElementShortName">register_write[5:0]</obj_property>
-            <obj_property name="ObjectShortName">register_write[5:0]</obj_property>
+            <obj_property name="ElementShortName">register_write[4:0]</obj_property>
+            <obj_property name="ObjectShortName">register_write[4:0]</obj_property>
          </wvobject>
          <wvobject fp_name="/tb/DUT/riscv_exu/riscv_exu_alu/register_write_data" type="array">
             <obj_property name="ElementShortName">register_write_data[31:0]</obj_property>
@@ -170,8 +219,8 @@
          <obj_property name="ObjectShortName">register_write_en[0:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/tb/DUT/riscv_exu/register_write" type="array">
-         <obj_property name="ElementShortName">register_write[0:0][5:0]</obj_property>
-         <obj_property name="ObjectShortName">register_write[0:0][5:0]</obj_property>
+         <obj_property name="ElementShortName">register_write[0:0][4:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write[0:0][4:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/tb/DUT/riscv_exu/register_write_data" type="array">
          <obj_property name="ElementShortName">register_write_data[0:0][31:0]</obj_property>
@@ -187,8 +236,8 @@
          <obj_property name="ObjectShortName">register_write_en[0:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/tb/DUT/riscv_reg/register_write" type="array">
-         <obj_property name="ElementShortName">register_write[0:0][5:0]</obj_property>
-         <obj_property name="ObjectShortName">register_write[0:0][5:0]</obj_property>
+         <obj_property name="ElementShortName">register_write[0:0][4:0]</obj_property>
+         <obj_property name="ObjectShortName">register_write[0:0][4:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/tb/DUT/riscv_reg/register_write_data" type="array">
          <obj_property name="ElementShortName">register_write_data[0:0][31:0]</obj_property>

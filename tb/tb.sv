@@ -31,9 +31,9 @@ module tb ();
             instr_op_ndx dist {
                45 := 100,  //ADD
                44 := 100,  //ADDI
-               43 := 0,  //AND
-               42 := 0,  //ANDI
-               41 := 0,  //AUIPC
+               43 := 100,  //AND
+               42 := 100,  //ANDI
+               41 := 100,  //AUIPC
                40 := 0,  //BEQ
                39 := 0,  //BGE
                38 := 0,  //BGEU
@@ -51,29 +51,29 @@ module tb ();
                26 := 0,  //LBU
                25 := 0,  //LH
                24 := 0,  //LHU
-               23 := 0,  //LUI
+               23 := 100,  //LUI
                22 := 0,  //LW
                21 := 0,  //MUL
                20 := 0,  //MULH
                19 := 0,  //MULHSU
                18 := 0,  //MULHU
-               17 := 0,  //OR
-               16 := 0,  //ORI
+               17 := 100,  //OR
+               16 := 100,  //ORI
                15 := 0,  //REM
                14 := 0,  //REMU
                13 := 0,  //SB
                12 := 0,  //SH
-               11 := 0,  //SLL
-               10 := 0,  //SLT
-               9  := 0,  //SLTI
-               8  := 0,  //SLTIU
-               7  := 0,  //SLTU
-               6  := 0,  //SRA
-               5  := 0,  //SRL
-               4  := 0,  //SUB
+               11 := 100,  //SLL
+               10 := 100,  //SLT
+               9  := 100,  //SLTI
+               8  := 100,  //SLTIU
+               7  := 100,  //SLTU
+               6  := 100,  //SRA
+               5  := 100,  //SRL
+               4  := 100,  //SUB
                3  := 0,  //SW
-               2  := 0,  //XOR
-               1  := 0,  //XORI
+               2  := 100,  //XOR
+               1  := 100,  //XORI
                0  := 0  //ILLEGAL
             };
          };
@@ -85,8 +85,8 @@ module tb ();
                22 := 100,  //C_ADDI
                21 := 100,  //C_ADDI16SP
                20 := 100,  //C_ADDI4SPN
-               19 := 0,  //C_AND
-               18 := 0,  //C_ANDI
+               19 := 100,  //C_AND
+               18 := 100,  //C_ANDI
                17 := 0,  //C_BEQZ
                16 := 0,  //C_BNEZ
                15 := 0,  //C_EBREAK
@@ -95,16 +95,16 @@ module tb ();
                12 := 0,  //C_JALR
                11 := 0,  //C_JR
                10 := 0,  //C_LI
-               9  := 0,  //C_LUI
+               9  := 100,  //C_LUI
                8  := 0,  //C_LW
                7  := 0,  //C_LWSP
-               6  := 0,  //C_MV
-               5  := 0,  //C_NOP
-               4  := 0,  //C_OR
-               3  := 0,  //C_SUB
+               6  := 100,  //C_MV
+               5  := 100,  //C_NOP
+               4  := 100,  //C_OR
+               3  := 100,  //C_SUB
                2  := 0,  //C_SW
                1  := 0,  //C_SWSP
-               0  := 0  //C_XOR
+               0  := 100  //C_XOR
             };
          };
       endfunction
@@ -930,7 +930,7 @@ module tb ();
    initial begin
       clock = 0;
       reset = 1;
-      #100000;
+      #1000000;
       $display("TB passed");
       $finish;
    end
