@@ -8,7 +8,7 @@ from pyeda.inter import *
 import PLA
 
 isa_file = ""
-for line in open("submodules/riscv-opcodes/instr_dict.yaml"):
+for line in open("instr_dict.yaml"):
     # if re.match(r"^isa:.*$",line):
     #   break
     isa_file += line
