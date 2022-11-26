@@ -32,6 +32,10 @@ module riscv_exu (
 
     output logic hold,
 
+    output logic flush,
+    output logic [31:0] flush_addr,
+    output logic [63:0] flush_seq,
+
     output logic [riscv_pkg::REGISTER_PORTS-1:0] rvfi_valid,
     output riscv_pkg::rvfi_t [riscv_pkg::REGISTER_PORTS-1:0] rvfi
 );
@@ -39,10 +43,14 @@ module riscv_exu (
    logic alu_vld;
    logic alu_done;
 
+   logic ctl_vld;
+   logic ctl_done;
+
    //Based on idu op, determine what block should process and if it can
    always_comb begin
       hold = '0;
       alu_vld = '0;
+      ctl_vld = '0;
       register_lock_en = '0;
 
       if (idu_vld) begin
@@ -81,6 +89,28 @@ module riscv_exu (
                   register_lock[0][4:0] = idu.rd[4:0];
                end
             end
+
+         if(  idu.op.BEQ
+            | idu.op.BGE
+            | idu.op.BGEU
+            | idu.op.BLT
+            | idu.op.BLTU
+            | idu.op.BNE
+            | idu.op.EBREAK
+            | idu.op.ECALL
+            | idu.op.FENCE
+            | idu.op.JAL
+            | idu.op.JALR
+            | idu.op.ILLEGAL )
+            if (ctl_vld & ~ctl_done) begin
+               hold = '1;
+            end else begin
+               ctl_vld = '1;
+               if (idu.rd_used) begin
+                  register_lock_en[0]   = '1;
+                  register_lock[0][4:0] = idu.rd[4:0];
+               end
+            end
       end
    end
 
@@ -102,6 +132,30 @@ module riscv_exu (
 
        .rvfi_valid(rvfi_valid[0]),
        .rvfi      (rvfi[0])
+   );
+
+   riscv_exu_ctl riscv_exu_ctl (
+       .clock(clock),
+       .reset(reset),
+
+       .vld(ctl_vld),
+       .idu(idu),
+
+       .rs1_data(register[idu.rs1][31:0]),
+       .rs2_data(register[idu.rs2][31:0]),
+
+       .register_write_en  (register_write_en[1]),
+       .register_write     (register_write[1][4:0]),
+       .register_write_data(register_write_data[1][31:0]),
+
+       .done(ctl_done),
+
+       .flush(flush),
+       .flush_addr(flush_addr[31:0]),
+       .flush_seq(flush_seq[63:0]),
+
+       .rvfi_valid(rvfi_valid[1]),
+       .rvfi      (rvfi[1])
    );
 
 

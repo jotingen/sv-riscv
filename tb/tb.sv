@@ -34,7 +34,7 @@ module tb ();
                43 := 100,  //AND
                42 := 100,  //ANDI
                41 := 100,  //AUIPC
-               40 := 0,  //BEQ
+               40 := 100,  //BEQ
                39 := 0,  //BGE
                38 := 0,  //BGEU
                37 := 0,  //BLT
@@ -893,27 +893,27 @@ module tb ();
    riscv_rvfimon rvfimon (
        .clock,
        .reset,
-       .rvfi_valid     ({rvfi_valid[0]}),
-       .rvfi_order     ({rvfi[0].order}),
-       .rvfi_insn      ({rvfi[0].insn}),
-       .rvfi_trap      ({rvfi[0].trap}),
-       .rvfi_halt      ({rvfi[0].halt}),
-       .rvfi_intr      ({rvfi[0].intr}),
-       .rvfi_mode      ({rvfi[0].mode}),
-       .rvfi_rs1_addr  ({rvfi[0].rs1_addr}),
-       .rvfi_rs2_addr  ({rvfi[0].rs2_addr}),
-       .rvfi_rs1_rdata ({rvfi[0].rs1_rdata}),
-       .rvfi_rs2_rdata ({rvfi[0].rs2_rdata}),
-       .rvfi_rd_addr   ({rvfi[0].rd_addr}),
-       .rvfi_rd_wdata  ({rvfi[0].rd_wdata}),
-       .rvfi_pc_rdata  ({rvfi[0].pc_rdata}),
-       .rvfi_pc_wdata  ({rvfi[0].pc_wdata}),
-       .rvfi_mem_addr  ({rvfi[0].mem_addr}),
-       .rvfi_mem_rmask ({rvfi[0].mem_rmask}),
-       .rvfi_mem_wmask ({rvfi[0].mem_wmask}),
-       .rvfi_mem_rdata ({rvfi[0].mem_rdata}),
-       .rvfi_mem_wdata ({rvfi[0].mem_wdata}),
-       .rvfi_mem_extamo({rvfi[0].mem_extamo}),
+       .rvfi_valid     ({rvfi_valid[1:0]}),
+       .rvfi_order     ({rvfi[1].order,     rvfi[0].order}),
+       .rvfi_insn      ({rvfi[1].insn,      rvfi[0].insn}),
+       .rvfi_trap      ({rvfi[1].trap,      rvfi[0].trap}),
+       .rvfi_halt      ({rvfi[1].halt,      rvfi[0].halt}),
+       .rvfi_intr      ({rvfi[1].intr,      rvfi[0].intr}),
+       .rvfi_mode      ({rvfi[1].mode,      rvfi[0].mode}),
+       .rvfi_rs1_addr  ({rvfi[1].rs1_addr,  rvfi[0].rs1_addr}),
+       .rvfi_rs2_addr  ({rvfi[1].rs2_addr,  rvfi[0].rs2_addr}),
+       .rvfi_rs1_rdata ({rvfi[1].rs1_rdata, rvfi[0].rs1_rdata}),
+       .rvfi_rs2_rdata ({rvfi[1].rs2_rdata, rvfi[0].rs2_rdata}),
+       .rvfi_rd_addr   ({rvfi[1].rd_addr,   rvfi[0].rd_addr}),
+       .rvfi_rd_wdata  ({rvfi[1].rd_wdata,  rvfi[0].rd_wdata}),
+       .rvfi_pc_rdata  ({rvfi[1].pc_rdata,  rvfi[0].pc_rdata}),
+       .rvfi_pc_wdata  ({rvfi[1].pc_wdata,  rvfi[0].pc_wdata}),
+       .rvfi_mem_addr  ({rvfi[1].mem_addr,  rvfi[0].mem_addr}),
+       .rvfi_mem_rmask ({rvfi[1].mem_rmask, rvfi[0].mem_rmask}),
+       .rvfi_mem_wmask ({rvfi[1].mem_wmask, rvfi[0].mem_wmask}),
+       .rvfi_mem_rdata ({rvfi[1].mem_rdata, rvfi[0].mem_rdata}),
+       .rvfi_mem_wdata ({rvfi[1].mem_wdata, rvfi[0].mem_wdata}),
+       .rvfi_mem_extamo({rvfi[1].mem_extamo,rvfi[0].mem_extamo}),
        .errcode        (rvfi_errcode)
    );
 

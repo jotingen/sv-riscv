@@ -5,6 +5,9 @@ module riscv_idu (
     input logic clock,
     input logic reset,
 
+    input logic flush,
+    input logic [63:0] flush_seq,
+
     input logic            ifu_vld,
     input riscv_pkg::ifu_t ifu,
 
@@ -303,7 +306,10 @@ module riscv_idu (
 
       //Registers
       idu_next.rd_used = dcd_rd | dcd_rd_p | dcd_rd_rs1 | dcd_rd_rs1_p;
-      idu_next.rd[4:0] = idu_next.data[11:7];
+      idu_next.rd[4:0] = '0;
+      if (idu_next.rd_used) begin
+         idu_next.rd[4:0] = idu_next.data[11:7];
+      end
       idu_next.rs1_used = dcd_rs1 | dcd_rs1_p;
       idu_next.rs1[4:0] = idu_next.data[19:15];
       idu_next.rs2_used = dcd_rs2 | dcd_rs2_p;
@@ -313,9 +319,9 @@ module riscv_idu (
       immed_i[31:0] = {{20{idu_next.data[31]}}, idu_next.data[31:20]};
       immed_s[31:0] = {{20{idu_next.data[31]}}, idu_next.data[31:15], idu_next.data[11:7]};
       immed_b[31:0] = {
-         idu_next.data[31], idu_next.data[7], idu_next.data[30:25], idu_next.data[11:8], 1'd0
+         {19{idu_next.data[31]}}, idu_next.data[31], idu_next.data[7], idu_next.data[30:25], idu_next.data[11:8], 1'd0
       };
-      immed_u[31:0] = {idu_next.data[31:12],12'd0};
+      immed_u[31:0] = {idu_next.data[31:12], 12'd0};
       immed_j[31:0] = {
          {11{idu_next.data[31]}},
          idu_next.data[31],
@@ -521,6 +527,11 @@ module riscv_idu (
          idu_vld <= '1;
          idu <= idu_next;
          seq <= seq + 1'd1;
+      end
+
+      if(flush) begin
+         idu_vld <= '0;
+         seq <= flush_seq[63:0];
       end
 
       if (reset) begin

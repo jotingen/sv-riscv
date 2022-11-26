@@ -11,6 +11,9 @@ module riscv_ifu (
     output axi4_pkg::ar_m AXI_AR_M,
     output axi4_pkg::r_m  AXI_R_M,
 
+    input logic flush,
+    input logic [31:0] flush_addr,
+
     output logic            ifu_vld,
     output riscv_pkg::ifu_t ifu
 
@@ -42,6 +45,8 @@ module riscv_ifu (
        .req_addr(PC),
        .req_data('x),
 
+       .flush(flush),
+
        .req_ack(req_ack),
 
        .rsp_vld (rsp_vld),
@@ -69,6 +74,10 @@ module riscv_ifu (
 
       if (req_ack) begin
          PC[31:0] = PC[31:0] + 'd4;
+      end
+
+      if (flush) begin
+         PC[31:0] = flush_addr[31:0];
       end
 
       if (reset) begin
@@ -292,6 +301,11 @@ module riscv_ifu (
             buffer_data_next = 'x;
          end
       endcase
+
+      if (flush) begin
+         ifu_vld = '0;
+         buffer_vld_next = '0;
+      end
 
    end
 

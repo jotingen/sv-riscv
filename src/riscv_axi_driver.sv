@@ -9,6 +9,8 @@ module riscv_axi_driver (
     input logic [31:0] req_addr,
     input logic [31:0] req_data,
 
+    input logic flush,
+
     output logic req_ack,
 
     output logic        rsp_vld,
@@ -37,6 +39,7 @@ module riscv_axi_driver (
       logic [31:0] req_addr;
       logic        rsp_vld;
       logic [31:0] rsp_data;
+      logic        flushed;
    } pending_entry;
    pending_entry [2**(3+1)-1:0] pending;
    logic [3:0] pending_wr_ptr;
@@ -98,6 +101,7 @@ module riscv_axi_driver (
             //Read
             if (req_rnw & AXI_AR_S.ARREADY) begin
                pending[pending_wr_ptr].req_vld <= '1;
+               pending[pending_wr_ptr].flushed <= '0;
                pending[pending_wr_ptr].req_rnw <= '1;
                pending[pending_wr_ptr].req_addr[31:0] <= req_addr[31:0];
                pending_wr_ptr <= pending_wr_ptr + 'd1;
@@ -105,6 +109,7 @@ module riscv_axi_driver (
             //Write
             if (req_rnw & AXI_AW_S.AWREADY) begin
                pending[pending_wr_ptr].req_vld <= '1;
+               pending[pending_wr_ptr].flushed <= '0;
                pending[pending_wr_ptr].req_rnw <= '0;
                pending[pending_wr_ptr].req_addr[31:0] <= req_addr[31:0];
                pending_wr_ptr <= pending_wr_ptr + 'd1;
@@ -119,12 +124,19 @@ module riscv_axi_driver (
       end
 
       //Export responses
-      if (rsp_ack & pending[pending_rd_ptr].rsp_vld) begin
+      //If flushed assume ack-ed
+      if ((rsp_ack | pending[pending_rd_ptr].flushed) & pending[pending_rd_ptr].rsp_vld) begin
          pending[pending_rd_ptr].req_vld <= '0;
          pending[pending_rd_ptr].rsp_vld <= '0;
          pending_rd_ptr <= pending_rd_ptr + 'd1;
       end
 
+      //Flag is flushed
+      for (int i = 0; i < $size(pending); i++) begin
+         if (flush) begin
+            pending[i].flushed <= '1;
+         end
+      end
 
       if (reset) begin
          pending        <= '0;
@@ -139,10 +151,11 @@ module riscv_axi_driver (
       rsp_vld = '0;
       rsp_addr[31:0] = 'x;
       rsp_data[31:0] = 'x;
-      if (pending[pending_rd_ptr].rsp_vld) begin
+      if (pending[pending_rd_ptr].rsp_vld & ~pending[pending_rd_ptr].flushed) begin
          rsp_vld = '1;
          rsp_addr[31:0] = pending[pending_rd_ptr].req_addr[31:0];
          rsp_data[31:0] = pending[pending_rd_ptr].rsp_data[31:0];
       end
    end
+
 endmodule : riscv_axi_driver

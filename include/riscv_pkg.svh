@@ -1,6 +1,6 @@
 package riscv_pkg;
 
-   parameter REGISTER_PORTS = 1;
+   parameter REGISTER_PORTS = 2;
 
    //typedef enum {
 

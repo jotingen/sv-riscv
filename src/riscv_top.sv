@@ -40,6 +40,10 @@ module riscv_top (
 
    logic                                                  hold;
 
+   logic                                                  flush;
+   logic            [                         31:0]       flush_addr;
+   logic            [                         63:0]       flush_seq;
+
    //Extract clock and reset
    assign clock = AXI_COMMON.ACLK;
    assign reset = ~AXI_COMMON.ARESETn;
@@ -63,6 +67,8 @@ module riscv_top (
        .AXI_R_S (AXI_R_S[1]),
        .AXI_AR_M(AXI_AR_M[1]),
        .AXI_R_M (AXI_R_M[1]),
+       .flush (flush),
+       .flush_addr ( flush_addr[31:0]),
        .ifu_vld (ifu_vld),
        .ifu(ifu)
    );
@@ -70,6 +76,8 @@ module riscv_top (
    riscv_idu riscv_idu (
        .clock   (clock),
        .reset   (reset),
+       .flush (flush),
+       .flush_seq(flush_seq[63:0]),
        .ifu_vld (ifu_vld),
        .ifu(ifu),
        .idu_vld (idu_vld),
@@ -106,6 +114,10 @@ module riscv_top (
        .register_write_data(register_write_data[riscv_pkg::REGISTER_PORTS-1:0]),
 
        .hold(hold),
+
+       .flush(flush),
+       .flush_addr(flush_addr[31:0]),
+       .flush_seq(flush_seq[63:0]),
 
        .rvfi_valid(rvfi_valid[riscv_pkg::REGISTER_PORTS-1:0]),
        .rvfi      (rvfi[riscv_pkg::REGISTER_PORTS-1:0])
