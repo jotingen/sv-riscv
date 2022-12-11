@@ -49,6 +49,9 @@ module riscv_idu (
    logic                   dcd_C_MV;
    logic                   dcd_C_NOP;
    logic                   dcd_C_OR;
+   logic                   dcd_C_SLLI;
+   logic                   dcd_C_SRAI;
+   logic                   dcd_C_SRLI;
    logic                   dcd_C_SUB;
    logic                   dcd_C_SW;
    logic                   dcd_C_SWSP;
@@ -77,12 +80,15 @@ module riscv_idu (
    logic                   dcd_SB;
    logic                   dcd_SH;
    logic                   dcd_SLL;
+   logic                   dcd_SLLI;
    logic                   dcd_SLT;
    logic                   dcd_SLTI;
    logic                   dcd_SLTIU;
    logic                   dcd_SLTU;
    logic                   dcd_SRA;
+   logic                   dcd_SRAI;
    logic                   dcd_SRL;
+   logic                   dcd_SRLI;
    logic                   dcd_SUB;
    logic                   dcd_SW;
    logic                   dcd_XOR;
@@ -124,6 +130,7 @@ module riscv_idu (
    logic                   dcd_rs1_p;
    logic                   dcd_rs2;
    logic                   dcd_rs2_p;
+   logic                   dcd_shamtd;
    logic                   dcd_succ;
 
    logic            [31:0] immed_i;
@@ -131,6 +138,7 @@ module riscv_idu (
    logic            [31:0] immed_b;
    logic            [31:0] immed_u;
    logic            [31:0] immed_j;
+   logic            [31:0] shamt;
 
    riscv_decode decode (
        .data       (ifu.data),
@@ -165,6 +173,9 @@ module riscv_idu (
        .C_MV       (dcd_C_MV),
        .C_NOP      (dcd_C_NOP),
        .C_OR       (dcd_C_OR),
+       .C_SLLI       (dcd_C_SLLI),
+       .C_SRAI       (dcd_C_SRAI),
+       .C_SRLI       (dcd_C_SRLI),
        .C_SUB      (dcd_C_SUB),
        .C_SW       (dcd_C_SW),
        .C_SWSP     (dcd_C_SWSP),
@@ -193,12 +204,15 @@ module riscv_idu (
        .SB         (dcd_SB),
        .SH         (dcd_SH),
        .SLL        (dcd_SLL),
+       .SLLI        (dcd_SLLI),
        .SLT        (dcd_SLT),
        .SLTI       (dcd_SLTI),
        .SLTIU      (dcd_SLTIU),
        .SLTU       (dcd_SLTU),
        .SRA        (dcd_SRA),
+       .SRAI        (dcd_SRAI),
        .SRL        (dcd_SRL),
+       .SRLI        (dcd_SRLI),
        .SUB        (dcd_SUB),
        .SW         (dcd_SW),
        .XOR        (dcd_XOR),
@@ -240,6 +254,7 @@ module riscv_idu (
        .rs1_p      (dcd_rs1_p),
        .rs2        (dcd_rs2),
        .rs2_p      (dcd_rs2_p),
+       .shamtd     (dcd_shamtd),
        .succ       (dcd_succ)
    );
 
@@ -291,12 +306,15 @@ module riscv_idu (
       idu_next.op.SB = dcd_SB;
       idu_next.op.SH = dcd_SH;
       idu_next.op.SLL = dcd_SLL;
+      idu_next.op.SLLI = dcd_SLLI | dcd_C_SLLI;
       idu_next.op.SLT = dcd_SLT;
       idu_next.op.SLTI = dcd_SLTI;
       idu_next.op.SLTIU = dcd_SLTIU;
       idu_next.op.SLTU = dcd_SLTU;
       idu_next.op.SRA = dcd_SRA;
+      idu_next.op.SRAI = dcd_SRAI | dcd_C_SRAI;
       idu_next.op.SRL = dcd_SRL;
+      idu_next.op.SRLI = dcd_SRLI | dcd_C_SRLI;
       idu_next.op.SUB = dcd_SUB | dcd_C_SUB;
       idu_next.op.SW = dcd_SW | dcd_C_SW | dcd_C_SWSP;
       idu_next.op.XOR = dcd_XOR | dcd_C_XOR;
@@ -342,6 +360,8 @@ module riscv_idu (
          idu_next.immed[31:0] = immed_u[31:0];
       end else if (dcd_jimm20) begin
          idu_next.immed[31:0] = immed_j[31:0];
+      end else if (dcd_shamtd) begin
+         idu_next.immed[31:0] = immed_i[31:0];
       end
 
       if (dcd_compressed) begin
@@ -493,6 +513,21 @@ module riscv_idu (
             idu_next.rd  = {2'b01, idu_next.data[9:7]};
             idu_next.rs1 = {2'b01, idu_next.data[9:7]};
             idu_next.rs2 = {2'b01, idu_next.data[4:2]};
+         end
+         if (dcd_C_SLLI) begin
+            idu_next.rd  = idu_next.data[11:7];
+            idu_next.rs1 = idu_next.data[11:7];
+            idu_next.immed[31:0] = {26'd0,idu_next.data[12],idu_next.data[6:2]};
+         end
+         if (dcd_C_SRLI) begin
+            idu_next.rd  = {2'b01, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
+            idu_next.immed[31:0] = {26'd0,idu_next.data[12],idu_next.data[6:2]};
+         end
+         if (dcd_C_SRAI) begin
+            idu_next.rd  = {2'b01, idu_next.data[9:7]};
+            idu_next.rs1 = {2'b01, idu_next.data[9:7]};
+            idu_next.immed[31:0] = {26'd0,idu_next.data[12],idu_next.data[6:2]};
          end
          if (dcd_C_SUB) begin
             idu_next.rd  = {2'b01, idu_next.data[9:7]};

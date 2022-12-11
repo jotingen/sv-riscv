@@ -29,17 +29,20 @@ module tb ();
              instr_op_ndx
          ) with {
             instr_op_ndx dist {
+               48 := 100,  //SLLI
+               47 := 100,  //SRAI
+               46 := 100,  //SRLI
                45 := 100,  //ADD
                44 := 100,  //ADDI
                43 := 100,  //AND
                42 := 100,  //ANDI
                41 := 100,  //AUIPC
-               40 := 100,  //BEQ
-               39 := 100,  //BGE
-               38 := 100,  //BGEU
-               37 := 100,  //BLT
-               36 := 100,  //BLTU
-               35 := 100,  //BNE
+               40 := 10,  //BEQ
+               39 := 10,  //BGE
+               38 := 10,  //BGEU
+               37 := 10,  //BLT
+               36 := 10,  //BLTU
+               35 := 10,  //BNE
                34 := 100,  //DIV
                33 := 100,  //DIVU
                32 := 0,  //EBREAK
@@ -81,14 +84,17 @@ module tb ();
              instr_cop_ndx
          ) with {
             instr_cop_ndx dist {
+               26 := 100,  //C_SLLI
+               25 := 100,  //C_SRAI
+               24 := 100,  //C_SRLI
                23 := 100,  //C_ADD
                22 := 100,  //C_ADDI
                21 := 100,  //C_ADDI16SP
                20 := 100,  //C_ADDI4SPN
                19 := 100,  //C_AND
                18 := 100,  //C_ANDI
-               17 := 100,  //C_BEQZ
-               16 := 100,  //C_BNEZ
+               17 := 10,  //C_BEQZ
+               16 := 10,  //C_BNEZ
                15 := 0,  //C_EBREAK
                14 := 0,  //C_J
                13 := 0,  //C_JAL
@@ -112,8 +118,20 @@ module tb ();
       function logic [31:0] data;
          do begin
             data = $urandom();
+            if (instr_op_ndx == 48) begin
+               data &= ~riscv_decode_slli_mask();
+               data |= riscv_decode_slli_match();
+            end
+            if (instr_op_ndx == 47) begin
+               data &= ~riscv_decode_srai_mask();
+               data |= riscv_decode_srai_match();
+            end
+            if (instr_op_ndx == 46) begin
+               data &= ~riscv_decode_srli_mask();
+               data |= riscv_decode_srli_match();
+            end
             if (instr_op_ndx == 45) begin
-               data &= ~riscv_decode_addi_mask();
+               data &= ~riscv_decode_add_mask();
                data |= riscv_decode_add_match();
             end
             if (instr_op_ndx == 44) begin
@@ -293,7 +311,13 @@ module tb ();
                data |= riscv_decode_xori_match();
             end
 
-         end while (!(((instr_op_ndx == 45) & riscv_decode_add(
+         end while (!(((instr_op_ndx == 48) & riscv_decode_slli(
+             data
+         ))|((instr_op_ndx == 47) & riscv_decode_srai(
+             data
+         ))|((instr_op_ndx == 46) & riscv_decode_srli(
+             data
+         ))|((instr_op_ndx == 45) & riscv_decode_add(
              data
          )) | ((instr_op_ndx == 44) & riscv_decode_addi(
              data
@@ -393,6 +417,18 @@ module tb ();
          logic [31:0] data;
          do begin
             data = $urandom();
+            if (instr_cop_ndx == 26) begin
+               data &= ~riscv_decode_c_slli_mask();
+               data |= riscv_decode_c_slli_match();
+            end
+            if (instr_cop_ndx == 25) begin
+               data &= ~riscv_decode_c_srai_mask();
+               data |= riscv_decode_c_srai_match();
+            end
+            if (instr_cop_ndx == 24) begin
+               data &= ~riscv_decode_c_srli_mask();
+               data |= riscv_decode_c_srli_match();
+            end
             if (instr_cop_ndx == 23) begin
                data &= ~riscv_decode_c_add_mask();
                data |= riscv_decode_c_add_match();
@@ -490,7 +526,13 @@ module tb ();
                data |= riscv_decode_c_xor_match();
             end
 
-         end while (!(((instr_cop_ndx == 23) & riscv_decode_c_add(
+         end while (!(((instr_cop_ndx == 26) & riscv_decode_c_slli(
+             data
+         ))|((instr_cop_ndx == 25) & riscv_decode_c_srai(
+             data
+         ))|((instr_cop_ndx == 24) & riscv_decode_c_srli(
+             data
+         ))|((instr_cop_ndx == 23) & riscv_decode_c_add(
              data
          )) | ((instr_cop_ndx == 22) & riscv_decode_c_addi(
              data
@@ -606,6 +648,12 @@ module tb ();
             return "C.NOP";
          end else if (riscv_decode_c_or(data)) begin
             return "C.OR";
+         end else if (riscv_decode_c_slli(data)) begin
+            return "C.SLLI";
+         end else if (riscv_decode_c_srai(data)) begin
+            return "C.SRAI";
+         end else if (riscv_decode_c_srli(data)) begin
+            return "C.SRLI";
          end else if (riscv_decode_c_sub(data)) begin
             return "C.SUB";
          end else if (riscv_decode_c_sw(data)) begin
@@ -662,6 +710,8 @@ module tb ();
             return "SH";
          end else if (riscv_decode_sll(data)) begin
             return "SLL";
+         end else if (riscv_decode_slli(data)) begin
+            return "SLLI";
          end else if (riscv_decode_slt(data)) begin
             return "SLT";
          end else if (riscv_decode_slti(data)) begin
@@ -672,8 +722,12 @@ module tb ();
             return "SLTU";
          end else if (riscv_decode_sra(data)) begin
             return "SRA";
+         end else if (riscv_decode_srai(data)) begin
+            return "SRAI";
          end else if (riscv_decode_srl(data)) begin
             return "SRL";
+         end else if (riscv_decode_srli(data)) begin
+            return "SRLI";
          end else if (riscv_decode_sub(data)) begin
             return "SUB";
          end else if (riscv_decode_sw(data)) begin
@@ -713,6 +767,10 @@ module tb ();
             1 := 60
          };
       }
+
+      function automatic void reset();
+         memory.delete();
+      endfunction
 
       function automatic logic [31:0] memory_read(logic [31:0] addr);
          //For now only generate valid instructions
@@ -807,6 +865,11 @@ module tb ();
 
    axi4_pkg::ar_m AXI_AR_M_queue[1:0][$];
    class axi_ar_m_monitor;
+
+      function automatic void reset(string tag);
+         AXI_AR_M_queue[tag.atoi()].delete();
+      endfunction
+
       function run(string tag, axi4_pkg::ar_s AXI_AR_S, axi4_pkg::ar_m AXI_AR_M);
          if (AXI_AR_M.ARVALID & AXI_AR_S.ARREADY) begin
             $display("%0t [AXI AR %s] %p", $time, tag, AXI_AR_M);
@@ -894,26 +957,26 @@ module tb ();
        .clock,
        .reset,
        .rvfi_valid     ({rvfi_valid[1:0]}),
-       .rvfi_order     ({rvfi[1].order,     rvfi[0].order}),
-       .rvfi_insn      ({rvfi[1].insn,      rvfi[0].insn}),
-       .rvfi_trap      ({rvfi[1].trap,      rvfi[0].trap}),
-       .rvfi_halt      ({rvfi[1].halt,      rvfi[0].halt}),
-       .rvfi_intr      ({rvfi[1].intr,      rvfi[0].intr}),
-       .rvfi_mode      ({rvfi[1].mode,      rvfi[0].mode}),
-       .rvfi_rs1_addr  ({rvfi[1].rs1_addr,  rvfi[0].rs1_addr}),
-       .rvfi_rs2_addr  ({rvfi[1].rs2_addr,  rvfi[0].rs2_addr}),
+       .rvfi_order     ({rvfi[1].order, rvfi[0].order}),
+       .rvfi_insn      ({rvfi[1].insn, rvfi[0].insn}),
+       .rvfi_trap      ({rvfi[1].trap, rvfi[0].trap}),
+       .rvfi_halt      ({rvfi[1].halt, rvfi[0].halt}),
+       .rvfi_intr      ({rvfi[1].intr, rvfi[0].intr}),
+       .rvfi_mode      ({rvfi[1].mode, rvfi[0].mode}),
+       .rvfi_rs1_addr  ({rvfi[1].rs1_addr, rvfi[0].rs1_addr}),
+       .rvfi_rs2_addr  ({rvfi[1].rs2_addr, rvfi[0].rs2_addr}),
        .rvfi_rs1_rdata ({rvfi[1].rs1_rdata, rvfi[0].rs1_rdata}),
        .rvfi_rs2_rdata ({rvfi[1].rs2_rdata, rvfi[0].rs2_rdata}),
-       .rvfi_rd_addr   ({rvfi[1].rd_addr,   rvfi[0].rd_addr}),
-       .rvfi_rd_wdata  ({rvfi[1].rd_wdata,  rvfi[0].rd_wdata}),
-       .rvfi_pc_rdata  ({rvfi[1].pc_rdata,  rvfi[0].pc_rdata}),
-       .rvfi_pc_wdata  ({rvfi[1].pc_wdata,  rvfi[0].pc_wdata}),
-       .rvfi_mem_addr  ({rvfi[1].mem_addr,  rvfi[0].mem_addr}),
+       .rvfi_rd_addr   ({rvfi[1].rd_addr, rvfi[0].rd_addr}),
+       .rvfi_rd_wdata  ({rvfi[1].rd_wdata, rvfi[0].rd_wdata}),
+       .rvfi_pc_rdata  ({rvfi[1].pc_rdata, rvfi[0].pc_rdata}),
+       .rvfi_pc_wdata  ({rvfi[1].pc_wdata, rvfi[0].pc_wdata}),
+       .rvfi_mem_addr  ({rvfi[1].mem_addr, rvfi[0].mem_addr}),
        .rvfi_mem_rmask ({rvfi[1].mem_rmask, rvfi[0].mem_rmask}),
        .rvfi_mem_wmask ({rvfi[1].mem_wmask, rvfi[0].mem_wmask}),
        .rvfi_mem_rdata ({rvfi[1].mem_rdata, rvfi[0].mem_rdata}),
        .rvfi_mem_wdata ({rvfi[1].mem_wdata, rvfi[0].mem_wdata}),
-       .rvfi_mem_extamo({rvfi[1].mem_extamo,rvfi[0].mem_extamo}),
+       .rvfi_mem_extamo({rvfi[1].mem_extamo, rvfi[0].mem_extamo}),
        .errcode        (rvfi_errcode)
    );
 
@@ -921,16 +984,28 @@ module tb ();
 
    always #10 clock = ~clock;
 
-   initial begin
-      reset = 1;
-      #50;
-      #0 reset = 0;
-   end
+   //initial begin
+   //   reset = 1;
+   //   #50;
+   //   #0 reset = 0;
+   //end
 
+   //After each pass, reset memory and restart
+   int passes = 100;
    initial begin
       clock = 0;
-      reset = 1;
-      #1000000;
+      for (int pass = 0; pass < passes; pass++) begin
+         reset = 1;
+         for (int cycle = 0; cycle < 50; cycle++) begin
+            mem.reset();
+            axi_ar_m_1.reset("1");
+            axi_ar_m_0.reset("1");
+            #10;
+         end
+         #10;
+         #0 reset = 0;
+         #10000;
+      end
       $display("TB passed");
       $finish;
    end

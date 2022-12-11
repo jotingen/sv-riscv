@@ -22,6 +22,8 @@ module riscv_top (
    logic                                                  clock;
    logic                                                  reset;
 
+   riscv_pkg::csr_t                                       csr;
+
    logic            [riscv_pkg::REGISTER_PORTS-1:0]       register_lock_en;
    logic            [riscv_pkg::REGISTER_PORTS-1:0][ 4:0] register_lock;
 
@@ -47,6 +49,13 @@ module riscv_top (
    //Extract clock and reset
    assign clock = AXI_COMMON.ACLK;
    assign reset = ~AXI_COMMON.ARESETn;
+
+   riscv_csr riscv_csr (
+       .clock(clock),
+       .reset(reset),
+
+       .csr(csr)
+   );
 
    riscv_reg riscv_reg (
        .clock              (clock),
@@ -99,6 +108,8 @@ module riscv_top (
        .AXI_B_M (AXI_B_M),
        .AXI_AR_M(AXI_AR_M[0]),
        .AXI_R_M (AXI_R_M[0]),
+
+       .csr(csr),
 
        .idu_vld(idu_vld),
        .idu(idu),

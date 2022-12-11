@@ -60,11 +60,4 @@ module riscv_idu_assert (
       )
    else $fatal(1, "%m assertion fail");
 
-   //Temporary, always defined
-   idu_defined_assert :
-   assert property (@(posedge clock) if (enable_assert) if (idu_vld) idu.op.ILLEGAL == '0)
-   else $fatal(1, "%m assertion fail");
-
-
-
 endmodule

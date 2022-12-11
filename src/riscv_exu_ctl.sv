@@ -4,6 +4,8 @@ module riscv_exu_ctl (
     input logic clock,
     input logic reset,
 
+    input riscv_pkg::csr_t csr,
+
     input logic            vld,
     input riscv_pkg::idu_t idu,
 
@@ -124,7 +126,15 @@ module riscv_exu_ctl (
          if (idu.op.JALR) begin
          end
          if (idu.op.ILLEGAL) begin
-            //TODO 
+            done  = '1;
+            flush = '1;
+            if (csr.mtvec.mode == 2'b00) begin
+               flush_addr[31:0] = {csr.mtvec.base[31:2], 2'd0};
+            end else begin
+               flush_addr[31:0] = {csr.mtvec.base[31:2] + 'd2, 2'd0};
+            end
+            flush_seq[63:0] = idu.seq[63:0] + 'd1;
+            rvfi.trap = '1;
          end
 
          rvfi_valid = '1;

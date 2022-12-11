@@ -17,6 +17,8 @@ module riscv_exu (
     output axi4_pkg::ar_m AXI_AR_M,
     output axi4_pkg::r_m  AXI_R_M,
 
+    input riscv_pkg::csr_t csr,
+
     input logic            idu_vld,
     input riscv_pkg::idu_t idu,
 
@@ -71,12 +73,15 @@ module riscv_exu (
             | idu.op.REM
             | idu.op.REMU
             | idu.op.SLL
+            | idu.op.SLLI
             | idu.op.SLT
             | idu.op.SLTI
             | idu.op.SLTIU
             | idu.op.SLTU
             | idu.op.SRA
+            | idu.op.SRAI
             | idu.op.SRL
+            | idu.op.SRLI
             | idu.op.SUB
             | idu.op.XOR
             | idu.op.XORI )
@@ -137,6 +142,8 @@ module riscv_exu (
    riscv_exu_ctl riscv_exu_ctl (
        .clock(clock),
        .reset(reset),
+
+       .csr(csr),
 
        .vld(ctl_vld),
        .idu(idu),

@@ -1,3 +1,4 @@
+import ast
 import copy
 import re
 
@@ -32,16 +33,58 @@ for inst, inst_fields in isa.items():
         if (
             extension.endswith("rv_c")
             or extension.endswith("rv32_c")
+            or extension.endswith("rv64_c")
             or extension.endswith("rv_i")
             or extension.endswith("rv32_i")
+            or extension.endswith("rv64_i")
             or extension.endswith("rv_m")
             or extension.endswith("rv32_m")
-        ):
+            or extension.endswith("rv64_m")
+        ) and inst not in [
+            "addw",
+            "addiw",
+            "ld",
+            "ldsp",
+            "lwu",
+            "sd",
+            "sllw",
+            "slliw",
+            "sraw",
+            "sraiw",
+            "srlw",
+            "srliw",
+            "sdsp",
+            "subw",
+            "c_addw",
+            "c_addiw",
+            "c_ld",
+            "c_ldsp",
+            "c_sd",
+            "c_sdsp",
+            "c_subw",
+            "mulw",
+            "divw",
+            "divuw",
+            "remw",
+            "remuw",
+        ]:
             extension_matched = True
     if not extension_matched:
         continue
 
     instructions[inst] = inst_fields
+
+    if inst in ["c_slli", "c_srai", "c_srli"]:
+        #print(instructions[inst]["mask"])
+        instructions[inst]["mask"] = hex(
+            ast.literal_eval(instructions[inst]["mask"]) | (1 << 12)
+        )
+        #print(instructions[inst]["mask"])
+        #print(instructions[inst]["match"])
+        instructions[inst]["match"] = hex(
+            ast.literal_eval(instructions[inst]["match"]) & ~(1 << 12)
+        )
+        #print(instructions[inst]["match"])
 
     # print(inst)
 
@@ -154,7 +197,9 @@ for instr_out in sorted(instructions_processed.keys()):
     encodings = []
     encodings.extend(instructions_processed[instr_out]["encoding"])
     encodings = [encoding.replace("-", "?") for encoding in encodings]
-    encodings = ["32'b" + encoding + f": {instr_out.upper()} = '1;\n" for encoding in encodings]
+    encodings = [
+        "32'b" + encoding + f": {instr_out.upper()} = '1;\n" for encoding in encodings
+    ]
     s += "".join(encodings)
     s += f"default: {instr_out.upper()} = '0;\n"
     s += f"endcase\n"
@@ -207,10 +252,10 @@ for field_out in sorted(variable_fields):
     s += f"end\n"
 
 s += "endmodule\n"
-output_file.write(s);
+output_file.write(s)
 
 
-s=""
+s = ""
 # make function for each output
 # Instruction
 for instr_out in sorted(instructions_processed.keys()):
@@ -222,7 +267,9 @@ for instr_out in sorted(instructions_processed.keys()):
     encodings = []
     encodings.extend(instructions_processed[instr_out]["encoding"])
     encodings = [encoding.replace("-", "?") for encoding in encodings]
-    encodings = ["32'b" + encoding + f": {instr_out.upper()} = '1;\n" for encoding in encodings]
+    encodings = [
+        "32'b" + encoding + f": {instr_out.upper()} = '1;\n" for encoding in encodings
+    ]
     s += "".join(encodings)
     s += f"default: {instr_out.upper()} = '0;\n"
     s += f"endcase\n"
@@ -298,4 +345,4 @@ for field_out in sorted(variable_fields):
     s += f"return {field_out};\n"
     s += f"endfunction\n"
 
-output_function_file.write(s);
+output_function_file.write(s)

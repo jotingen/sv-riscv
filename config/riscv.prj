@@ -2,6 +2,7 @@ sv  riscv ../include/axi4_pkg.svh
 sv  riscv ../include/riscv_pkg.svh
 
 sv  riscv ../src/riscv_top.sv
+sv  riscv ../src/riscv_csr.sv
 sv  riscv ../src/riscv_reg.sv
 sv  riscv ../src/riscv_ifu.sv
 sv  riscv ../src/riscv_idu.sv

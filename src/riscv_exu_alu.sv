@@ -129,6 +129,11 @@ module riscv_exu_alu (
             register_write_en = '1;
             register_write_data[31:0] = rs1_data[31:0] << idu.rs2[5:0];
          end
+         if (idu.op.SLLI) begin
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] << idu.immed[5:0];
+         end
          if (idu.op.SLT) begin
             done = '1;
             register_write_en = '1;
@@ -156,12 +161,22 @@ module riscv_exu_alu (
          if (idu.op.SRA) begin
             done = '1;
             register_write_en = '1;
-            register_write_data[31:0] = rs1_data[31:0] >>> idu.rs2[5:0];
+            register_write_data[31:0] = $signed(rs1_data[31:0]) >>> idu.rs2[5:0];
+         end
+         if (idu.op.SRAI) begin
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = $signed(rs1_data[31:0]) >>> idu.immed[5:0];
          end
          if (idu.op.SRL) begin
             done = '1;
             register_write_en = '1;
             register_write_data[31:0] = rs1_data[31:0] >> idu.rs2[5:0];
+         end
+         if (idu.op.SRLI) begin
+            done = '1;
+            register_write_en = '1;
+            register_write_data[31:0] = rs1_data[31:0] >> idu.immed[5:0];
          end
          if (idu.op.SUB) begin
             done = '1;
