@@ -86,6 +86,10 @@ module riscv_axi_driver (
       AXI_AW_M.AWID[3:0]    = pending_wr_ptr[3:0];
       AXI_AW_M.AWADDR[31:0] = req_addr[31:0];
 
+      if (reset) begin
+         AXI_AR_M.ARVALID = '0;
+         AXI_AW_M.AWVALID = '0;
+      end
    end
 
    //Update pending queue
@@ -155,6 +159,10 @@ module riscv_axi_driver (
          rsp_vld = '1;
          rsp_addr[31:0] = pending[pending_rd_ptr].req_addr[31:0];
          rsp_data[31:0] = pending[pending_rd_ptr].rsp_data[31:0];
+      end
+
+      if (reset) begin
+         rsp_vld = '0;
       end
    end
 
